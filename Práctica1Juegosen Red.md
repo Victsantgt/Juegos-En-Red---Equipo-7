@@ -22,15 +22,18 @@ Debido a estas características, el juego sería calificado como un PEGI 3, es d
 
 Se tomó referencia en uno de los juegos que hicieron conocido el género de juegos de fiesta, el Wii party. Además, se tomará inspiración la saga de Mario Party y juegos más actualizados de este género, como el Overcooked.
 
-![][image1]  
-<img width="55" height="159" alt="image" src="https://github.com/user-attachments/assets/b91c8d42-fbe6-49aa-a9fd-24cb860537bf" />
+
+<img width="259" height="363" alt="image" src="https://github.com/user-attachments/assets/51897a4f-0fc3-4b46-af8c-e12ee3be87fe" />
+
 
 ***Wii Party (2010)***
 
-![][image2]  
+<img width="404" height="608" alt="image" src="https://github.com/user-attachments/assets/92ef70b9-778d-4084-b0a2-755a674e2323" />
+ 
 ***Mario Party 9 (2012)***
 
-![][image3]  
+<img width="712" height="399" alt="image" src="https://github.com/user-attachments/assets/e9468616-2851-45a2-9377-bfb8d9c8e8bf" />
+
 ***Overcooked (2018)***
 
 5. **Objetivo del juego** 
@@ -84,12 +87,14 @@ La visión del juego se basará en una cámara cenital, es decir, la cámara se 
 
 El escenario es un espacio separado con seis arbustos. Estas separaciones se conectan entre ellos y con los bordes mediante un camino de raíles, por el cual el jugador podrá moverse dentro de los límites de este. El espacio de juego está delimitado por unos bordes diegéticos (muros), haciendo que todo el espacio jugable sea visto por el jugador en todo momento. 
 
-![][image4]  
+<img width="1053" height="591" alt="image" src="https://github.com/user-attachments/assets/946c009f-c978-4257-b31c-9667e100acb3" />
+
 *Diseño del escenario*
 
 11. **Diagrama de flujo** 
 
-**![][image5]**
+<img width="1054" height="619" alt="image" src="https://github.com/user-attachments/assets/1c710e3b-2c6c-42e4-8185-3f3a5c1e945b" />
+
 
 12. **Descripción visual(uso de colores)/Estilo visual(pixel art,cartoon..)** 
 
@@ -104,17 +109,20 @@ Se tomaron como inspiración para el estilo gráfico juegos como Stardew Valley 
 Los labubus han sido rediseñados para hacerlos mas distintivos y fáciles de pasar a pixel art.
 
 Este rediseño se debe principalmente a las proporciones extrañas de los labubu oficiales, las cuales serían difíciles de trabajar en un entorno de altas limitaciones como es el pixel art. Al hacer las extremidades más grandes y al otorgarles más expresividad, se facilita muchísimo el paso a cualquier medio fuera de los peluches originales.  
-![][image6]  
+<img width="780" height="612" alt="image" src="https://github.com/user-attachments/assets/2e2938d1-04f5-4576-b4d7-cb0816c88aac" />
+  
 *Rediseño de labubus*
 
 14. **Logotipo** 
 
 Nuestra empresa se llama “Todo al 7”. El logotipo se creó a aprtir de esa frase, siendo el 7 la parte naranja
 
-![][image7]
+<img width="857" height="530" alt="image" src="https://github.com/user-attachments/assets/9724db12-fa20-4a2b-85ac-1bc9436cbd92" />
+
 
 También, se creó el boceto del logotipo del juego  
-![][image8]
+<img width="891" height="633" alt="image" src="https://github.com/user-attachments/assets/a359ecaa-8739-4688-8c61-2cc086e0b46c" />
+
 
 *Boceto del logo de juego*
 
