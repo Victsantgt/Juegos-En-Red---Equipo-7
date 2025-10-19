@@ -126,7 +126,8 @@ Este rediseño se debe principalmente a las proporciones extrañas de los labubu
 
 Boceto del menú
 
-<img width="1480" height="882" alt="image" src="https://github.com/user-attachments/assets/bb6ad22f-2504-4a2b-a58c-8fd63798dee4" />
+<img width="1477" height="884" alt="image" src="https://github.com/user-attachments/assets/967a7c71-3b33-49b6-8c6d-27a271c3cd08" />
+
 
 14. **Logotipo** 
 
