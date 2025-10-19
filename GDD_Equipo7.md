@@ -124,6 +124,10 @@ Este rediseño se debe principalmente a las proporciones extrañas de los labubu
   
 *Rediseño de labubus*
 
+Boceto del menú
+
+<img width="1480" height="882" alt="image" src="https://github.com/user-attachments/assets/bb6ad22f-2504-4a2b-a58c-8fd63798dee4" />
+
 14. **Logotipo** 
 
 Nuestra empresa se llama “Todo al 7”. El logotipo se creó a aprtir de esa frase, siendo el 7 la parte naranja
