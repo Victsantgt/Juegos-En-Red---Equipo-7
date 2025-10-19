@@ -23,6 +23,8 @@ Debido a estas características, el juego sería calificado como un PEGI 3, es d
 Se tomó referencia en uno de los juegos que hicieron conocido el género de juegos de fiesta, el Wii party. Además, se tomará inspiración la saga de Mario Party y juegos más actualizados de este género, como el Overcooked.
 
 ![][image1]  
+<img width="55" height="159" alt="image" src="https://github.com/user-attachments/assets/b91c8d42-fbe6-49aa-a9fd-24cb860537bf" />
+
 ***Wii Party (2010)***
 
 ![][image2]  
