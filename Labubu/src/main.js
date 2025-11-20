@@ -4,8 +4,8 @@ import { GameScene } from './scenes/GameScene.js';
 
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: 704,
+    height: 576,
     parent: 'game-container',
     physics: {
         default: 'arcade',
