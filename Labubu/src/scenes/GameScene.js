@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { Paddle } from '../entities/Paddle';
+import { Labubu } from '../entities/Paddle';
 
 export class GameScene extends Phaser.Scene {
 
@@ -15,21 +15,21 @@ export class GameScene extends Phaser.Scene {
         this.escWasDown = false;
     }
 
-    preload(){
+    preload() {
 
-      this.load.image('fondo', '../public/assets/prueba.png');
-      
+        this.load.image('fondo', 'assets/fondo.png');
+
     }
     create() {
-        
-        let fondo = this.add.sprite(400, 300, 'fondo').setOrigin(0, 0);
-        //this.add.rectangle(400, 300, 800, 600, 0x1a1a2e);
+
+        let fondo = this.add.image(400, 300, 'fondo').setOrigin(0, 0);
+
 
         // Center discontinued line
         for (let i = 0; i < 12; i++) {
             this.add.rectangle(400, i * 50 + 25, 10, 30, 0x444444);
         }
-    
+
         // Score texts
         this.scoreLeft = this.add.text(100, 50, '0', {
             fontSize: '48px',
@@ -55,29 +55,35 @@ export class GameScene extends Phaser.Scene {
     }
 
     setUpPlayers() {
-        const leftPaddle = new Paddle(this, 'player1', 50, 300);
-        const rightPaddle = new Paddle(this, 'player2', 750, 300); 
+        const jugadorUno = new Labubu(this, 'player1', 50, 300);
+        const jugadorDos = new Labubu(this, 'player2', 750, 300);
 
-        this.players.set('player1', leftPaddle);
-        this.players.set('player2', rightPaddle);
+        this.players.set('player1', jugadorUno);
+        this.players.set('player2', jugadorDos);
 
         const InputConfig = [
             {
                 playerId: 'player1',
-                upKey : 'W',
-                downKey : 'S',
+                upKey: 'W',
+                downKey: 'S',
+                leftKey: 'A',
+                rightKey: 'D'
             },
             {
                 playerId: 'player2',
-                upKey : 'UP',
-                downKey : 'DOWN',
+                upKey: 'UP',
+                downKey: 'DOWN',
+                leftKey: 'LEFT',
+                rightKey: 'RIGHT'
             }
         ]
         this.inputMappings = InputConfig.map(config => {
             return {
-                playerId : config.playerId,
-                upKeyObj : this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[config.upKey]),
+                playerId: config.playerId,
+                upKeyObj: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[config.upKey]),
                 downKeyObj: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[config.downKey]),
+                leftKeyObj: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[config.leftKey]),
+                rightKeyObj: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[config.rightKey]),
             }
         });
     }
@@ -95,7 +101,7 @@ export class GameScene extends Phaser.Scene {
     resetBall() {
         this.ball.setVelocity(0, 0);
         this.ball.setPosition(400, 300);
-    
+
         this.time.delayedCall(1000, () => {
             this.launchBall();
         });
@@ -141,12 +147,20 @@ export class GameScene extends Phaser.Scene {
     update() {
         this.inputMappings.forEach(mapping => {
             const paddle = this.players.get(mapping.playerId);
+
+            //Resetea la velocidad antes de aplicar movimiento
+            paddle.sprite.setVelocity(0);
+            
+            //Movimiento en las cuatro direciones
             if (mapping.upKeyObj.isDown) {
                 paddle.sprite.setVelocityY(-paddle.baseSpeed);
             } else if (mapping.downKeyObj.isDown) {
                 paddle.sprite.setVelocityY(paddle.baseSpeed);
-            } else {
-                paddle.sprite.setVelocityY(0);
+            }
+            if (mapping.leftKeyObj.isDown) {
+                paddle.sprite.setVelocityX(-paddle.baseSpeed);
+            } else if (mapping.rightKeyObj.isDown) {
+                paddle.sprite.setVelocityX(paddle.baseSpeed);
             }
         });
     }

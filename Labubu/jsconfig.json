@@ -23,7 +23,7 @@
   },
   "include": [
     "src/**/*"
-  ],
+, "src/main.js"  ],
   "exclude": [
     "node_modules",
     "dist"
