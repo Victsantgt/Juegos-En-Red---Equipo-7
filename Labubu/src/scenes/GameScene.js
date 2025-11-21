@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { Labubu } from '../entities/Paddle';
+import { Labubu } from '../entities/paddle';
 import { CommandProcessor } from '../commands/CommandProcessor';
 import { MovePaddleCommand } from '../commands/MovePaddleCommand';
 import { PauseGameCommand } from '../commands/PuaseGameCommand';
@@ -8,12 +8,15 @@ export class GameScene extends Phaser.Scene {
 
     constructor() {
         super('GameScene');
+        //cuadrados de 64pxls
+        //ancho 704 pxls
+        //alto 576 pxls
     }
 
     init() {
         this.players = new Map();
         this.inputMappings = [];
-        this.ball = null;
+        //this.ball = null;
         this.isPaused = false;
         this.escWasDown = false;
         this.processor = new CommandProcessor();
@@ -27,41 +30,38 @@ export class GameScene extends Phaser.Scene {
     create() {
         
         let fondo = this.add.image(0, 0, 'fondo').setOrigin(0, 0);
-
-        // Center discontinued line
-        for (let i = 0; i < 12; i++) {
-            this.add.rectangle(400, i * 50 + 25, 10, 30, 0x444444);
-        }
     
-        // Score texts
-        this.scoreLeft = this.add.text(100, 50, '0', {
+        // puntuaciones
+        //j1 arriba izquierda
+        this.scoreLeft = this.add.text(17, 10, '0', {
             fontSize: '48px',
             color: '#00ff00'
         });
 
-        this.rightScore = this.add.text(700, 50, '0', {
+        //j2 arriba derecha
+        this.rightScore = this.add.text(657, 10, '0', {
             fontSize: '48px',
             color: '#00ff00'
         });
 
         this.createBounds();
-        this.createBall();
-        this.launchBall();
+       // this.createBall();
+        //this.launchBall();
 
-        this.physics.add.overlap(this.ball, this.leftGoal, this.scoreRightGoal, null, this);
-        this.physics.add.overlap(this.ball, this.rightGoal, this.scoreLeftGoal, null, this);
+       // this.physics.add.overlap(this.ball, this.leftGoal, this.scoreRightGoal, null, this);
+       // this.physics.add.overlap(this.ball, this.rightGoal, this.scoreLeftGoal, null, this);
 
         this.setUpPlayers();
         this.players.forEach(paddle => {
-            this.physics.add.collider(this.ball, paddle.sprite);
+            //this.physics.add.collider(this.ball, paddle.sprite);
         });
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     }
 
     setUpPlayers() {
-        const jugadorUno = new Labubu(this, 'player1', 50, 300);
-        const jugadorDos = new Labubu(this, 'player2', 750, 300);
+        const jugadorUno = new Labubu(this, 'player1', 96, 288);
+        const jugadorDos = new Labubu(this, 'player2', 608, 288);
 
         this.players.set('player1', jugadorUno);
         this.players.set('player2', jugadorDos);
@@ -101,7 +101,7 @@ export class GameScene extends Phaser.Scene {
         if (player1.score >= 2) {
             this.endGame('player1');
         } else {
-            this.resetBall();
+           // this.resetBall();
         }
     }
 
@@ -113,12 +113,12 @@ export class GameScene extends Phaser.Scene {
         if (player2.score >= 2) {
             this.endGame('player2');
         } else {
-            this.resetBall();
+           // this.resetBall();
         }
     }
 
     endGame(winnerId) {
-        this.ball.setVelocity(0, 0);
+       // this.ball.setVelocity(0, 0);
         this.players.forEach(paddle => {
             paddle.sprite.setVelocity(0, 0);
         });
@@ -142,15 +142,24 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
+    /*
     resetBall() {
         this.ball.setVelocity(0, 0);
         this.ball.setPosition(400, 300);
     
         this.time.delayedCall(1000, () => {
-            this.launchBall();
+            //this.launchBall();
         });
     }
 
+    //podríamos reutilizar esto para hacer que los jugadores empiecen
+    con una velocidad constante, osea lo q queremos lol, y que uno
+    tire para arriba y otro hacia abajo, pa q empiecen distinto
+
+    //la idea es que si llega a x pixel gire automaticamente para el
+    lado que toque y si detecta intersección que permita girar a donde
+    se pueda
+    
     launchBall() {
         const angle = Phaser.Math.Between(-30, 30);
         const speed = 300;
@@ -161,7 +170,8 @@ export class GameScene extends Phaser.Scene {
             Math.sin(Phaser.Math.DegToRad(angle)) * speed
         )
     }
-
+        */
+/*
     createBall() {
         const graphics = this.add.graphics();
         graphics.fillStyle(0xffffff);
@@ -173,6 +183,7 @@ export class GameScene extends Phaser.Scene {
         this.ball.setCollideWorldBounds(true);
         this.ball.setBounce(1);
     }
+        */
 
     createBounds() {
         this.leftGoal = this.physics.add.sprite(0, 300, null);
@@ -181,7 +192,7 @@ export class GameScene extends Phaser.Scene {
         this.leftGoal.setImmovable(true);
         this.leftGoal.setVisible(false);
 
-        this.rightGoal = this.physics.add.sprite(800, 300, null);
+        this.rightGoal = this.physics.add.sprite(700, 300, null);
         this.rightGoal.setDisplaySize(10, 600);
         this.rightGoal.body.setSize(10, 600);
         this.rightGoal.setImmovable(true);

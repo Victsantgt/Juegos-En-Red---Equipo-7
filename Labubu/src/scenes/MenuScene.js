@@ -7,15 +7,15 @@ export class MenuScene extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(400, 100, 'PONG GAME', {
+        this.add.text(400, 100, 'LABUBU MATCHUP', {
             fontSize: '64px',
             color: '#ffffff'
-        }).setOrigin(0.5);
+        }).setOrigin(0.6);
 
         const localBtn = this.add.text(400, 320, 'Local 2 Player', {
             fontSize: '24px',
             color: '#00ff00',
-        }).setOrigin(0.5)
+        }).setOrigin(0.75)
         .setInteractive({useHandCursor: true})
         .on('pointerover', () => localBtn.setColor('#00ff88'))
         .on('pointerout', () => localBtn.setColor('#00ff00'))
@@ -26,6 +26,6 @@ export class MenuScene extends Phaser.Scene {
         const onlineBtn = this.add.text(400, 390, 'Online Multiplayer (Not available)', {
             fontSize: '24px',
             color: '#ff6666',
-        }).setOrigin(0.5);
+        }).setOrigin(0.6);
     }
 }

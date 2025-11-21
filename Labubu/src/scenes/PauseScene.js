@@ -17,7 +17,7 @@ export class PauseScene extends Phaser.Scene {
         const resumeBtn = this.add.text(400, 320, 'Resume', {
             fontSize: '32px',
             color: '#00ff00',
-        }).setOrigin(0.5)
+        }).setOrigin(0.7)
         .setInteractive({useHandCursor: true})
         .on('pointover', () => resumeBtn.setColor('#00ff88'))
         .on('pointerout', () => resumeBtn.setColor('#00ff00'))
@@ -30,7 +30,7 @@ export class PauseScene extends Phaser.Scene {
         const menuBtn = this.add.text(400, 400, 'Return to Main Menu', {
             fontSize: '32px',
             color: '#ffffff',
-        }).setOrigin(0.5)
+        }).setOrigin(0.7)
         .setInteractive({ useHandCursor: true })
         .on('pointerover', () => menuBtn.setColor('#ff8888'))
         .on('pointerout', () => menuBtn.setColor('#ffffff'))
