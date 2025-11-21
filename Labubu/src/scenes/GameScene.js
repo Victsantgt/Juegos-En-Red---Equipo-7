@@ -15,8 +15,15 @@ export class GameScene extends Phaser.Scene {
         this.escWasDown = false;
     }
 
+    preload(){
+
+      this.load.image('fondo', '../public/assets/prueba.png');
+      
+    }
     create() {
-        this.add.rectangle(400, 300, 800, 600, 0x1a1a2e);
+        
+        let fondo = this.add.sprite(400, 300, 'fondo').setOrigin(0, 0);
+        //this.add.rectangle(400, 300, 800, 600, 0x1a1a2e);
 
         // Center discontinued line
         for (let i = 0; i < 12; i++) {
