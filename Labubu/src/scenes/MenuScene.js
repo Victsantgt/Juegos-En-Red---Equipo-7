@@ -6,7 +6,6 @@ export class MenuScene extends Phaser.Scene {
         super('MenuScene');
     }
 
-    
     create() {
         this.add.text(400, 100, 'PONG GAME', {
             fontSize: '64px',

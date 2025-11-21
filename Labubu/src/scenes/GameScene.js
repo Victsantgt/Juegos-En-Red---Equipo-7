@@ -1,5 +1,8 @@
 import Phaser from 'phaser';
 import { Labubu } from '../entities/Paddle';
+import { CommandProcessor } from '../commands/CommandProcessor';
+import { MovePaddleCommand } from '../commands/MovePaddleCommand';
+import { PauseGameCommand } from '../commands/PuaseGameCommand';
 
 export class GameScene extends Phaser.Scene {
 
@@ -13,6 +16,7 @@ export class GameScene extends Phaser.Scene {
         this.ball = null;
         this.isPaused = false;
         this.escWasDown = false;
+        this.processor = new CommandProcessor();
     }
 
     preload() {
@@ -20,16 +24,16 @@ export class GameScene extends Phaser.Scene {
         this.load.image('fondo', 'assets/fondo.png');
 
     }
+
     create() {
-
+        
         let fondo = this.add.image(400, 300, 'fondo').setOrigin(0, 0);
-
 
         // Center discontinued line
         for (let i = 0; i < 12; i++) {
             this.add.rectangle(400, i * 50 + 25, 10, 30, 0x444444);
         }
-
+    
         // Score texts
         this.scoreLeft = this.add.text(100, 50, '0', {
             fontSize: '48px',
@@ -52,6 +56,8 @@ export class GameScene extends Phaser.Scene {
         this.players.forEach(paddle => {
             this.physics.add.collider(this.ball, paddle.sprite);
         });
+
+        this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     }
 
     setUpPlayers() {
@@ -89,19 +95,58 @@ export class GameScene extends Phaser.Scene {
     }
 
     scoreLeftGoal() {
-        console.log("Left Goal Scored");
-        this.resetBall();
+        const player1 = this.players.get('player1');
+        player1.score += 1;
+        this.scoreLeft.setText(player1.score.toString());
+
+        if (player1.score >= 2) {
+            this.endGame('player1');
+        } else {
+            this.resetBall();
+        }
     }
 
     scoreRightGoal() {
-        console.log("Right Goal Scored");
-        this.resetBall();
+        const player2 = this.players.get('player2');
+        player2.score += 1;
+        this.rightScore.setText(player2.score.toString());
+
+        if (player2.score >= 2) {
+            this.endGame('player2');
+        } else {
+            this.resetBall();
+        }
+    }
+
+    endGame(winnerId) {
+        this.ball.setVelocity(0, 0);
+        this.players.forEach(paddle => {
+            paddle.sprite.setVelocity(0, 0);
+        });
+        this.physics.pause();
+
+        const winnerText = winnerId === 'player1' ? 'Player 1 Wins!' : 'Player 2 Wins!';
+        this.add.text(400, 250, winnerText, {
+            fontSize: '64px',
+            color: '#00ff00'
+        }).setOrigin(0.5);
+
+        const menuBtn = this.add.text(400, 350, 'Return to Main Menu', {
+            fontSize: '32px',
+            color: '#ffffff',
+        }).setOrigin(0.5)
+        .setInteractive({ useHandCursor: true })
+        .on('pointerover', () => menuBtn.setColor('#cccccc'))
+        .on('pointerout', () => menuBtn.setColor('#ffffff'))
+        .on('pointerdown', () => {
+            this.scene.start('MenuScene');
+        });
     }
 
     resetBall() {
         this.ball.setVelocity(0, 0);
         this.ball.setPosition(400, 300);
-
+    
         this.time.delayedCall(1000, () => {
             this.launchBall();
         });
@@ -144,7 +189,31 @@ export class GameScene extends Phaser.Scene {
         this.rightGoal.setVisible(false);
     }
 
+    setPauseState(isPaused) {
+        this.isPaused = isPaused;
+        if (isPaused) {
+            this.scene.launch('PauseScene', { originalScene: 'GameScene' });
+            this.scene.pause();
+        } 
+    }
+
+    resume() {
+        this.isPaused = false;
+    }
+
+    togglePause() {
+        const newPauseState = !this.isPaused;
+        this.processor.process(
+            new PauseGameCommand(this, newPauseState)
+        );
+    }
+
     update() {
+
+        if (this.escKey.isDown && !this.escWasDown) {
+            this.togglePause();
+        }
+
         this.inputMappings.forEach(mapping => {
             const paddle = this.players.get(mapping.playerId);
 
