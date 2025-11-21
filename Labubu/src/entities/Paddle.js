@@ -11,7 +11,7 @@ export class Labubu {
 
         // Crear textura del cuadrado
         const graphics = this.scene.add.graphics();
-        graphics.fillStyle(0x00ff00);                      // color
+        graphics.fillStyle(0xff0000);                      // color
         graphics.fillRect(0, 0, this.size, this.size);     // cuadrado
         graphics.generateTexture(`square-${id}`, this.size, this.size);
         graphics.destroy();

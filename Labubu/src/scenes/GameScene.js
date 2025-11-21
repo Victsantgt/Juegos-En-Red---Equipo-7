@@ -22,12 +22,11 @@ export class GameScene extends Phaser.Scene {
     preload() {
 
         this.load.image('fondo', 'assets/fondo.png');
-
     }
 
     create() {
         
-        let fondo = this.add.image(400, 300, 'fondo').setOrigin(0, 0);
+        let fondo = this.add.image(0, 0, 'fondo').setOrigin(0, 0);
 
         // Center discontinued line
         for (let i = 0; i < 12; i++) {
