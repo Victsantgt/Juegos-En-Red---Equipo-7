@@ -1,6 +1,6 @@
 export class Labubu {
 
-    constructor(scene, id, x, y) {
+    constructor(scene, id, x, y, animKey) {
           this.id = id;
         this.scene = scene;
         this.score = 0;
@@ -13,8 +13,9 @@ export class Labubu {
         this.sprite.setCollideWorldBounds(true);
         this.sprite.body.allowGravity = false;
 
-        // Reproducir animación automáticamente
-        this.sprite.play('labubu-walk');
+        //control de animaciones
+        this.currentAnim = null;
+        this.animKey = animKey;  // <-- guardamos key de animación para esta instancia
     }
 
 }

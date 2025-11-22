@@ -31,6 +31,10 @@ export class GameScene extends Phaser.Scene {
             frameWidth: 68,
             frameHeight: 88
         });
+        this.load.spritesheet('labubu2', 'assets/yellow/down.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
 
     }
 
@@ -38,14 +42,22 @@ export class GameScene extends Phaser.Scene {
 
         let fondo = this.add.image(0, 0, 'fondo').setOrigin(0, 0);
 
-        ////ANIMACIÓN DE CAMNIAR////
+        ////ANIMACIÓN ABAJO JUGADOR 1////
         this.anims.create({
-            key: 'labubu-down',
+            key: 'labubu1-down',
             frames: this.anims.generateFrameNumbers('labubu', { start: 0, end: 3 }),
             frameRate: 10,
             repeat: -1
         });
-        
+
+        //ANIMACIÓN ABAJO JUGADOR 2//
+        this.anims.create({
+            key: 'labubu2-down',
+            frames: this.anims.generateFrameNumbers('labubu2', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
         // puntuaciones
         //j1 arriba izquierda
         this.scoreLeft = this.add.text(17, 10, '0', {
@@ -78,8 +90,8 @@ export class GameScene extends Phaser.Scene {
     }
 
     setUpPlayers() {
-        const jugadorUno = new Labubu(this, 'player1', 96, 288);
-        const jugadorDos = new Labubu(this, 'player2', 608, 288);
+        const jugadorUno = new Labubu(this, 'player1', 96, 288,'labubu1-down');
+        const jugadorDos = new Labubu(this, 'player2', 608, 288, 'labubu2-down');
 
         this.players.set('player1', jugadorUno);
         this.players.set('player2', jugadorDos);
@@ -246,7 +258,7 @@ export class GameScene extends Phaser.Scene {
         this.inputMappings.forEach(mapping => {
 
             const labubu = this.players.get(mapping.playerId);
-            let newAnim = 'labubu-down';
+             let newAnim = labubu.animKey;
 
             //Resetea la velocidad antes de aplicar movimiento
             labubu.sprite.setVelocity(0);
@@ -268,17 +280,12 @@ export class GameScene extends Phaser.Scene {
                 newAnim = 'labubu-down';
             }
 
-            // --- REPRODUCIR ANIMACIÓN SOLO SI CAMBIA ---
+            //REPRODUCIR ANIMACIÓN SOLO SI CAMBIA
             if (newAnim && labubu.currentAnim !== newAnim) {
                 labubu.sprite.play(newAnim, true);
                 labubu.currentAnim = newAnim;
             }
 
-            // --- Si NO se está moviendo, parar animación ---
-            if (!newAnim) {
-                labubu.sprite.anims.stop();
-                labubu.currentAnim = null;
-            }
         });
 
     }
