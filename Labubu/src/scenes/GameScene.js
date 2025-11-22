@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { Labubu } from '../entities/paddle';
+import { Labubu } from '../entities/Labubu';
 import { CommandProcessor } from '../commands/CommandProcessor';
 import { MovePaddleCommand } from '../commands/MovePaddleCommand';
 import { PauseGameCommand } from '../commands/PuaseGameCommand';
@@ -25,12 +25,27 @@ export class GameScene extends Phaser.Scene {
     preload() {
 
         this.load.image('fondo', 'assets/fondo.png');
+
+        //SPRITES//
+        this.load.spritesheet('labubu', 'assets/brownanim/down.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
     }
 
     create() {
-        
+
         let fondo = this.add.image(0, 0, 'fondo').setOrigin(0, 0);
-    
+
+        ////ANIMACIÓN DE CAMNIAR////
+        this.anims.create({
+            key: 'labubu-down',
+            frames: this.anims.generateFrameNumbers('labubu', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        
         // puntuaciones
         //j1 arriba izquierda
         this.scoreLeft = this.add.text(17, 10, '0', {
@@ -45,12 +60,15 @@ export class GameScene extends Phaser.Scene {
         });
 
         this.createBounds();
-       // this.createBall();
+        // this.createBall();
         //this.launchBall();
 
-       // this.physics.add.overlap(this.ball, this.leftGoal, this.scoreRightGoal, null, this);
-       // this.physics.add.overlap(this.ball, this.rightGoal, this.scoreLeftGoal, null, this);
+        // this.physics.add.overlap(this.ball, this.leftGoal, this.scoreRightGoal, null, this);
+        // this.physics.add.overlap(this.ball, this.rightGoal, this.scoreLeftGoal, null, this);
 
+        //LOS COLLIDERS
+        let collider1 = this.physics.add.image(400, 500, 'suelo');
+        collider1.setImmovable(true);  // No se mueve al impacto
         this.setUpPlayers();
         this.players.forEach(paddle => {
             //this.physics.add.collider(this.ball, paddle.sprite);
@@ -101,7 +119,7 @@ export class GameScene extends Phaser.Scene {
         if (player1.score >= 2) {
             this.endGame('player1');
         } else {
-           // this.resetBall();
+            // this.resetBall();
         }
     }
 
@@ -113,12 +131,12 @@ export class GameScene extends Phaser.Scene {
         if (player2.score >= 2) {
             this.endGame('player2');
         } else {
-           // this.resetBall();
+            // this.resetBall();
         }
     }
 
     endGame(winnerId) {
-       // this.ball.setVelocity(0, 0);
+        // this.ball.setVelocity(0, 0);
         this.players.forEach(paddle => {
             paddle.sprite.setVelocity(0, 0);
         });
@@ -134,12 +152,12 @@ export class GameScene extends Phaser.Scene {
             fontSize: '32px',
             color: '#ffffff',
         }).setOrigin(0.5)
-        .setInteractive({ useHandCursor: true })
-        .on('pointerover', () => menuBtn.setColor('#cccccc'))
-        .on('pointerout', () => menuBtn.setColor('#ffffff'))
-        .on('pointerdown', () => {
-            this.scene.start('MenuScene');
-        });
+            .setInteractive({ useHandCursor: true })
+            .on('pointerover', () => menuBtn.setColor('#cccccc'))
+            .on('pointerout', () => menuBtn.setColor('#ffffff'))
+            .on('pointerdown', () => {
+                this.scene.start('MenuScene');
+            });
     }
 
     /*
@@ -171,19 +189,19 @@ export class GameScene extends Phaser.Scene {
         )
     }
         */
-/*
-    createBall() {
-        const graphics = this.add.graphics();
-        graphics.fillStyle(0xffffff);
-        graphics.fillCircle(8, 8, 8);
-        graphics.generateTexture('ball', 16, 16);
-        graphics.destroy();
-
-        this.ball = this.physics.add.sprite(400, 300, 'ball');
-        this.ball.setCollideWorldBounds(true);
-        this.ball.setBounce(1);
-    }
-        */
+    /*
+        createBall() {
+            const graphics = this.add.graphics();
+            graphics.fillStyle(0xffffff);
+            graphics.fillCircle(8, 8, 8);
+            graphics.generateTexture('ball', 16, 16);
+            graphics.destroy();
+    
+            this.ball = this.physics.add.sprite(400, 300, 'ball');
+            this.ball.setCollideWorldBounds(true);
+            this.ball.setBounce(1);
+        }
+            */
 
     createBounds() {
         this.leftGoal = this.physics.add.sprite(0, 300, null);
@@ -204,7 +222,7 @@ export class GameScene extends Phaser.Scene {
         if (isPaused) {
             this.scene.launch('PauseScene', { originalScene: 'GameScene' });
             this.scene.pause();
-        } 
+        }
     }
 
     resume() {
@@ -224,23 +242,44 @@ export class GameScene extends Phaser.Scene {
             this.togglePause();
         }
 
+
         this.inputMappings.forEach(mapping => {
-            const paddle = this.players.get(mapping.playerId);
+
+            const labubu = this.players.get(mapping.playerId);
+            let newAnim = 'labubu-down';
 
             //Resetea la velocidad antes de aplicar movimiento
-            paddle.sprite.setVelocity(0);
-            
+            labubu.sprite.setVelocity(0);
+
             //Movimiento en las cuatro direciones
             if (mapping.upKeyObj.isDown) {
-                paddle.sprite.setVelocityY(-paddle.baseSpeed);
+                labubu.sprite.setVelocityY(-labubu.baseSpeed);
+                newAnim = 'labubu-down';
+
             } else if (mapping.downKeyObj.isDown) {
-                paddle.sprite.setVelocityY(paddle.baseSpeed);
+                labubu.sprite.setVelocityY(labubu.baseSpeed);
+                newAnim = 'labubu-down';
             }
             if (mapping.leftKeyObj.isDown) {
-                paddle.sprite.setVelocityX(-paddle.baseSpeed);
+                labubu.sprite.setVelocityX(-labubu.baseSpeed);
+                newAnim = 'labubu-down';
             } else if (mapping.rightKeyObj.isDown) {
-                paddle.sprite.setVelocityX(paddle.baseSpeed);
+                labubu.sprite.setVelocityX(labubu.baseSpeed);
+                newAnim = 'labubu-down';
+            }
+
+            // --- REPRODUCIR ANIMACIÓN SOLO SI CAMBIA ---
+            if (newAnim && labubu.currentAnim !== newAnim) {
+                labubu.sprite.play(newAnim, true);
+                labubu.currentAnim = newAnim;
+            }
+
+            // --- Si NO se está moviendo, parar animación ---
+            if (!newAnim) {
+                labubu.sprite.anims.stop();
+                labubu.currentAnim = null;
             }
         });
+
     }
 }
