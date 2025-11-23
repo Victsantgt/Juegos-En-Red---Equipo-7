@@ -92,7 +92,15 @@ export class GameScene extends Phaser.Scene {
         this.setUpPlayers();
 
         this.players.forEach((player) => {
+
+            //COLLIDERS CON LOS OBJETOS DEL ESCENARIO
             this.physics.add.collider(player.sprite, this.walls);
+            this.physics.add.collider(player.sprite, this.leftWall);
+
+            //COLLIDERS CON LÍMITES DE PAREDES
+            this.physics.add.collider(player.sprite, this.rightWall);
+            this.physics.add.collider(player.sprite, this.topWall);
+            this.physics.add.collider(player.sprite, this.bottomWall);
         });
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
@@ -226,7 +234,7 @@ export class GameScene extends Phaser.Scene {
             */
 
     createBounds() {
-        this.leftGoal = this.physics.add.sprite(0, 300, null);
+        /*this.leftGoal = this.physics.add.sprite(0, 400, null);
         this.leftGoal.setDisplaySize(10, 600);
         this.leftGoal.body.setSize(10, 600);
         this.leftGoal.setImmovable(true);
@@ -236,7 +244,36 @@ export class GameScene extends Phaser.Scene {
         this.rightGoal.setDisplaySize(10, 600);
         this.rightGoal.body.setSize(10, 600);
         this.rightGoal.setImmovable(true);
-        this.rightGoal.setVisible(false);
+        this.rightGoal.setVisible(false);*/
+
+        //Variables
+        const gameWidth = 704;
+        const gameHeight = 576;
+        const wallThickness = 70; // ancho de la pared
+
+        // Límite izquierdo
+        this.leftWall = this.physics.add.staticImage(wallThickness / 2, gameHeight / 2, null)
+            .setDisplaySize(wallThickness, gameHeight)
+            .setVisible(false);
+        this.leftWall.refreshBody();
+
+        // Límite derecho
+        this.rightWall = this.physics.add.staticImage(gameWidth - wallThickness / 2, gameHeight / 2, null)
+            .setDisplaySize(wallThickness, gameHeight)
+            .setVisible(false);
+        this.rightWall.refreshBody();
+
+        // Límite superior
+        this.topWall = this.physics.add.staticImage(gameWidth / 2, wallThickness / 2, null)
+            .setDisplaySize(gameWidth, wallThickness)
+            .setVisible(false);
+        this.topWall.refreshBody();
+
+        // Límite inferior
+        this.bottomWall = this.physics.add.staticImage(gameWidth / 2, gameHeight - wallThickness / 2, null)
+            .setDisplaySize(gameWidth, wallThickness)
+            .setVisible(false);
+        this.bottomWall.refreshBody();
     }
 
     setPauseState(isPaused) {

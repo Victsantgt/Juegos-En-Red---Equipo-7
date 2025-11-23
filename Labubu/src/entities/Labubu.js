@@ -11,7 +11,7 @@ export class Labubu {
         this.sprite = this.scene.physics.add.sprite(x, y, 'labubu');
 
         //Retocamos el collider porque lo queremos un poco más pequeño
-        this.sprite.body.setSize(55, 50);
+        this.sprite.body.setSize(58, 50);
 
         // Mover el collider hacia abajo
         this.sprite.body.setOffset(
