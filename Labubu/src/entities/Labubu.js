@@ -6,12 +6,13 @@ export class Labubu {
         this.score = 0;
 
         this.baseSpeed = 300;
+        
 
         // Crear sprite físico del jugador usando el spritesheet
         this.sprite = this.scene.physics.add.sprite(x, y, 'labubu');
 
         //Retocamos el collider porque lo queremos un poco más pequeño
-        this.sprite.body.setSize(58, 50);
+        this.sprite.body.setSize(50, 50);
 
         // Mover el collider hacia abajo
         this.sprite.body.setOffset(
@@ -26,6 +27,10 @@ export class Labubu {
         this.currentAnim = null;
         //la animación que ha recibido el constructor
         this.animKey = animKey;
+
+        this.currentDirection = 'down';     // dirección inicial
+        this.turnMode = "normal"; 
     }
+
 
 }

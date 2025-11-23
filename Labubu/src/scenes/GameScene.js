@@ -4,6 +4,7 @@ import { CommandProcessor } from '../commands/CommandProcessor';
 import { MovePaddleCommand } from '../commands/MovePaddleCommand';
 import { PauseGameCommand } from '../commands/PuaseGameCommand';
 collider1: Phaser.Physics.Arcade.Image;
+nodes: Phaser.Physics.Arcade.StaticGroup;
 
 export class GameScene extends Phaser.Scene {
 
@@ -74,33 +75,54 @@ export class GameScene extends Phaser.Scene {
         });
 
         this.createBounds();
+        this.createRailNodes();
         // this.createBall();
         //this.launchBall();
 
         // this.physics.add.overlap(this.ball, this.leftGoal, this.scoreRightGoal, null, this);
         // this.physics.add.overlap(this.ball, this.rightGoal, this.scoreLeftGoal, null, this);
 
+        // ---------- PAREDES DEL ESCENARIO ----------
         this.walls = this.physics.add.staticGroup();
 
-        // Por ejemplo, estos son los huecos:
-        let wall1 = this.walls.create(192, 188, 'colliderCuadrado');
+        let wall1 = this.walls.create(192, 190, 'colliderCuadrado');
         wall1.body.setSize(128, 136);
         wall1.setVisible(true);
+        wall1.refreshBody();
 
-        //this.collider1.body.setOffset(offsetX, offsetY);
-        //this.walls.setImmovable(true);  // No se mueve al impacto
+        let wall2 = this.walls.create(512, 380, 'colliderCuadrado');
+        wall2.body.setSize(128, 136);
+        wall2.setVisible(true);
+        wall2.refreshBody();
+
+        let wall3 = this.walls.create(256, 380, 'colliderRectangulo');
+        wall3.body.setSize(256, 136);
+        wall3.setVisible(true);
+        wall3.refreshBody();
+
+        let wall4 = this.walls.create(448, 188, 'colliderRectangulo');
+        wall4.body.setSize(256, 136);
+        wall4.setVisible(true);
+        wall4.refreshBody();
+
+
         this.setUpPlayers();
 
         this.players.forEach((player) => {
 
             //COLLIDERS CON LOS OBJETOS DEL ESCENARIO
             this.physics.add.collider(player.sprite, this.walls);
-            this.physics.add.collider(player.sprite, this.leftWall);
 
             //COLLIDERS CON LÍMITES DE PAREDES
+            this.physics.add.collider(player.sprite, this.leftWall);
             this.physics.add.collider(player.sprite, this.rightWall);
             this.physics.add.collider(player.sprite, this.topWall);
             this.physics.add.collider(player.sprite, this.bottomWall);
+
+            //COLLIDERS NODOS
+            this.physics.add.overlap(player.sprite, this.nodes, (spr, node) => {
+                player.canTurn = true;
+            }, null, this);
         });
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
@@ -112,6 +134,8 @@ export class GameScene extends Phaser.Scene {
 
         this.players.set('player1', jugadorUno);
         this.players.set('player2', jugadorDos);
+        this.players.get('player1').turnMode = "reverse";
+        this.players.get('player2').turnMode = "normal";
 
 
         const InputConfig = [
@@ -234,46 +258,25 @@ export class GameScene extends Phaser.Scene {
             */
 
     createBounds() {
-        /*this.leftGoal = this.physics.add.sprite(0, 400, null);
-        this.leftGoal.setDisplaySize(10, 600);
-        this.leftGoal.body.setSize(10, 600);
-        this.leftGoal.setImmovable(true);
-        this.leftGoal.setVisible(false);
-
-        this.rightGoal = this.physics.add.sprite(700, 300, null);
-        this.rightGoal.setDisplaySize(10, 600);
-        this.rightGoal.body.setSize(10, 600);
-        this.rightGoal.setImmovable(true);
-        this.rightGoal.setVisible(false);*/
-
-        //Variables
         const gameWidth = 704;
         const gameHeight = 576;
-        const wallThickness = 70; // ancho de la pared
+        const wallThickness = 70;
 
-        // Límite izquierdo
-        this.leftWall = this.physics.add.staticImage(wallThickness / 2, gameHeight / 2, null)
-            .setDisplaySize(wallThickness, gameHeight)
-            .setVisible(false);
-        this.leftWall.refreshBody();
+        this.leftWall = this.add.rectangle(wallThickness / 2, gameHeight / 2, wallThickness, gameHeight);
+        this.physics.add.existing(this.leftWall, true);
+        this.leftWall.visible = false;
 
-        // Límite derecho
-        this.rightWall = this.physics.add.staticImage(gameWidth - wallThickness / 2, gameHeight / 2, null)
-            .setDisplaySize(wallThickness, gameHeight)
-            .setVisible(false);
-        this.rightWall.refreshBody();
+        this.rightWall = this.add.rectangle(gameWidth - wallThickness / 2, gameHeight / 2, wallThickness, gameHeight);
+        this.physics.add.existing(this.rightWall, true);
+        this.rightWall.visible = false;
 
-        // Límite superior
-        this.topWall = this.physics.add.staticImage(gameWidth / 2, wallThickness / 2, null)
-            .setDisplaySize(gameWidth, wallThickness)
-            .setVisible(false);
-        this.topWall.refreshBody();
+        this.topWall = this.add.rectangle(gameWidth / 2, wallThickness / 2, gameWidth, wallThickness);
+        this.physics.add.existing(this.topWall, true);
+        this.topWall.visible = false;
 
-        // Límite inferior
-        this.bottomWall = this.physics.add.staticImage(gameWidth / 2, gameHeight - wallThickness / 2, null)
-            .setDisplaySize(gameWidth, wallThickness)
-            .setVisible(false);
-        this.bottomWall.refreshBody();
+        this.bottomWall = this.add.rectangle(gameWidth / 2, gameHeight - wallThickness / 2, gameWidth, wallThickness);
+        this.physics.add.existing(this.bottomWall, true);
+        this.bottomWall.visible = false;
     }
 
     setPauseState(isPaused) {
@@ -294,12 +297,31 @@ export class GameScene extends Phaser.Scene {
             new PauseGameCommand(this, newPauseState)
         );
     }
+    getTurnDirectionNormal(dir) {
+        const fixedTurns = {
+            'left': 'up',
+            'up': 'right',
+            'right': 'down',
+            'down': 'left'
+        };
+        return fixedTurns[dir];
+    }
+
+    getTurnDirectionReverse(dir) {
+        const reverseTurns = {
+            'left': 'down',
+            'down': 'right',
+            'right': 'up',
+            'up': 'left'
+        };
+        return reverseTurns[dir];
+    }
 
     update() {
 
-        if (this.escKey.isDown && !this.escWasDown) {
+       if (this.escKey.isDown && !this.escWasDown) {
             this.togglePause();
-        }
+        }/*
 
 
         this.inputMappings.forEach(mapping => {
@@ -307,8 +329,9 @@ export class GameScene extends Phaser.Scene {
             const labubu = this.players.get(mapping.playerId);
             let newAnim = labubu.animKey;
 
+            
             //Resetea la velocidad antes de aplicar movimiento
-            labubu.sprite.setVelocity(0);
+            labubu.sprite.setVelocity(0,16);
 
             //Movimiento en las cuatro direciones
             if (mapping.upKeyObj.isDown) {
@@ -335,5 +358,103 @@ export class GameScene extends Phaser.Scene {
 
         });
 
+         if (this.escKey.isDown && !this.escWasDown) {
+        this.togglePause();
+    }*/
+
+
+        this.players.forEach(labubu => {
+            const speed = labubu.baseSpeed;
+            const body = labubu.sprite.body;
+
+            let newDirection = labubu.currentDirection;
+
+            // ---------- INPUT ----------
+            const mapping = this.inputMappings.find(m => m.playerId === labubu.id);
+            let inputDir = null;
+            if (mapping) {
+                if (mapping.upKeyObj.isDown) inputDir = 'up';
+                else if (mapping.downKeyObj.isDown) inputDir = 'down';
+                else if (mapping.leftKeyObj.isDown) inputDir = 'left';
+                else if (mapping.rightKeyObj.isDown) inputDir = 'right';
+            }
+
+            // ---------- GIRO POR INPUT ----------
+            if (inputDir && !body.blocked[inputDir]) {
+                newDirection = inputDir;
+            }
+
+            // ---------- GIRO AUTOMÁTICO (SEGÚN MODO DEL LABUBU) ----------
+            if (body.blocked.up || body.blocked.down || body.blocked.left || body.blocked.right) {
+
+                if (labubu.turnMode === "normal") {
+                    newDirection = this.getTurnDirectionNormal(labubu.currentDirection);
+                } else if (labubu.turnMode === "reverse") {
+                    newDirection = this.getTurnDirectionReverse(labubu.currentDirection);
+                }
+            }
+            // ---------- APLICAR MOVIMIENTO ----------
+            labubu.currentDirection = newDirection;
+            switch (labubu.currentDirection) {
+                case 'up': labubu.sprite.setVelocity(0, -speed); break;
+                case 'down': labubu.sprite.setVelocity(0, speed); break;
+                case 'left': labubu.sprite.setVelocity(-speed, 0); break;
+                case 'right': labubu.sprite.setVelocity(speed, 0); break;
+            }
+
+        });
+
+
     }
+    createRailNodes() {
+        this.nodes = this.physics.add.staticGroup();
+
+        const nodePositions = [
+            //{ x: 287, y: 95 },
+            //{ x: 100, y: 100 },
+            // { x: 100, y: 470 },
+            // { x: 192, y: 128 },
+            // { x: 192, y: 192 },
+
+        ];
+
+        nodePositions.forEach(p => {
+            /*let n = this.nodes.create(p.x, p.y, null);
+            n.setDisplaySize(74, 74).setVisible(true);
+            n.refreshBody();*/
+            const node = this.nodes.create(p.x, p.y, 'colliderCuadrado'); // textura real
+            node.setDisplaySize(64, 64);
+            node.setVisible(true); // invisible en juego
+            node.refreshBody();
+        });
+
+        function tryTurn(labubu) {
+
+            const speed = labubu.baseSpeed;
+
+            switch (labubu.nextDirection) {
+                case 'up':
+                    labubu.sprite.setVelocity(0, -speed);
+                    labubu.currentDirection = 'up';
+                    break;
+                case 'down':
+                    labubu.sprite.setVelocity(0, speed);
+                    labubu.currentDirection = 'down';
+                    break;
+                case 'left':
+                    labubu.sprite.setVelocity(-speed, 0);
+                    labubu.currentDirection = 'left';
+                    break;
+                case 'right':
+                    labubu.sprite.setVelocity(speed, 0);
+                    labubu.currentDirection = 'right';
+                    break;
+            }
+        }
+    }
+
+
+
+
+
 }
