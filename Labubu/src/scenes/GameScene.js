@@ -3,6 +3,7 @@ import { Labubu } from '../entities/Labubu';
 import { CommandProcessor } from '../commands/CommandProcessor';
 import { MovePaddleCommand } from '../commands/MovePaddleCommand';
 import { PauseGameCommand } from '../commands/PuaseGameCommand';
+collider1: Phaser.Physics.Arcade.Image;
 
 export class GameScene extends Phaser.Scene {
 
@@ -25,6 +26,8 @@ export class GameScene extends Phaser.Scene {
     preload() {
 
         this.load.image('fondo', 'assets/fondo.png');
+        this.load.image('colliderCuadrado', 'assets/colliderCuadrado.png');
+        this.load.image('colliderRectangulo', 'assets/colliderRectangulo.png');
 
         //SPRITES//
         this.load.spritesheet('labubu', 'assets/brownanim/down.png', {
@@ -41,7 +44,6 @@ export class GameScene extends Phaser.Scene {
     create() {
 
         let fondo = this.add.image(0, 0, 'fondo').setOrigin(0, 0);
-
         ////ANIMACIÓN ABAJO JUGADOR 1////
         this.anims.create({
             key: 'labubu1-down',
@@ -78,23 +80,31 @@ export class GameScene extends Phaser.Scene {
         // this.physics.add.overlap(this.ball, this.leftGoal, this.scoreRightGoal, null, this);
         // this.physics.add.overlap(this.ball, this.rightGoal, this.scoreLeftGoal, null, this);
 
-        //LOS COLLIDERS
-        let collider1 = this.physics.add.image(400, 500, 'suelo');
-        collider1.setImmovable(true);  // No se mueve al impacto
+        this.walls = this.physics.add.staticGroup();
+
+        // Por ejemplo, estos son los huecos:
+        let wall1 = this.walls.create(192, 188, 'colliderCuadrado');
+        wall1.body.setSize(128, 136);
+        wall1.setVisible(true);
+
+        //this.collider1.body.setOffset(offsetX, offsetY);
+        //this.walls.setImmovable(true);  // No se mueve al impacto
         this.setUpPlayers();
-        this.players.forEach(paddle => {
-            //this.physics.add.collider(this.ball, paddle.sprite);
+
+        this.players.forEach((player) => {
+            this.physics.add.collider(player.sprite, this.walls);
         });
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     }
 
     setUpPlayers() {
-        const jugadorUno = new Labubu(this, 'player1', 96, 288,'labubu1-down');
+        const jugadorUno = new Labubu(this, 'player1', 96, 288, 'labubu1-down');
         const jugadorDos = new Labubu(this, 'player2', 608, 288, 'labubu2-down');
 
         this.players.set('player1', jugadorUno);
         this.players.set('player2', jugadorDos);
+
 
         const InputConfig = [
             {
@@ -258,7 +268,7 @@ export class GameScene extends Phaser.Scene {
         this.inputMappings.forEach(mapping => {
 
             const labubu = this.players.get(mapping.playerId);
-             let newAnim = labubu.animKey;
+            let newAnim = labubu.animKey;
 
             //Resetea la velocidad antes de aplicar movimiento
             labubu.sprite.setVelocity(0);
