@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { Labubu } from '../entities/Labubu';
+import { Bullet } from '../entities/Bullet';
 import { CommandProcessor } from '../commands/CommandProcessor';
 import { MovePaddleCommand } from '../commands/MovePaddleCommand';
 import { PauseGameCommand } from '../commands/PuaseGameCommand';
@@ -29,6 +30,7 @@ export class GameScene extends Phaser.Scene {
         this.load.image('fondo', 'assets/fondo.png');
         this.load.image('colliderCuadrado', 'assets/colliderCuadrado.png');
         this.load.image('colliderRectangulo', 'assets/colliderRectangulo.png');
+        this.load.image('tapioca', 'assets/tapioca.png');
 
         //SPRITES//
         this.load.spritesheet('labubu', 'assets/brownanim/down.png', {
@@ -144,14 +146,16 @@ export class GameScene extends Phaser.Scene {
                 upKey: 'W',
                 downKey: 'S',
                 leftKey: 'A',
-                rightKey: 'D'
+                rightKey: 'D',
+                shootKey: 'SHIFT'
             },
             {
                 playerId: 'player2',
                 upKey: 'UP',
                 downKey: 'DOWN',
                 leftKey: 'LEFT',
-                rightKey: 'RIGHT'
+                rightKey: 'RIGHT',
+                shootKey: 'ENTER'
             }
         ]
         this.inputMappings = InputConfig.map(config => {
@@ -161,6 +165,7 @@ export class GameScene extends Phaser.Scene {
                 downKeyObj: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[config.downKey]),
                 leftKeyObj: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[config.leftKey]),
                 rightKeyObj: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[config.rightKey]),
+                shootKeyObj: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes[config.shootKey]),
             }
         });
     }
@@ -377,6 +382,7 @@ export class GameScene extends Phaser.Scene {
                 else if (mapping.downKeyObj.isDown) inputDir = 'down';
                 else if (mapping.leftKeyObj.isDown) inputDir = 'left';
                 else if (mapping.rightKeyObj.isDown) inputDir = 'right';
+                else if (mapping.shootKeyObj.isDown) this.shoot(labubu.currentDirection, labubu.x, labubu.y);
             }
 
             // ---------- GIRO POR INPUT ----------
@@ -452,9 +458,7 @@ export class GameScene extends Phaser.Scene {
             }
         }
     }
-
-
-
-
-
+    shoot(dir, x, y) {
+        let bullet = new Bullet(this, 96, 288, dir);
+    }
 }
