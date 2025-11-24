@@ -66,13 +66,13 @@ export class GameScene extends Phaser.Scene {
 
         // puntuaciones
         //j1 arriba izquierda
-        this.scoreLeft = this.add.text(17, 10, '0', {
+        this.scoreLeft = this.add.text(17, 10, '3', {
             fontSize: '48px',
             color: '#00ff00'
         });
 
         //j2 arriba derecha
-        this.rightScore = this.add.text(657, 10, '0', {
+        this.rightScore = this.add.text(657, 10, '3', {
             fontSize: '48px',
             color: '#00ff00'
         });
@@ -136,6 +136,10 @@ export class GameScene extends Phaser.Scene {
         const jugadorUno = new Labubu(this, 'player1', 96, 288, 'labubu1-down');
         const jugadorDos = new Labubu(this, 'player2', 608, 288, 'labubu2-down');
 
+        //Empiezan con 3 vidas cada uno
+        jugadorUno.score = 3;
+        jugadorDos.score = 3;
+
         this.players.set('player1', jugadorUno);
         this.players.set('player2', jugadorDos);
         this.players.get('player1').turnMode = "reverse";
@@ -172,33 +176,21 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
-    /*scoreLeftGoal() {
+    scoreUpdate() {
         const player1 = this.players.get('player1');
-        player1.score += 1;
-        this.scoreLeft.setText(player1.score.toString());
-
-        if (player1.score >= 2) {
-            this.endGame('player1');
-        } else {
-            // this.resetBall();
-        }
-    }
-
-    scoreRightGoal() {
         const player2 = this.players.get('player2');
-        player2.score += 1;
+        this.scoreLeft.setText(player1.score.toString());
         this.rightScore.setText(player2.score.toString());
 
-        if (player2.score >= 2) {
+        if (player1.score <= 0) {
             this.endGame('player2');
-        } else {
-            // this.resetBall();
+        }
+        if (player2.score <= 0) {
+            this.endGame('player1');
         }
     }
-        */
 
     endGame(winnerId) {
-        // this.ball.setVelocity(0, 0);
         this.players.forEach(paddle => {
             paddle.sprite.setVelocity(0, 0);
         });
@@ -369,7 +361,7 @@ export class GameScene extends Phaser.Scene {
          if (this.escKey.isDown && !this.escWasDown) {
         this.togglePause();
     }*/
-
+        // MOVIMIENTO BALAS
         this.bullets.forEach(bullet =>{
             switch (bullet.currentDirection) {
                 case 'up':
@@ -387,6 +379,7 @@ export class GameScene extends Phaser.Scene {
             }
         });
 
+        //LABUBUS
         this.players.forEach(labubu => {
             const speed = labubu.baseSpeed;
             const body = labubu.sprite.body;
@@ -484,16 +477,19 @@ export class GameScene extends Phaser.Scene {
             }
         }
     }
+
     shoot(dir, x, y) {
 
         let bullet = new Bullet(this, x, y, dir);
 
+        //las balas tienen un poco de offset para que se coloquen bien y no se choquen
+        //con los labubus
         switch (dir) {
             case 'up':
-                bullet.sprite.y -= 40;
+                bullet.sprite.y -= 50;
                 break;
             case 'down':
-                bullet.sprite.y += 40;
+                bullet.sprite.y += 70;
                 break;
             case 'left':
                 bullet.sprite.x -= 50;
@@ -506,21 +502,25 @@ export class GameScene extends Phaser.Scene {
         }
         this.bullets.push(bullet);
 
+        // COLISIONES LABUBUS
         this.players.forEach(labubu => {
             this.physics.add.overlap(bullet.sprite, labubu.sprite, () => {
                 if(bullet.currentDirection === labubu.currentDirection) {
-                    console.log('¡labubu dado!')
+                    //ACIERTO
+                    this.hit(labubu);
                     this.bullets = this.bullets.filter(b => b !== bullet);
                     bullet.sprite.destroy();
+                    this.scoreUpdate();
                 }
                 else {
-                    console.log('fallo')
+                    //FALLO
                     this.bullets = this.bullets.filter(b => b !== bullet);
                     bullet.sprite.destroy();
                 }
             });
         });
 
+        // COLISIONES MUNDO
         this.physics.add.overlap(bullet.sprite, this.rightWall, () => {
             this.bullets = this.bullets.filter(b => b !== bullet);
             bullet.sprite.destroy();
@@ -541,5 +541,12 @@ export class GameScene extends Phaser.Scene {
             this.bullets = this.bullets.filter(b => b !== bullet);
             bullet.sprite.destroy();
         });
+    }
+
+    hit(labubu) {
+        //Meter aquí para procesar frames de invulnerabilidad
+
+        //Perder vida
+        labubu.score--;
     }
 }

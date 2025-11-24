@@ -7,9 +7,8 @@ export class Bullet {
         
         this.sprite = this.scene.physics.add.sprite(x, y, 'tapioca');
 
-        this.sprite.setCollideWorldBounds(false);
+        this.sprite.setCollideWorldBounds(true);   
         this.sprite.body.allowGravity = false;
-        this.sprite.setVisible(true);
         this.currentDirection = dir;
     }
 }
