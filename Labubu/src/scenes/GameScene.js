@@ -23,8 +23,7 @@ export class GameScene extends Phaser.Scene {
         this.isPaused = false;
         this.escWasDown = false;
         this.processor = new CommandProcessor();
-        this.bulletInv = [];
-        this.activeBullets = [];
+        this.bullets = [];
     }
 
     preload() {
@@ -68,20 +67,19 @@ export class GameScene extends Phaser.Scene {
         // puntuaciones
         //j1 arriba izquierda
         this.scoreLeft = this.add.text(17, 10, '0', {
-            fontFamily: 'Lemon',
             fontSize: '48px',
             color: '#00ff00'
         });
 
         //j2 arriba derecha
         this.rightScore = this.add.text(657, 10, '0', {
-            fontFamily: 'Lemon',
             fontSize: '48px',
             color: '#00ff00'
         });
 
         this.createBounds();
         this.createRailNodes();
+
         // this.createBall();
         //this.launchBall();
 
@@ -129,30 +127,6 @@ export class GameScene extends Phaser.Scene {
             this.physics.add.overlap(player.sprite, this.nodes, (spr, node) => {
                 player.canTurn = true;
             }, null, this);
-        });
-
-        this.activeBullets.forEach((bullet) => {
-            //COLLIDERS BALA CON MUNDO
-            this.physics.add.overlap(bullet.sprite, this.walls, (b, w) => {
-                b.destroy();
-                console.log('aaaaaaaaaaaaaa');
-            });
-            this.physics.add.overlap(bullet.sprite, this.leftWall, (b, w) => {
-                b.destroy();
-                console.log('aaaaaaaaaaaaaa');
-            });
-            this.physics.add.overlap(bullet.sprite, this.rightWall, (b, w) => {
-                b.destroy();
-                console.log('aaaaaaaaaaaaaa');
-            });
-            this.physics.add.overlap(bullet.sprite, this.topWall, (b, w) => {
-                b.destroy();
-                console.log('aaaaaaaaaaaaaa');
-            });
-            this.physics.add.overlap(bullet.sprite, this.bottomWall, (b, w) => {
-                b.destroy();
-                console.log('aaaaaaaaaaaaaa');
-            });
         });
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
@@ -396,7 +370,7 @@ export class GameScene extends Phaser.Scene {
         this.togglePause();
     }*/
 
-        this.activeBullets.forEach(bullet =>{
+        this.bullets.forEach(bullet =>{
             switch (bullet.currentDirection) {
                 case 'up':
                     bullet.sprite.setVelocity(0, -bullet.speed);
@@ -511,26 +485,30 @@ export class GameScene extends Phaser.Scene {
         }
     }
     shoot(dir, x, y) {
-        /*
+
+        let bullet = new Bullet(this, x, y, dir);
+
         switch (dir) {
             case 'up':
-                this.bulletBase.sprite.y =  y - 40;
-                this.bulletBase.currentDirection = dir;
+                bullet.sprite.y -= 40;
                 break;
             case 'down':
-                this.bulletBase.sprite.y =  y + 40;
-                this.bulletBase.currentDirection = dir;
+                bullet.sprite.y += 40;
                 break;
             case 'left':
-                this.bulletBase.sprite.x =  x - 40;
-                this.bulletBase.currentDirection = dir;
+                bullet.sprite.x -= 40;
+                bullet.sprite.y += 16;
                 break;
             case 'right':
-                this.bulletBase.sprite.x =  x + 40;
-                this.bulletBase.currentDirection = dir;
+                bullet.sprite.x += 40;
+                bullet.sprite.y += 16;
                 break;
         }
-        this.activeBullets.push(this.bulletBase);
-        */
+        this.bullets.push(bullet);
+        this.physics.add.overlap(bullet.sprite, this.walls, () => console.log('a'));
+        this.physics.add.overlap(bullet.sprite, this.leftWall, () => console.log('a'));
+        this.physics.add.overlap(bullet.sprite, this.rightWall, () => console.log('a'));
+        this.physics.add.overlap(bullet.sprite, this.topWall, () => console.log('a'));
+        this.physics.add.overlap(bullet.sprite, this.bottomWall, () => console.log('a'));
     }
 }
