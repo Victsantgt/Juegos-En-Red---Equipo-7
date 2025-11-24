@@ -1,0 +1,79 @@
+/* Estilos generales */
+body {
+    font-family: "Lemon", sans-serif;
+    animation: gradientAnimation 15s ease infinite; /* Animación de fondo */
+    background: linear-gradient(270deg, #ffcc00, #ff6699, #66ccff, #ffcc00); /* Gradiente de colores complementarios */
+    background-size: 400% 400%; /* Tamaño del fondo para la animación */
+    color: #fff; /* Texto blanco */
+    text-shadow: 2px 2px 5px black;
+    text-align: center; /* Centrar texto */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%; 
+    }
+    50% {
+        background-position: 100% 50%; 
+    }
+    100% {
+        background-position: 0% 50%; 
+    }
+}
+
+
+/* Estilo del título */
+h1 {
+    font-family: "Lemon", sans-serif;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-family: "Lemon", sans-serif;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+/* Estilo del canvas */
+canvas {
+    display: block;
+    margin: auto;
+    background: black;
+    border: 2px solid #fff; /* Borde blanco */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Estilo de los botones */
+button {
+    background: #f39c12; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    padding: 10px 20px; /* Espaciado interno */
+    font-family: "Lemon", sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer; /* Cambiar cursor al pasar por encima */
+    margin: 10px; /* Espaciado entre botones */
+    transition: background-color 0.3s; /* Transición suave */
+}
+
+button:hover {
+    background-color: #e67e22; /* Color de fondo al pasar el ratón */
+}
+
+/* Estilo de la puntuación y vidas */
+#puntuacion, #vidas {
+    text-shadow: 2px 2px 5px white;
+    font-size: 1.2em; /* Tamaño de fuente */
+    font-family: "Lucida Console", "Courier New", monospace;
+    margin-top: 20px; /* Espaciado superior */
+    color: #e74c3c; /* Color rojo */
+}
