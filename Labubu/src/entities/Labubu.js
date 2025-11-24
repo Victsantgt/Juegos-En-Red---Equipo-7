@@ -4,7 +4,7 @@ export class Labubu {
         this.id = id;
         this.scene = scene;
         this.score = 0;
-
+        this.cooldown = 0;
         this.baseSpeed = 300;
         
 
