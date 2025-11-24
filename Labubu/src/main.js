@@ -17,6 +17,9 @@ const config = {
     },
     scene: [MenuScene, GameScene, PauseScene],
     backgroundColor: '#1a1a2e',
-}
+};
 
-const game = new Phaser.Game(config);
+document.fonts.ready.then(() => {
+    //Para la fuente
+    new Phaser.Game(config);
+    });

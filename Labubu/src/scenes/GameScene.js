@@ -34,12 +34,14 @@ export class GameScene extends Phaser.Scene {
         // puntuaciones
         //j1 arriba izquierda
         this.scoreLeft = this.add.text(17, 10, '0', {
+            fontFamily: 'Lemon',
             fontSize: '48px',
             color: '#00ff00'
         });
 
         //j2 arriba derecha
         this.rightScore = this.add.text(657, 10, '0', {
+            fontFamily: 'Lemon',
             fontSize: '48px',
             color: '#00ff00'
         });
