@@ -496,19 +496,50 @@ export class GameScene extends Phaser.Scene {
                 bullet.sprite.y += 40;
                 break;
             case 'left':
-                bullet.sprite.x -= 40;
+                bullet.sprite.x -= 50;
                 bullet.sprite.y += 16;
                 break;
             case 'right':
-                bullet.sprite.x += 40;
+                bullet.sprite.x += 50;
                 bullet.sprite.y += 16;
                 break;
         }
         this.bullets.push(bullet);
-        this.physics.add.overlap(bullet.sprite, this.walls, () => console.log('a'));
-        this.physics.add.overlap(bullet.sprite, this.leftWall, () => console.log('a'));
-        this.physics.add.overlap(bullet.sprite, this.rightWall, () => console.log('a'));
-        this.physics.add.overlap(bullet.sprite, this.topWall, () => console.log('a'));
-        this.physics.add.overlap(bullet.sprite, this.bottomWall, () => console.log('a'));
+
+        this.players.forEach(labubu => {
+            this.physics.add.overlap(bullet.sprite, labubu.sprite, () => {
+                if(bullet.currentDirection === labubu.currentDirection) {
+                    console.log('¡labubu dado!')
+                    this.bullets = this.bullets.filter(b => b !== bullet);
+                    bullet.sprite.destroy();
+                }
+                else {
+                    console.log('fallo')
+                    this.bullets = this.bullets.filter(b => b !== bullet);
+                    bullet.sprite.destroy();
+                }
+            });
+        });
+
+        this.physics.add.overlap(bullet.sprite, this.rightWall, () => {
+            this.bullets = this.bullets.filter(b => b !== bullet);
+            bullet.sprite.destroy();
+        });
+        this.physics.add.overlap(bullet.sprite, this.leftWall, () => {
+            this.bullets = this.bullets.filter(b => b !== bullet);
+            bullet.sprite.destroy();
+        });
+        this.physics.add.overlap(bullet.sprite, this.topWall, () => {
+            this.bullets = this.bullets.filter(b => b !== bullet);
+            bullet.sprite.destroy();
+        });
+        this.physics.add.overlap(bullet.sprite, this.bottomWall, () => {
+            this.bullets = this.bullets.filter(b => b !== bullet);
+            bullet.sprite.destroy();
+        });
+        this.physics.add.overlap(bullet.sprite, this.walls, () => {
+            this.bullets = this.bullets.filter(b => b !== bullet);
+            bullet.sprite.destroy();
+        });
     }
 }
