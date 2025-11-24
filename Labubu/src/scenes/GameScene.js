@@ -23,6 +23,8 @@ export class GameScene extends Phaser.Scene {
         this.isPaused = false;
         this.escWasDown = false;
         this.processor = new CommandProcessor();
+        this.bulletInv = [];
+        this.activeBullets = [];
     }
 
     preload() {
@@ -129,6 +131,30 @@ export class GameScene extends Phaser.Scene {
             }, null, this);
         });
 
+        this.activeBullets.forEach((bullet) => {
+            //COLLIDERS BALA CON MUNDO
+            this.physics.add.overlap(bullet.sprite, this.walls, (b, w) => {
+                b.destroy();
+                console.log('aaaaaaaaaaaaaa');
+            });
+            this.physics.add.overlap(bullet.sprite, this.leftWall, (b, w) => {
+                b.destroy();
+                console.log('aaaaaaaaaaaaaa');
+            });
+            this.physics.add.overlap(bullet.sprite, this.rightWall, (b, w) => {
+                b.destroy();
+                console.log('aaaaaaaaaaaaaa');
+            });
+            this.physics.add.overlap(bullet.sprite, this.topWall, (b, w) => {
+                b.destroy();
+                console.log('aaaaaaaaaaaaaa');
+            });
+            this.physics.add.overlap(bullet.sprite, this.bottomWall, (b, w) => {
+                b.destroy();
+                console.log('aaaaaaaaaaaaaa');
+            });
+        });
+
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     }
 
@@ -172,7 +198,7 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
-    scoreLeftGoal() {
+    /*scoreLeftGoal() {
         const player1 = this.players.get('player1');
         player1.score += 1;
         this.scoreLeft.setText(player1.score.toString());
@@ -195,6 +221,7 @@ export class GameScene extends Phaser.Scene {
             // this.resetBall();
         }
     }
+        */
 
     endGame(winnerId) {
         // this.ball.setVelocity(0, 0);
@@ -369,6 +396,22 @@ export class GameScene extends Phaser.Scene {
         this.togglePause();
     }*/
 
+        this.activeBullets.forEach(bullet =>{
+            switch (bullet.currentDirection) {
+                case 'up':
+                    bullet.sprite.setVelocity(0, -bullet.speed);
+                    break;
+                case 'down':
+                    bullet.sprite.setVelocity(0, bullet.speed);
+                    break;
+                case 'left':
+                    bullet.sprite.setVelocity(-bullet.speed, 0);
+                    break;
+                case 'right':
+                    bullet.sprite.setVelocity(bullet.speed, 0);
+                    break;
+            }
+        });
 
         this.players.forEach(labubu => {
             const speed = labubu.baseSpeed;
@@ -384,7 +427,11 @@ export class GameScene extends Phaser.Scene {
                 else if (mapping.downKeyObj.isDown) inputDir = 'down';
                 else if (mapping.leftKeyObj.isDown) inputDir = 'left';
                 else if (mapping.rightKeyObj.isDown) inputDir = 'right';
-                else if (mapping.shootKeyObj.isDown) this.shoot(labubu.currentDirection, labubu.x, labubu.y);
+
+                else if (mapping.shootKeyObj.isDown && labubu.cooldown === 0) {
+                    this.shoot(labubu.currentDirection, labubu.sprite.x, labubu.sprite.y);
+                    labubu.cooldown = 300;
+                }
             }
 
             // ---------- GIRO POR INPUT ----------
@@ -409,9 +456,12 @@ export class GameScene extends Phaser.Scene {
                 case 'left': labubu.sprite.setVelocity(-speed, 0); break;
                 case 'right': labubu.sprite.setVelocity(speed, 0); break;
             }
+            // ---------- REDUCIR COOLDOWN ----------
+            if(labubu.cooldown > 0) {
+                labubu.cooldown--;
+            }
 
         });
-
 
     }
     createRailNodes() {
@@ -461,6 +511,26 @@ export class GameScene extends Phaser.Scene {
         }
     }
     shoot(dir, x, y) {
-        let bullet = new Bullet(this, 96, 288, dir);
+        /*
+        switch (dir) {
+            case 'up':
+                this.bulletBase.sprite.y =  y - 40;
+                this.bulletBase.currentDirection = dir;
+                break;
+            case 'down':
+                this.bulletBase.sprite.y =  y + 40;
+                this.bulletBase.currentDirection = dir;
+                break;
+            case 'left':
+                this.bulletBase.sprite.x =  x - 40;
+                this.bulletBase.currentDirection = dir;
+                break;
+            case 'right':
+                this.bulletBase.sprite.x =  x + 40;
+                this.bulletBase.currentDirection = dir;
+                break;
+        }
+        this.activeBullets.push(this.bulletBase);
+        */
     }
 }
