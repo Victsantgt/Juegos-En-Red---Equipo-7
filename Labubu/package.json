@@ -1,5 +1,5 @@
 {
-  "name": "practice",
+  "name": "LABUBU MATCHUP",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -12,11 +12,11 @@
   },
   "keywords": [
     "game",
-    "pong"
+    "LABUBU MATCH-UP"
   ],
-  "author": "Ruben Rodriguez",
+  "author": "EQUIPO 7",
   "license": "Apache-2.0",
-  "description": "A pong game with Phaser3",
+  "description": "Un juego de labubus",
   "dependencies": {
     "express": "^5.1.0",
     "phaser": "^3.90.0"
