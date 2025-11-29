@@ -7,9 +7,11 @@ export class MenuScene extends Phaser.Scene {
 
     preload() {
         this.load.image('menuFondo', 'assets/menuFondo.png');
+        this.load.audio('musicaFondo', 'assets/audio/menuPpal.mp3');
     }
 
     create() {
+        this.cameras.main.setBackgroundColor('#ffffff');
         // FADE IN
         this.cameras.main.fadeIn(1000, 255, 255, 255);
 

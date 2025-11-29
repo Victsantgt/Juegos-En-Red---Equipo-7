@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { StartScene } from './scenes/StartScene.js';
 import { MenuScene } from './scenes/MenuScene.js';
 import { GameScene } from './scenes/GameScene.js';
 import { PauseScene } from './scenes/PauseScene.js';
@@ -7,6 +8,7 @@ const config = {
     type: Phaser.AUTO,
     width: 704,
     height: 576,
+    backgroundColor: '#ffffff',
     parent: 'game-container',
     physics: {
         default: 'arcade',
@@ -15,8 +17,7 @@ const config = {
             debug: false
         }
     },
-    scene: [MenuScene, GameScene, PauseScene],
-    backgroundColor: '#1a1a2e',
+    scene: [StartScene, MenuScene, GameScene, PauseScene],
 };
 
 document.fonts.ready.then(() => {
