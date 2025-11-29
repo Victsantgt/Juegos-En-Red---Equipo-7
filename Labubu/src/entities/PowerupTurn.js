@@ -1,5 +1,6 @@
 import { Powerup } from "./Powerup";
 
+<<<<<<< Updated upstream
 export class PowerupTurn extends Powerup{
 
     constructor(scene, name) {
@@ -10,4 +11,12 @@ export class PowerupTurn extends Powerup{
     }
 
 
+=======
+export class PowerupTurn extends Powerup {
+
+    constructor(){
+        super();
+    }
+
+>>>>>>> Stashed changes
 }

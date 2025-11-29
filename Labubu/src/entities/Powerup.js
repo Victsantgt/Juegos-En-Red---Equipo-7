@@ -1,5 +1,6 @@
 export class Powerup {
 
+<<<<<<< Updated upstream
     constructor(scene, x, y) {
         this.scene = scene;
 
@@ -12,4 +13,15 @@ export class Powerup {
 
 
     
+=======
+    constructor(scene,x,y,animKey){
+        this.scene = scene;
+        this.x = x;
+        this.y = y;
+        this.animKey = animKey;
+
+        
+    }
+
+>>>>>>> Stashed changes
 }

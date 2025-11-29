@@ -5,6 +5,8 @@ import { RailNode } from '../entities/RailNode';
 import { CommandProcessor } from '../commands/CommandProcessor';
 import { MovePaddleCommand } from '../commands/MovePaddleCommand';
 import { PauseGameCommand } from '../commands/PuaseGameCommand';
+import { Powerup } from '../entities/Powerup';
+import { PowerupSpeed } from '../entities/PowerupSpeed';
 collider1: Phaser.Physics.Arcade.Image;
 nodes: Phaser.Physics.Arcade.StaticGroup;
 
@@ -43,7 +45,19 @@ export class GameScene extends Phaser.Scene {
             frameWidth: 68,
             frameHeight: 88
         });
-
+        this.load.spritesheet('powerupHealth','assets/chocolateanim/chocolate',{
+            frameWidth: 48,
+            frameHeight: 48
+        });
+        this.load.spritesheet('powerupTurn','assets/chocolateanim/chocolate1',{
+            frameWidth: 48,
+            frameHeight: 48
+        });
+        this.load.spritesheet('powerupSpeed','assets/chocolateanim/chocolate2',{
+            frameWidth: 48,
+            frameHeight: 48
+        });
+        
     }
 
     create() {
@@ -64,6 +78,30 @@ export class GameScene extends Phaser.Scene {
         this.anims.create({
             key: 'labubu2-down',
             frames: this.anims.generateFrameNumbers('labubu2', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        //ANIMACIÓN POWERUP HEALTH
+        this.anims.create({
+            key: 'powerupHealtg',
+            frames: this.anims.generateFrameNumbers('powerupHealth', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        //ANIMACIÓN POWERUP SPEED
+        this.anims.create({
+            key: 'powerupSpeed',
+            frames: this.anims.generateFrameNumbers('powerupSpeed', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        //ANIMACIÓN POWERUP TURN
+        this.anims.create({
+            key: 'powerupTurn',
+            frames: this.anims.generateFrameNumbers('powerupTurn', { start: 0, end: 3 }),
             frameRate: 10,
             repeat: -1
         });
@@ -146,6 +184,7 @@ export class GameScene extends Phaser.Scene {
     setUpPlayers() {
         const jugadorUno = new Labubu(this, 'player1', 96, 288, 'labubu1-down');
         const jugadorDos = new Labubu(this, 'player2', 608, 288, 'labubu2-down');
+        //const powerupprueba = new PowerupSpeed(this, 300, 400, 'powerupSpeed');
 
         //Empiezan con 3 vidas cada uno
         jugadorUno.score = 3;
@@ -155,6 +194,7 @@ export class GameScene extends Phaser.Scene {
         this.players.set('player2', jugadorDos);
         this.players.get('player1').turnMode = "reverse";
         this.players.get('player2').turnMode = "normal";
+
 
 
         const InputConfig = [
