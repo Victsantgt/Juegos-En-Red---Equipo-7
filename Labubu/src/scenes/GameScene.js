@@ -384,59 +384,7 @@ export class GameScene extends Phaser.Scene {
 
         //LABUBUS
         this.players.forEach(labubu => {
-            this.players.forEach(labubu => {
-                if (!labubu || !labubu.sprite || !labubu.sprite.body) {
-                    console.log("Labubu inválido", labubu);
-                    return;
-                }
-                console.log("Labubu", labubu.id, "pos", labubu.sprite.x, labubu.sprite.y);
-            });
-            /* const speed = labubu.baseSpeed;
-             const body = labubu.sprite.body;
- 
-             let newDirection = labubu.currentDirection;
-             
-             // ---------- INPUT ----------
-             const mapping = this.inputMappings.find(m => m.playerId === labubu.id);
-             let inputDir = null;
-             if (mapping) {
-                 if (mapping.upKeyObj.isDown) inputDir = 'up';
-                 else if (mapping.downKeyObj.isDown) inputDir = 'down';
-                 else if (mapping.leftKeyObj.isDown) inputDir = 'left';
-                 else if (mapping.rightKeyObj.isDown) inputDir = 'right';
- 
-                 else if (mapping.shootKeyObj.isDown && labubu.cooldown === 0) {
-                     this.shoot(labubu.currentDirection, labubu.sprite.x, labubu.sprite.y);
-                     labubu.cooldown = 300;
-                 }
-             }
- 
-             // ---------- GIRO POR INPUT ----------
-             if (inputDir && !body.blocked[inputDir]) {
-                 newDirection = inputDir;
-             }
- 
-             // ---------- GIRO AUTOMÁTICO (SEGÚN MODO DEL LABUBU) ----------
-             if (body.blocked.up || body.blocked.down || body.blocked.left || body.blocked.right) {
- 
-                 if (labubu.turnMode === "normal") {
-                     newDirection = this.getTurnDirectionNormal(labubu.currentDirection);
-                 } else if (labubu.turnMode === "reverse") {
-                     newDirection = this.getTurnDirectionReverse(labubu.currentDirection);
-                 }
-             }
-             // ---------- APLICAR MOVIMIENTO ----------
-             labubu.currentDirection = newDirection;
-             switch (labubu.currentDirection) {
-                 case 'up': labubu.sprite.setVelocity(0, -speed); break;
-                 case 'down': labubu.sprite.setVelocity(0, speed); break;
-                 case 'left': labubu.sprite.setVelocity(-speed, 0); break;
-                 case 'right': labubu.sprite.setVelocity(speed, 0); break;
-             }
-             // ---------- REDUCIR COOLDOWN ----------
-             if (labubu.cooldown > 0) {
-                 labubu.cooldown--;
-             }*/
+
             const speed = labubu.baseSpeed;
             const body = labubu.sprite.body;
 
@@ -446,8 +394,11 @@ export class GameScene extends Phaser.Scene {
             labubu.canTurn = false;
             labubu.allowedTurns = labubu.allowedTurns || [];
 
+            labubu.updateCenterCollider();
+
+
             // --- detectar si está sobre un nodo ---
-            this.physics.overlap(labubu.sprite, this.nodes, (spr, node) => {
+            this.physics.overlap(labubu.centerCollider, this.nodes, (spr, node) => {
                 labubu.canTurn = true;
 
                 // Usar node['allowedTurns'] en vez de node.allowedTurns
@@ -474,11 +425,15 @@ export class GameScene extends Phaser.Scene {
             // ---------- GIRO POR INPUT SOLO EN NODO ----------
             if (inputDir && labubu.canTurn) {
 
-                const nodeAllows = labubu.allowedTurns.includes(inputDir);
 
+                // Verifica si la dirección que quiere el jugador está permitida por el nodo
                 if (labubu.allowedTurns.includes(inputDir) && !body.blocked[inputDir]) {
+                    // Giro permitido → actualizar dirección
                     newDirection = inputDir;
                     labubu.canTurn = false; // evita múltiples giros en el mismo nodo
+                } else {
+                    // Giro no permitido → mantener la dirección anterior
+                    newDirection = labubu.currentDirection;
                 }
             }
 

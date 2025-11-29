@@ -5,7 +5,7 @@ export class Labubu {
         this.scene = scene;
         this.score = 0;
         this.cooldown = 0;
-        this.baseSpeed = 300;
+        this.baseSpeed = 200;
 
 
         // Crear sprite físico del jugador usando el spritesheet
@@ -23,6 +23,14 @@ export class Labubu {
         this.sprite.setCollideWorldBounds(true);
         this.sprite.body.allowGravity = false;
 
+        //COLLIDER PARA DETECTAR NODOS
+        
+        this.centerCollider = this.scene.add.zone(x, y, 10,10);
+        this.scene.physics.add.existing(this.centerCollider);
+        this.centerCollider.body.setAllowGravity(false);
+        this.centerCollider.body.setImmovable(true);
+        
+
         //control de animaciones
         this.currentAnim = null;
         //la animación que ha recibido el constructor
@@ -31,8 +39,9 @@ export class Labubu {
         this.currentDirection = 'down';     // dirección inicial
         this.turnMode = "normal";
     }
-   getCenterPos() {
-        return { x: this.sprite.x, y: this.sprite.y };
+   updateCenterCollider() {
+        this.centerCollider.x = this.sprite.x;
+        this.centerCollider.y = this.sprite.y;
     }
 
 
