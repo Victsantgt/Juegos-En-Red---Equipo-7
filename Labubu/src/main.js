@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { StartScene } from './scenes/StartScene.js';
 import { MenuScene } from './scenes/MenuScene.js';
 import { GameScene } from './scenes/GameScene.js';
 import { PauseScene } from './scenes/PauseScene.js';
@@ -16,8 +17,8 @@ const config = {
             debug: false
         }
     },
-    scene: [MenuScene, GameScene, PauseScene, VictoryScene],
-    backgroundColor: '#1a1a2e',
+    scene: [StartScene, MenuScene, GameScene, PauseScene, VictoryScene],
+    backgroundColor: '#ffffff',
 };
 
 document.fonts.ready.then(() => {

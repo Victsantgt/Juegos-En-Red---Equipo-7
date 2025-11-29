@@ -7,6 +7,8 @@ import { MovePaddleCommand } from '../commands/MovePaddleCommand';
 import { PauseGameCommand } from '../commands/PuaseGameCommand';
 import { Powerup } from '../entities/Powerup';
 import { PowerupSpeed } from '../entities/PowerupSpeed';
+import { PowerupTurn } from '../entities/PowerupTurn';
+import { PowerupHealth } from '../entities/PowerupHealth';
 collider1: Phaser.Physics.Arcade.Image;
 nodes: Phaser.Physics.Arcade.StaticGroup;
 
@@ -45,15 +47,17 @@ export class GameScene extends Phaser.Scene {
             frameWidth: 68,
             frameHeight: 88
         });
-        this.load.spritesheet('powerupHealth','assets/chocolateanim/chocolate',{
+        this.load.spritesheet('powerupSpeed','assets/chocolate/chocolateSpeed.png',{
             frameWidth: 48,
             frameHeight: 48
         });
-        this.load.spritesheet('powerupTurn','assets/chocolateanim/chocolate1',{
+        
+        this.load.spritesheet('powerupTurn','assets/chocolate/chocolateTurn.png',{
             frameWidth: 48,
             frameHeight: 48
         });
-        this.load.spritesheet('powerupSpeed','assets/chocolateanim/chocolate2',{
+
+        this.load.spritesheet('powerupHealth','assets/chocolate/chocolateHealth.png',{
             frameWidth: 48,
             frameHeight: 48
         });
@@ -84,25 +88,25 @@ export class GameScene extends Phaser.Scene {
 
         //ANIMACIÓN POWERUP HEALTH
         this.anims.create({
-            key: 'powerupHealtg',
+            key: 'powerupHealth',
             frames: this.anims.generateFrameNumbers('powerupHealth', { start: 0, end: 3 }),
-            frameRate: 10,
+            frameRate: 6,
             repeat: -1
         });
 
         //ANIMACIÓN POWERUP SPEED
         this.anims.create({
-            key: 'powerupSpeed',
-            frames: this.anims.generateFrameNumbers('powerupSpeed', { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1
-        });
+            key:'powerupSpeed',
+            frames: this.anims.generateFrameNumbers('powerupSpeed',{start:0,end:3}),
+            frameRate: 6,
+            repeat: -1            
+        })
 
         //ANIMACIÓN POWERUP TURN
         this.anims.create({
             key: 'powerupTurn',
             frames: this.anims.generateFrameNumbers('powerupTurn', { start: 0, end: 3 }),
-            frameRate: 10,
+            frameRate: 6,
             repeat: -1
         });
 
@@ -148,6 +152,8 @@ export class GameScene extends Phaser.Scene {
         wall4.setVisible(true);
         wall4.refreshBody();
 
+        //grupo para los powerups creados en spawnPowerup()
+        this.powerups = this.physics.add.group();
 
         this.setUpPlayers();
 
@@ -166,19 +172,14 @@ export class GameScene extends Phaser.Scene {
             this.physics.add.overlap(player.sprite, this.nodes, (spr, node) => {
                 player.canTurn = true;
             }, null, this);
+
+            //COLLIDERS CON POWERUPS
+            this.physics.add.overlap(player.sprite,this.powerups,this.collectPowerup,null,this);
         });
 
-        this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-
-
-
-        //ESTO NO ES PARA CÓDIGO, ES PA PROBAR VICTORIA
+        this.spawnPowerup();
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-        
-        // Tecla de Debug para probar la victoria
-        this.debugKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
-
     }
 
     setUpPlayers() {
@@ -195,7 +196,7 @@ export class GameScene extends Phaser.Scene {
         this.players.get('player1').turnMode = "reverse";
         this.players.get('player2').turnMode = "normal";
 
-
+        //this.players.get('player2').currentDirection = "up";
 
         const InputConfig = [
             {
@@ -227,6 +228,28 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
+    spawnPowerup(){
+        
+        let type = Math.ceil(Math.random()*3)
+        //let type = 2
+        let p;
+        
+        switch(type){
+            case 1:
+                p = new PowerupSpeed(this,'powerupSpeed');
+                p.sprite.play('powerupSpeed');
+                break;
+            case 2:
+                p = new PowerupTurn(this,'powerupTurn');
+                p.sprite.play('powerupTurn');
+                break;
+            case 3:
+                p = new PowerupHealth(this,'powerupHealth');
+                p.sprite.play('powerupHealth');
+                break;
+        }    
+    }
+
     scoreUpdate() {
         // Si el juego ya terminó, no actualizamos nada más
         if (this.gameEnded) return;
@@ -237,16 +260,57 @@ export class GameScene extends Phaser.Scene {
         this.scoreLeft.setText(player1.score.toString());
         this.rightScore.setText(player2.score.toString());
 
-        // Fin del juego cuando las vidas llegan a 0 (antes estaba <= 3)
-        if (player1.score <= 3) {
+        if (player1.score <= 0) {
             this.endGame('player2'); // Gana el 2 porque el 1 murió
         }
-        else if (player2.score <= 3) {
+        else if (player2.score <= 0) {
             this.endGame('player1'); // Gana el 1 porque el 2 murió
         }
     }
 
-    // En GameScene.js
+    collectPowerup(player, powerup){
+        
+        let speedmult = 1.4;        
+        if(powerup.poweruptype=='Speed'){
+        
+          player.playerInstance.baseSpeed *=speedmult;
+          player.playerInstance.scene.time.delayedCall(5000, () => {
+          player.playerInstance.baseSpeed /= speedmult;  
+          });     
+
+        }else if(powerup.poweruptype == 'Turn'){        
+        switch(player.playerInstance.currentDirection){
+            case 'down': 
+                player.playerInstance.currentDirection = 'up';
+                player.playerInstance.turnCooldown = 50;
+                player.playerInstance.alternateTurnmode();
+                break;
+            case 'up': 
+                player.playerInstance.currentDirection = 'down';
+                player.playerInstance.turnCooldown = 50;
+                player.playerInstance.alternateTurnmode();
+                break;
+            case 'left': 
+                player.playerInstance.currentDirection = 'right';
+                player.playerInstance.turnCooldown = 50;
+                player.playerInstance.alternateTurnmode();
+                break;
+            case 'right': 
+                player.playerInstance.currentDirection = 'left';
+                player.playerInstance.turnCooldown = 50;
+                player.playerInstance.alternateTurnmode();
+                break;
+        }       
+
+        }else {
+            player.playerInstance.score++;  
+            this.scoreUpdate();
+        }
+
+
+        powerup.destroy();
+
+    }
 
 endGame(winnerId) {
     if (this.gameEnded) return;
@@ -325,23 +389,7 @@ endGame(winnerId) {
     }
 
     update() {
-        //PROBAR VICTORIA
-        //////////////////////////////////////////////////////////////////////
-
-        if (this.gameEnded) return; 
-
-        // --- AÑADE ESTO AL PRINCIPIO ---
-        if (this.debugKey.isDown) {
-            // Simulamos que gana el Player 1 instantáneamente
-            this.endGame('player1'); 
-            return; // Salimos del update para que no procese nada más
-        }
-        // -------------------------------
-
-        if (this.escKey.isDown && !this.escWasDown) {
-            this.togglePause();
-        }
-        //////////////////////////////////////////////////////////////////////
+        console.log(this.players.get('player2').turnMode);
 
         if (this.escKey.isDown && !this.escWasDown) {
             this.togglePause();
@@ -423,7 +471,7 @@ endGame(winnerId) {
             labubu.allowedTurns = labubu.allowedTurns || [];
 
             labubu.updateCenterCollider();
-            console.log("LABUBU : " + labubu.centerCollider.y);
+            //console.log("LABUBU : " + labubu.centerCollider.y);
 
 
             // --- detectar si está sobre un nodo ---
@@ -458,7 +506,7 @@ endGame(winnerId) {
             }
 
             // ---------- GIRO POR INPUT SOLO EN NODO ----------
-            if (inputDir && labubu.canTurn && !labubu.blockMove) {
+            if (inputDir && labubu.canTurn && !labubu.blockMove && labubu.turnCooldown === 0) {
 
 
                 // Verifica si la dirección que quiere el jugador está permitida por el nodo
@@ -476,6 +524,7 @@ endGame(winnerId) {
                         onComplete: () => { 
                             labubu.blockMove = false} 
                     });
+                    labubu.turnCooldown = 50;
 
 
                 } else {
@@ -484,15 +533,19 @@ endGame(winnerId) {
                 }
             }
 
-            // ---------- GIRO AUTOMÁTICO (TU SISTEMA ORIGINAL) ----------
-            if (body.blocked.up || body.blocked.down || body.blocked.left || body.blocked.right) {
-
-                if (labubu.turnMode === "normal") {
-                    newDirection = this.getTurnDirectionNormal(labubu.currentDirection);
-                } else if (labubu.turnMode === "reverse") {
-                    newDirection = this.getTurnDirectionReverse(labubu.currentDirection);
+            // ---------- GIRO AUTOMÁTICO ----------
+            if(labubu.turnCooldown === 0) {
+                    if (body.blocked.up || body.blocked.down || body.blocked.left || body.blocked.right) {
+                    if (labubu.turnMode === "normal") {
+                        newDirection = this.getTurnDirectionNormal(labubu.currentDirection);
+                        labubu.turnCooldown = 50;
+                    } else if (labubu.turnMode === "reverse") {
+                        newDirection = this.getTurnDirectionReverse(labubu.currentDirection);
+                        labubu.turnCooldown = 50;
+                    }
                 }
             }
+            
 
             // ---------- APLICAR MOVIMIENTO ----------
 
@@ -515,6 +568,10 @@ endGame(winnerId) {
             // ---------- REDUCIR COOLDOWN ----------
             if (labubu.cooldown > 0) {
                 labubu.cooldown--;
+            }
+
+            if (labubu.turnCooldown > 0) {
+                labubu.turnCooldown--;
             }
 
         });
@@ -594,7 +651,7 @@ endGame(winnerId) {
             this.physics.add.overlap(bullet.sprite, labubu.sprite, () => {
                 if (bullet.currentDirection === labubu.currentDirection) {
                     //ACIERTO
-                    this.hit(labubu);
+                    labubu.score--;
                     this.bullets = this.bullets.filter(b => b !== bullet);
                     bullet.sprite.destroy();
                     this.scoreUpdate();
@@ -628,12 +685,5 @@ endGame(winnerId) {
             this.bullets = this.bullets.filter(b => b !== bullet);
             bullet.sprite.destroy();
         });
-    }
-
-    hit(labubu) {
-        //Meter aquí para procesar frames de invulnerabilidad
-
-        //Perder vida
-        labubu.score--;
     }
 }

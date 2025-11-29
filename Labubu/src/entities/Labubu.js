@@ -5,6 +5,7 @@ export class Labubu {
         this.scene = scene;
         this.score = 0;
         this.cooldown = 0;
+        this.turnCooldown = 0;
         this.baseSpeed = 300;
         this.blockMove=false;
 
@@ -41,10 +42,16 @@ export class Labubu {
         this.currentDirection = 'down';     // dirección inicial
         this.turnMode = "normal";
     }
-   updateCenterCollider() {
+
+    updateCenterCollider() {
     const offset = 4;
         this.centerCollider.x = this.sprite.x+offset;
         this.centerCollider.y = this.sprite.y+offset;
+    }
+
+    alternateTurnmode() {
+        if (this.turnMode === "normal") this.turnMode = "reverse";
+        else this.turnMode = "normal";
     }
 
 
