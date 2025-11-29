@@ -23,6 +23,7 @@ export class Labubu {
 
         this.sprite.setCollideWorldBounds(true);
         this.sprite.body.allowGravity = false;
+        this.sprite.playerInstance = this;
 
         //COLLIDER PARA DETECTAR NODOS
         
