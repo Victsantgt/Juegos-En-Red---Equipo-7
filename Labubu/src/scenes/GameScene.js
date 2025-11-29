@@ -252,30 +252,8 @@ export class GameScene extends Phaser.Scene {
         }    
     }
                 
-    collectPowerup(player, powerup){
-        
-        console.log(powerup.poweruptype);
-        if(powerup.poweruptype=='Speed'){
-
-            player.Speed = player.Speed *2;
-
-
-
-        }else if(powerup.poweruptype == 'Turn'){
-
-
-
-
-        }else {
-
-        }
-
-        
-        powerup.destroy();
-
-    }
-
-
+    
+    
     scoreUpdate() {
         const player1 = this.players.get('player1');
         const player2 = this.players.get('player2');
@@ -289,9 +267,36 @@ export class GameScene extends Phaser.Scene {
             this.endGame('player1');
         }
     }
+    
+    
+    
+    collectPowerup(player, powerup){
+        
+        let speedmult = 1.4;        
+        if(powerup.poweruptype=='Speed'){
+        
+          player.playerInstance.baseSpeed *=speedmult;
+          player.playerInstance.scene.time.delayedCall(5000, () => {
+          player.playerInstance.baseSpeed /= speedmult;  
+          });     
+
+        }else if(powerup.poweruptype == 'Turn'){        
+        switch(player.playerInstance.currentDirection){
+            case 'down': player.playerInstance.currentDirection = 'up'; break;
+            case 'up': player.playerInstance.currentDirection = 'down'; break;
+            case 'left': player.playerInstance.currentDirection = 'right'; break;
+            case 'right': player.playerInstance.currentDirection = 'left'; break;
+        }       
+
+        }else {
+            player.playerInstance.score++;  
+            this.scoreUpdate();
+        }
 
 
+        powerup.destroy();
 
+    }
 
     endGame(winnerId) {
         this.players.forEach(paddle => {

@@ -22,6 +22,7 @@ export class Labubu {
 
         this.sprite.setCollideWorldBounds(true);
         this.sprite.body.allowGravity = false;
+        this.sprite.playerInstance = this;
 
         //control de animaciones
         this.currentAnim = null;
