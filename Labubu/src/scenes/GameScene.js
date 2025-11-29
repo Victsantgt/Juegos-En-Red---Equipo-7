@@ -5,11 +5,6 @@ import { RailNode } from '../entities/RailNode';
 import { CommandProcessor } from '../commands/CommandProcessor';
 import { MovePaddleCommand } from '../commands/MovePaddleCommand';
 import { PauseGameCommand } from '../commands/PuaseGameCommand';
-import { Powerup } from '../entities/Powerup';
-import { PowerupSpeed } from '../entities/PowerupSpeed';
-import { PowerupTurn } from '../entities/PowerupTurn';
-import { PowerupHealth } from '../entities/PowerupHealth';
-
 collider1: Phaser.Physics.Arcade.Image;
 nodes: Phaser.Physics.Arcade.StaticGroup;
 
@@ -38,7 +33,7 @@ export class GameScene extends Phaser.Scene {
         this.load.image('colliderCuadrado', 'assets/colliderCuadrado.png');
         this.load.image('colliderRectangulo', 'assets/colliderRectangulo.png');
         this.load.image('tapioca', 'assets/tapioca.png');
-        
+
         //SPRITES//
         this.load.spritesheet('labubu', 'assets/brownanim/down.png', {
             frameWidth: 68,
@@ -48,21 +43,7 @@ export class GameScene extends Phaser.Scene {
             frameWidth: 68,
             frameHeight: 88
         });
-        
-        this.load.spritesheet('powerupSpeed','assets/chocolate/chocolateSpeed.png',{
-            frameWidth: 48,
-            frameHeight: 48
-        });
-        
-        this.load.spritesheet('powerupTurn','assets/chocolate/chocolateTurn.png',{
-            frameWidth: 48,
-            frameHeight: 48
-        });
 
-        this.load.spritesheet('powerupHealth','assets/chocolate/chocolateHealth.png',{
-            frameWidth: 48,
-            frameHeight: 48
-        });
     }
 
     create() {
@@ -86,27 +67,6 @@ export class GameScene extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
-        
-        this.anims.create({
-            key:'powerupSpeed',
-            frames: this.anims.generateFrameNumbers('powerupSpeed',{start:0,end:3}),
-            frameRate: 6,
-            repeat: -1            
-        })
-
-        this.anims.create({
-            key:'powerupTurn',
-            frames: this.anims.generateFrameNumbers('powerupTurn',{start:0,end:3}),
-            frameRate: 6,
-            repeat: -1            
-        })
-
-        this.anims.create({
-            key:'powerupHealth',
-            frames: this.anims.generateFrameNumbers('powerupHealth',{start:0,end:3}),
-            frameRate: 6,
-            repeat: -1            
-        })
 
         // puntuaciones
         //j1 arriba izquierda
@@ -126,14 +86,6 @@ export class GameScene extends Phaser.Scene {
         this.createBounds();
         this.setRailNodes();
 
-        
-
-
-        // this.createBall();
-        //this.launchBall();
-
-        // this.physics.add.overlap(this.ball, this.leftGoal, this.scoreRightGoal, null, this);
-        // this.physics.add.overlap(this.ball, this.rightGoal, this.scoreLeftGoal, null, this);
 
         // ---------- PAREDES DEL ESCENARIO ----------
         this.walls = this.physics.add.staticGroup();
@@ -158,8 +110,6 @@ export class GameScene extends Phaser.Scene {
         wall4.setVisible(true);
         wall4.refreshBody();
 
-        //grupo para los powerups creados en spawnPowerup()
-        this.powerups = this.physics.add.group();
 
         this.setUpPlayers();
 
@@ -174,37 +124,39 @@ export class GameScene extends Phaser.Scene {
             this.physics.add.collider(player.sprite, this.topWall);
             this.physics.add.collider(player.sprite, this.bottomWall);
 
-            //COLLIDERS CON POWERUPS
-
-            this.physics.add.overlap(player.sprite,this.powerups,this.collectPowerup,null,this);
-
-
             //COLLIDERS NODOS
             this.physics.add.overlap(player.sprite, this.nodes, (spr, node) => {
                 player.canTurn = true;
             }, null, this);
         });
 
-        this.spawnPowerup();
+        this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+
+
+
+        //ESTO NO ES PARA CÓDIGO, ES PA PROBAR VICTORIA
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        
+        // Tecla de Debug para probar la victoria
+        this.debugKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+
     }
 
-    
     setUpPlayers() {
         const jugadorUno = new Labubu(this, 'player1', 96, 288, 'labubu1-down');
         const jugadorDos = new Labubu(this, 'player2', 608, 288, 'labubu2-down');
-        
+
         //Empiezan con 3 vidas cada uno
         jugadorUno.score = 3;
         jugadorDos.score = 3;
-        
+
         this.players.set('player1', jugadorUno);
         this.players.set('player2', jugadorDos);
         this.players.get('player1').turnMode = "reverse";
         this.players.get('player2').turnMode = "normal";
-        
-        
+
+
         const InputConfig = [
             {
                 playerId: 'player1',
@@ -234,140 +186,43 @@ export class GameScene extends Phaser.Scene {
             }
         });
     }
-    
-    spawnPowerup(){
-        
-        let type = Math.ceil(Math.random()*3)
-        let p;
-        
-        switch(type){
-            case 1:
-                p = new PowerupSpeed(this,'powerupSpeed');
-                p.sprite.play('powerupSpeed');
-                break;
-            case 2:
-                p = new PowerupTurn(this,'powerupTurn');
-                p.sprite.play('powerupTurn');
-                break;
-            case 3:
-                p = new PowerupHealth(this,'powerupHealth');
-                p.sprite.play('powerupHealth');
-                break;
-        }    
-    }
-                
-    
-    
+
     scoreUpdate() {
+        // Si el juego ya terminó, no actualizamos nada más
+        if (this.gameEnded) return;
+
         const player1 = this.players.get('player1');
         const player2 = this.players.get('player2');
+        
         this.scoreLeft.setText(player1.score.toString());
         this.rightScore.setText(player2.score.toString());
 
-        if (player1.score <= 0) {
-            this.endGame('player2');
+        // Fin del juego cuando las vidas llegan a 0 (antes estaba <= 3)
+        if (player1.score <= 3) {
+            this.endGame('player2'); // Gana el 2 porque el 1 murió
         }
-        if (player2.score <= 0) {
-            this.endGame('player1');
+        else if (player2.score <= 3) {
+            this.endGame('player1'); // Gana el 1 porque el 2 murió
         }
     }
-    
-    
-    
-    collectPowerup(player, powerup){
-        
-        let speedmult = 1.4;        
-        if(powerup.poweruptype=='Speed'){
-        
-          player.playerInstance.baseSpeed *=speedmult;
-          player.playerInstance.scene.time.delayedCall(5000, () => {
-          player.playerInstance.baseSpeed /= speedmult;  
-          });     
 
-        }else if(powerup.poweruptype == 'Turn'){        
-        switch(player.playerInstance.currentDirection){
-            case 'down': player.playerInstance.currentDirection = 'up'; break;
-            case 'up': player.playerInstance.currentDirection = 'down'; break;
-            case 'left': player.playerInstance.currentDirection = 'right'; break;
-            case 'right': player.playerInstance.currentDirection = 'left'; break;
-        }       
+    // En GameScene.js
 
-        }else {
-            player.playerInstance.score++;  
-            this.scoreUpdate();
-        }
+endGame(winnerId) {
+    if (this.gameEnded) return;
+    this.gameEnded = true;
 
+    // Congelar físicas (balas y jugadores quietos)
+    this.physics.pause();
 
-        powerup.destroy();
+    // Pausar la escena actual por completo (para que deje de procesar inputs o update)
+    this.scene.pause();
 
-    }
+    // Lanzar la escena de Victoria ENCIMA de esta (Overlay)
+    // Pasamos el ID del ganador
+    this.scene.launch('VictoryScene', { winnerId: winnerId });
+}
 
-    endGame(winnerId) {
-        this.players.forEach(paddle => {
-            paddle.sprite.setVelocity(0, 0);
-        });
-        this.physics.pause();
-
-        const winnerText = winnerId === 'player1' ? 'Player 1 Wins!' : 'Player 2 Wins!';
-        this.add.text(400, 250, winnerText, {
-            fontSize: '64px',
-            color: '#00ff00'
-        }).setOrigin(0.5);
-
-        const menuBtn = this.add.text(400, 350, 'Return to Main Menu', {
-            fontSize: '32px',
-            color: '#ffffff',
-        }).setOrigin(0.5)
-            .setInteractive({ useHandCursor: true })
-            .on('pointerover', () => menuBtn.setColor('#cccccc'))
-            .on('pointerout', () => menuBtn.setColor('#ffffff'))
-            .on('pointerdown', () => {
-                this.scene.start('MenuScene');
-            });
-    }
-
-    /*
-    resetBall() {
-        this.ball.setVelocity(0, 0);
-        this.ball.setPosition(400, 300);
-    
-        this.time.delayedCall(1000, () => {
-            //this.launchBall();
-        });
-    }
-
-    //podríamos reutilizar esto para hacer que los jugadores empiecen
-    con una velocidad constante, osea lo q queremos lol, y que uno
-    tire para arriba y otro hacia abajo, pa q empiecen distinto
-
-    //la idea es que si llega a x pixel gire automaticamente para el
-    lado que toque y si detecta intersección que permita girar a donde
-    se pueda
-    
-    launchBall() {
-        const angle = Phaser.Math.Between(-30, 30);
-        const speed = 300;
-        const direction = Math.random() < 0.5 ? 1 : -1;
-
-        this.ball.setVelocity(
-            Math.cos(Phaser.Math.DegToRad(angle)) * speed * direction,
-            Math.sin(Phaser.Math.DegToRad(angle)) * speed
-        )
-    }
-        */
-    /*
-        createBall() {
-            const graphics = this.add.graphics();
-            graphics.fillStyle(0xffffff);
-            graphics.fillCircle(8, 8, 8);
-            graphics.generateTexture('ball', 16, 16);
-            graphics.destroy();
-    
-            this.ball = this.physics.add.sprite(400, 300, 'ball');
-            this.ball.setCollideWorldBounds(true);
-            this.ball.setBounce(1);
-        }
-            */
 
     createBounds() {
         const gameWidth = 704;
@@ -430,6 +285,23 @@ export class GameScene extends Phaser.Scene {
     }
 
     update() {
+        //PROBAR VICTORIA
+        //////////////////////////////////////////////////////////////////////
+
+        if (this.gameEnded) return; 
+
+        // --- AÑADE ESTO AL PRINCIPIO ---
+        if (this.debugKey.isDown) {
+            // Simulamos que gana el Player 1 instantáneamente
+            this.endGame('player1'); 
+            return; // Salimos del update para que no procese nada más
+        }
+        // -------------------------------
+
+        if (this.escKey.isDown && !this.escWasDown) {
+            this.togglePause();
+        }
+        //////////////////////////////////////////////////////////////////////
 
         if (this.escKey.isDown && !this.escWasDown) {
             this.togglePause();
@@ -643,6 +515,14 @@ export class GameScene extends Phaser.Scene {
         this.nodes.add(new RailNode(this, 289, 95, ["down"]));
         this.nodes.add(new RailNode(this, 400, 300, ["up"]));
 
+
+
+        //this.nodes.add(new RailNode(this, 400, 300, ["up"]));
+        //this.nodes.add(new RailNode(this, 600, 300, ["left", "right"]));
+
+        // Puedes agregar más nodos según tu mapa
+        // Ejemplo:
+        // this.nodes.add(new RailNode(this, 500, 200, ["up", "right"]));
     }
 
     shoot(dir, x, y) {
