@@ -6,7 +6,14 @@ export class MenuScene extends Phaser.Scene {
         super('MenuScene');
     }
 
+    preload(){
+
+    this.load.image('menuFondo', 'assets/menuFondo.png');
+    }
+
     create() {
+    let menuFondo = this.add.image(0, 0, 'menuFondo').setOrigin(0, 0);
+
         this.add.text(400, 100, 'LABUBU MATCHUP', {
         fontFamily: 'Lemon', 
         fontSize: '64px',

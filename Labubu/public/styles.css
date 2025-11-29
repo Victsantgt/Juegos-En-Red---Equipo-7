@@ -1,26 +1,81 @@
-/* Estilos generales */
+/* --- Estilos Generales (Igual que antes) --- */
 body {
-    animation: gradientAnimation 15s ease infinite; /* Animación de fondo */
-    background: linear-gradient(270deg, #ffcc00, #ff6699, #66ccff, #ffcc00); /* Gradiente de colores complementarios */
-    background-size: 400% 400%; /* Tamaño del fondo para la animación */
+    animation: gradientAnimation 15s ease infinite;
+    background: linear-gradient(270deg, #ffcc00, #ff6699, #66ccff, #ffcc00);
+    background-size: 400% 400%;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* Centrado horizontal */
+    align-items: center;     /* Centrado vertical */
     min-height: 100vh;
+    font-family: 'Lemon', cursive, sans-serif; /* Aplicamos la fuente a todo */
 }
 
 @keyframes gradientAnimation {
-    0% {
-        background-position: 0% 50%; 
-    }
-    50% {
-        background-position: 100% 50%; 
-    }
-    100% {
-        background-position: 0% 50%; 
-    }
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
+/* --- NUEVO: Layout Principal --- */
+.main-layout {
+    display: flex;
+    align-items: center; /* Alinea los paneles verticalmente con el juego */
+    gap: 20px; /* Espacio entre los paneles y el juego */
+    padding: 20px;
+}
 
+/* --- ESTILO DEL JUEGO (Con la sombra grande que pediste) --- */
+#game-container {
+    box-shadow: 0px 15px 60px 10px rgba(0, 0, 0, 0.7); /* Opción A recomendada */
+    border-radius: 20px;
+    overflow: hidden;
+    font-size: 0;
+    flex-shrink: 0; /* Evita que el juego se aplaste si la pantalla es pequeña */
+}
+
+/* --- NUEVO: Paneles de Texto --- */
+.info-panel {
+    background: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    width: 200px; /* Ancho fijo para mantener simetría */
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border: 2px solid rgba(255,255,255,0.3);
+}
+
+/* Estilos de texto dentro de los paneles */
+.info-panel h2 {
+    color: #ffcc00; /* Amarillo para resaltar títulos */
+    margin-top: 0;
+    font-size: 1.2rem;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+    padding-bottom: 10px;
+}
+
+.info-panel h3 {
+    font-size: 0.9rem;
+    color: #66ccff; /* Azul clarito para subtítulos */
+    margin-bottom: 5px;
+}
+
+.info-panel p, .info-panel li {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    list-style: none; /* Quitamos los puntos feos de la lista */
+    margin: 5px 0;
+}
+
+.info-panel ul {
+    padding: 0;
+}
+
+/* Nota: En pantallas muy pequeñas (móviles), ocultamos los paneles para que se pueda jugar */
+@media (max-width: 1200px) {
+    .info-panel {
+        display: none;
+    }
+}

@@ -1,19 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-   <!-- Estilos -->
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lemon">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Título de la pestaña -->
+  
   <title>LABUBU MATCHUP</title>
-  <!-- Favicon -->
-<link rel="icon" type="image/png" href="/assets/brownanim/icono.png">
+  
+  <link rel="icon" type="image/png" href="/assets/brownanim/icono.png">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lemon">
 </head>
+
 <body>
-  <div id="game-container"></div>
+
+  <div class="main-layout">
+
+    <div class="info-panel left">
+      <h2>CONTROLES</h2>
+      
+      <div class="section">
+        <h3>ONLINE</h3>
+        <p>Ambos jugadores usan los controles del JUGADOR 1.</p>
+      </div>
+
+      <div class="section">
+        <h3>LOCAL - JUGADOR 1</h3>
+        <ul>
+          <li><strong>WASD:</strong> Moverse</li>
+          <li><strong>ESPACIO:</strong> Disparar</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="game-container"></div>
+
+    <div class="info-panel right">
+      <h2>DETALLES</h2>
+
+      <div class="section">
+        <h3>LOCAL - JUGADOR 2</h3>
+        <ul>
+          <li><strong>FLECHAS:</strong> Moverse</li>
+          <li><strong>ENTER:</strong> Disparar</li>
+        </ul>
+      </div>
+
+      <div class="section note">
+        <h3>NOTAS</h3>
+        <p>• Direcciones relativas a la cámara.</p>
+        <p>• El disparo tiene tiempo de recarga.</p>
+      </div>
+    </div>
+
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.70.0/phaser.min.js"></script>
   <script src="bundle.js"></script>
+
 </body>
 </html>

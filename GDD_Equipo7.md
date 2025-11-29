@@ -108,7 +108,7 @@ Ambos jugadores utilizarán los controles del Jugador 1.
 | Acción | Jugador 1 | Jugador 2 | Nota |
 | :--- | :--- | :--- | :--- |
 | **Elegir Dirección (Intersecciones)** | Teclas **WASD** | **Flechas** | Las direcciones son relativas a la cámara. |
-| **Disparo** | Tecla **Espacio** | Tecla **Enter** | El disparo se limita al tiempo de recarga, aunque se pulse repetidamente. |
+| **Disparo** | Tecla **Shift** | Tecla **Enter** | El disparo se limita al tiempo de recarga, aunque se pulse repetidamente. |
 
 -----
 

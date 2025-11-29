@@ -49,6 +49,7 @@ export class GameScene extends Phaser.Scene {
     create() {
 
         let fondo = this.add.image(0, 0, 'fondo').setOrigin(0, 0);
+        
         ////ANIMACIÓN ABAJO JUGADOR 1////
         this.anims.create({
             key: 'labubu1-down',
