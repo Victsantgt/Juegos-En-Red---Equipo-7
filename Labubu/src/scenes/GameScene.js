@@ -47,6 +47,8 @@ export class GameScene extends Phaser.Scene {
     }
 
     create() {
+        // FADE IN
+        this.cameras.main.fadeIn(1000, 255, 255, 255);
 
         let fondo = this.add.image(0, 0, 'fondo').setOrigin(0, 0);
         
@@ -71,14 +73,14 @@ export class GameScene extends Phaser.Scene {
         this.scoreLeft = this.add.text(17, 0, '3', {
             fontFamily: 'Lemon',
             fontSize: '48px',
-            color: '#000000ff'
+            color: '#e6dd38'
         });
 
         //j2 arriba derecha
         this.rightScore = this.add.text(657, 0, '3', {
             fontFamily: 'Lemon',
             fontSize: '48px',
-            color: '#ffffffff'
+            color: '#8a452e'
         });
 
         this.createBounds();

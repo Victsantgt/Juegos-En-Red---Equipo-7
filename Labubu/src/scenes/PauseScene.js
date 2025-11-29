@@ -6,14 +6,7 @@ export class PauseScene extends Phaser.Scene {
         super('PauseScene');
     }
 
-    preload(){
-
-    this.load.image('menuFondo', 'assets/menuFondo.png');
-    }
-
-    create(data) {
-        let menuFondo = this.add.image(0, 0, 'menuFondo').setOrigin(0, 0);
-    
+    create(data) {    
 
         this.add.rectangle(400, 300, 800, 600, 0x000000, 0.7);
 
