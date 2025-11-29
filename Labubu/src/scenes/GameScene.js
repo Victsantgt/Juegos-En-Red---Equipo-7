@@ -177,6 +177,7 @@ export class GameScene extends Phaser.Scene {
             this.physics.add.overlap(player.sprite,this.powerups,this.collectPowerup,null,this);
         });
 
+        /*
         //COLLIDER CHOQUE JUGADORES
         this.physics.add.overlap(this.players.get('player1').sprite, this.players.get('player2').sprite, () => {
                 if (this.players.get('player1').turnMode !== this.players.get('player2').turnMode) {
@@ -207,6 +208,7 @@ export class GameScene extends Phaser.Scene {
                     });
                 }
             });
+            */
 
 
         this.spawnPowerup();
@@ -640,8 +642,12 @@ endGame(winnerId) {
         this.nodes = this.add.group(); // sin classType
 
 
-        this.nodes.add(new RailNode(this, 289, 95, ["down"]));
-        this.nodes.add(new RailNode(this, 400, 300, ["up"]));
+        this.nodes.add(new RailNode(this, 288.5, 95.5, ["down", "left", "right"]));
+        this.nodes.add(new RailNode(this, 95.5, 288.5, ["up", "down", "left"]));
+        this.nodes.add(new RailNode(this, 288.5, 288.5, ["up", "right", "left"]));
+        this.nodes.add(new RailNode(this, 416.5, 288.5, ["down", "right", "left"]));
+        this.nodes.add(new RailNode(this, 608.5, 288.5, ["up", "down", "left"]));
+        this.nodes.add(new RailNode(this, 416.5, 480.5, ["up", "right", "left"]));
 
 
 
