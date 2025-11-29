@@ -51,7 +51,7 @@ export class GameScene extends Phaser.Scene {
         this.cameras.main.fadeIn(1000, 255, 255, 255);
 
         let fondo = this.add.image(0, 0, 'fondo').setOrigin(0, 0);
-        
+
         ////ANIMACIÓN ABAJO JUGADOR 1////
         this.anims.create({
             key: 'labubu1-down',
@@ -327,7 +327,11 @@ export class GameScene extends Phaser.Scene {
 
         if (this.escKey.isDown && !this.escWasDown) {
             this.togglePause();
-        }/*
+        }
+
+
+
+        /* 
 
 
         this.inputMappings.forEach(mapping => {
@@ -388,8 +392,11 @@ export class GameScene extends Phaser.Scene {
         //LABUBUS
         this.players.forEach(labubu => {
 
+
             const speed = labubu.baseSpeed;
             const body = labubu.sprite.body;
+            let currentRailx = 0;
+            let currentRaily = 0;
 
             let newDirection = labubu.currentDirection;
 
@@ -398,13 +405,20 @@ export class GameScene extends Phaser.Scene {
             labubu.allowedTurns = labubu.allowedTurns || [];
 
             labubu.updateCenterCollider();
+            console.log("LABUBU : " + labubu.centerCollider.y);
 
 
             // --- detectar si está sobre un nodo ---
             this.physics.overlap(labubu.centerCollider, this.nodes, (spr, node) => {
+                if(Phaser.Math.Distance.Between(labubu.centerCollider.x, labubu.centerCollider.y, node['x'], node['y']) > 18){
+                    return;
+                }        
                 labubu.canTurn = true;
-
+                
+                currentRailx = node['x'];
+                currentRaily = node['y'];
                 // Usar node['allowedTurns'] en vez de node.allowedTurns
+
                 labubu.allowedTurns = node['allowedTurns'] || [];
             });
 
@@ -426,7 +440,7 @@ export class GameScene extends Phaser.Scene {
             }
 
             // ---------- GIRO POR INPUT SOLO EN NODO ----------
-            if (inputDir && labubu.canTurn) {
+            if (inputDir && labubu.canTurn && !labubu.blockMove) {
 
 
                 // Verifica si la dirección que quiere el jugador está permitida por el nodo
@@ -434,6 +448,18 @@ export class GameScene extends Phaser.Scene {
                     // Giro permitido → actualizar dirección
                     newDirection = inputDir;
                     labubu.canTurn = false; // evita múltiples giros en el mismo nodo
+                    // labubu.sprite.setPosition(currentRailx, currentRaily);
+                    this.tweens.add({
+                        targets: labubu.sprite,
+                        x: currentRailx,
+                        //y: currentRaily,
+                        duration:600,
+                        ease: 'Sine',
+                        onComplete: () => { 
+                            labubu.blockMove = false} 
+                    });
+
+
                 } else {
                     // Giro no permitido → mantener la dirección anterior
                     newDirection = labubu.currentDirection;
@@ -451,6 +477,9 @@ export class GameScene extends Phaser.Scene {
             }
 
             // ---------- APLICAR MOVIMIENTO ----------
+
+            if(!labubu.blockMove){
+
             labubu.currentDirection = newDirection;
 
             switch (labubu.currentDirection) {
@@ -458,6 +487,11 @@ export class GameScene extends Phaser.Scene {
                 case 'down': labubu.sprite.setVelocity(0, speed); break;
                 case 'left': labubu.sprite.setVelocity(-speed, 0); break;
                 case 'right': labubu.sprite.setVelocity(speed, 0); break;
+            }
+
+            }
+            else{
+                labubu.sprite.setVelocity(0, 0);
             }
 
             // ---------- REDUCIR COOLDOWN ----------
@@ -499,8 +533,12 @@ export class GameScene extends Phaser.Scene {
     setRailNodes() {
         this.nodes = this.add.group(); // sin classType
 
-        this.nodes.add(new RailNode(this, 287, 95, ["down"]));
+
+        this.nodes.add(new RailNode(this, 289, 95, ["down"]));
         this.nodes.add(new RailNode(this, 400, 300, ["up"]));
+
+
+
         //this.nodes.add(new RailNode(this, 400, 300, ["up"]));
         //this.nodes.add(new RailNode(this, 600, 300, ["left", "right"]));
 

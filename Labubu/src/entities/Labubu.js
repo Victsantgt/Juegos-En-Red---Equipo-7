@@ -5,12 +5,13 @@ export class Labubu {
         this.scene = scene;
         this.score = 0;
         this.cooldown = 0;
-        this.baseSpeed = 200;
+        this.baseSpeed = 300;
+        this.blockMove=false;
 
 
         // Crear sprite físico del jugador usando el spritesheet
         this.sprite = this.scene.physics.add.sprite(x, y, 'labubu');
-
+        
         //Retocamos el collider porque lo queremos un poco más pequeño
         this.sprite.body.setSize(50, 50);
 
@@ -40,8 +41,9 @@ export class Labubu {
         this.turnMode = "normal";
     }
    updateCenterCollider() {
-        this.centerCollider.x = this.sprite.x;
-        this.centerCollider.y = this.sprite.y;
+    const offset = 4;
+        this.centerCollider.x = this.sprite.x+offset;
+        this.centerCollider.y = this.sprite.y+offset;
     }
 
 
