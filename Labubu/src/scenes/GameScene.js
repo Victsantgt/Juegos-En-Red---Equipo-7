@@ -177,6 +177,38 @@ export class GameScene extends Phaser.Scene {
             this.physics.add.overlap(player.sprite,this.powerups,this.collectPowerup,null,this);
         });
 
+        //COLLIDER CHOQUE JUGADORES
+        this.physics.add.overlap(this.players.get('player1').sprite, this.players.get('player2').sprite, () => {
+                if (this.players.get('player1').turnMode !== this.players.get('player2').turnMode) {
+                    this.players.forEach((player) => {
+                        switch(player.currentDirection){
+                            case 'down': 
+                                player.currentDirection = 'up';
+                                player.turnCooldown = 10;
+                                player.alternateTurnmode();
+                                break;
+                            case 'up': 
+                                player.currentDirection = 'down';
+                                player.turnCooldown = 10;
+                                player.alternateTurnmode();
+                                break;
+                            case 'left': 
+                                player.currentDirection = 'right';
+                                player.turnCooldown = 10;
+                                player.alternateTurnmode();
+                                break;
+                            case 'right': 
+                                player.currentDirection = 'left';
+                                player.turnCooldown = 10;
+                                player.alternateTurnmode();
+                                break;
+                                
+                        }
+                    });
+                }
+            });
+
+
         this.spawnPowerup();
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
@@ -389,7 +421,6 @@ endGame(winnerId) {
     }
 
     update() {
-        console.log(this.players.get('player2').turnMode);
 
         if (this.escKey.isDown && !this.escWasDown) {
             this.togglePause();
