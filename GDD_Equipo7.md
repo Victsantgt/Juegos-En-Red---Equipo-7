@@ -88,7 +88,7 @@ La visión del juego se basará en una cámara cenital, es decir, la cámara se 
 
 El escenario es un espacio separado con seis arbustos. Estas separaciones se conectan entre ellos y con los bordes mediante un camino de raíles, por el cual el jugador podrá moverse dentro de los límites de este. El espacio de juego está delimitado por unos bordes diegéticos (muros), haciendo que todo el espacio jugable sea visto por el jugador en todo momento. 
 
-<img width="1053" height="591" alt="Fondo del juego GDD" src="public/assets/yellow/fondo.png" />
+![Fondo del juego](public/assets/yellow/fondo.png)
 
 *Diseño del escenario*
 
