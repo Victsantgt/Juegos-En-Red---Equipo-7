@@ -88,7 +88,7 @@ La visión del juego se basará en una cámara cenital, es decir, la cámara se 
 
 El escenario es un espacio separado con seis arbustos. Estas separaciones se conectan entre ellos y con los bordes mediante un camino de raíles, por el cual el jugador podrá moverse dentro de los límites de este. El espacio de juego está delimitado por unos bordes diegéticos (muros), haciendo que todo el espacio jugable sea visto por el jugador en todo momento. 
 
-<img width="1053" height="591" alt="image" src="file:///C:/Users/Usuario/OneDrive%20-%20Universidad%20Rey%20Juan%20Carlos/Documentos/GitHub/Juegos-En-Red---Equipo-7/Labubu/public/assets/fondo.png" /> 
+<img width="1053" height="591" alt="image" src="https://github.com/user-attachments/assets/Labubu/public/assets/fondo.png" /> 
 *Diseño del escenario*
 
 11. **Diagrama de flujo** 
