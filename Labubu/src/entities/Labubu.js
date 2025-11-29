@@ -6,7 +6,7 @@ export class Labubu {
         this.score = 0;
         this.cooldown = 0;
         this.baseSpeed = 300;
-        
+
 
         // Crear sprite físico del jugador usando el spritesheet
         this.sprite = this.scene.physics.add.sprite(x, y, 'labubu');
@@ -29,7 +29,10 @@ export class Labubu {
         this.animKey = animKey;
 
         this.currentDirection = 'down';     // dirección inicial
-        this.turnMode = "normal"; 
+        this.turnMode = "normal";
+    }
+   getCenterPos() {
+        return { x: this.sprite.x, y: this.sprite.y };
     }
 
 

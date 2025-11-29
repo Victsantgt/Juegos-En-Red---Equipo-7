@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { Labubu } from '../entities/Labubu';
 import { Bullet } from '../entities/Bullet';
+import { RailNode } from '../entities/RailNode';
 import { CommandProcessor } from '../commands/CommandProcessor';
 import { MovePaddleCommand } from '../commands/MovePaddleCommand';
 import { PauseGameCommand } from '../commands/PuaseGameCommand';
@@ -80,7 +81,7 @@ export class GameScene extends Phaser.Scene {
         });
 
         this.createBounds();
-        this.createRailNodes();
+        this.setRailNodes();
 
         // this.createBall();
         //this.launchBall();
@@ -321,7 +322,7 @@ export class GameScene extends Phaser.Scene {
 
     update() {
 
-       if (this.escKey.isDown && !this.escWasDown) {
+        if (this.escKey.isDown && !this.escWasDown) {
             this.togglePause();
         }/*
 
@@ -364,7 +365,7 @@ export class GameScene extends Phaser.Scene {
         this.togglePause();
     }*/
         // MOVIMIENTO BALAS
-        this.bullets.forEach(bullet =>{
+        this.bullets.forEach(bullet => {
             switch (bullet.currentDirection) {
                 case 'up':
                     bullet.sprite.setVelocity(0, -bullet.speed);
@@ -383,32 +384,105 @@ export class GameScene extends Phaser.Scene {
 
         //LABUBUS
         this.players.forEach(labubu => {
+            this.players.forEach(labubu => {
+                if (!labubu || !labubu.sprite || !labubu.sprite.body) {
+                    console.log("Labubu inválido", labubu);
+                    return;
+                }
+                console.log("Labubu", labubu.id, "pos", labubu.sprite.x, labubu.sprite.y);
+            });
+            /* const speed = labubu.baseSpeed;
+             const body = labubu.sprite.body;
+ 
+             let newDirection = labubu.currentDirection;
+             
+             // ---------- INPUT ----------
+             const mapping = this.inputMappings.find(m => m.playerId === labubu.id);
+             let inputDir = null;
+             if (mapping) {
+                 if (mapping.upKeyObj.isDown) inputDir = 'up';
+                 else if (mapping.downKeyObj.isDown) inputDir = 'down';
+                 else if (mapping.leftKeyObj.isDown) inputDir = 'left';
+                 else if (mapping.rightKeyObj.isDown) inputDir = 'right';
+ 
+                 else if (mapping.shootKeyObj.isDown && labubu.cooldown === 0) {
+                     this.shoot(labubu.currentDirection, labubu.sprite.x, labubu.sprite.y);
+                     labubu.cooldown = 300;
+                 }
+             }
+ 
+             // ---------- GIRO POR INPUT ----------
+             if (inputDir && !body.blocked[inputDir]) {
+                 newDirection = inputDir;
+             }
+ 
+             // ---------- GIRO AUTOMÁTICO (SEGÚN MODO DEL LABUBU) ----------
+             if (body.blocked.up || body.blocked.down || body.blocked.left || body.blocked.right) {
+ 
+                 if (labubu.turnMode === "normal") {
+                     newDirection = this.getTurnDirectionNormal(labubu.currentDirection);
+                 } else if (labubu.turnMode === "reverse") {
+                     newDirection = this.getTurnDirectionReverse(labubu.currentDirection);
+                 }
+             }
+             // ---------- APLICAR MOVIMIENTO ----------
+             labubu.currentDirection = newDirection;
+             switch (labubu.currentDirection) {
+                 case 'up': labubu.sprite.setVelocity(0, -speed); break;
+                 case 'down': labubu.sprite.setVelocity(0, speed); break;
+                 case 'left': labubu.sprite.setVelocity(-speed, 0); break;
+                 case 'right': labubu.sprite.setVelocity(speed, 0); break;
+             }
+             // ---------- REDUCIR COOLDOWN ----------
+             if (labubu.cooldown > 0) {
+                 labubu.cooldown--;
+             }*/
             const speed = labubu.baseSpeed;
             const body = labubu.sprite.body;
 
             let newDirection = labubu.currentDirection;
 
+            // --- reset de flags por frame ---
+            labubu.canTurn = false;
+            labubu.allowedTurns = labubu.allowedTurns || [];
+
+            // --- detectar si está sobre un nodo ---
+            this.physics.overlap(labubu.sprite, this.nodes, (spr, node) => {
+                labubu.canTurn = true;
+
+                // Usar node['allowedTurns'] en vez de node.allowedTurns
+                labubu.allowedTurns = node['allowedTurns'] || [];
+            });
+
             // ---------- INPUT ----------
             const mapping = this.inputMappings.find(m => m.playerId === labubu.id);
             let inputDir = null;
+
             if (mapping) {
                 if (mapping.upKeyObj.isDown) inputDir = 'up';
                 else if (mapping.downKeyObj.isDown) inputDir = 'down';
                 else if (mapping.leftKeyObj.isDown) inputDir = 'left';
                 else if (mapping.rightKeyObj.isDown) inputDir = 'right';
 
-                else if (mapping.shootKeyObj.isDown && labubu.cooldown === 0) {
+                // --- disparo ---
+                if (mapping.shootKeyObj.isDown && labubu.cooldown === 0) {
                     this.shoot(labubu.currentDirection, labubu.sprite.x, labubu.sprite.y);
                     labubu.cooldown = 300;
                 }
             }
 
-            // ---------- GIRO POR INPUT ----------
-            if (inputDir && !body.blocked[inputDir]) {
-                newDirection = inputDir;
+            // ---------- GIRO POR INPUT SOLO EN NODO ----------
+            if (inputDir && labubu.canTurn) {
+
+                const nodeAllows = labubu.allowedTurns.includes(inputDir);
+
+                if (labubu.allowedTurns.includes(inputDir) && !body.blocked[inputDir]) {
+                    newDirection = inputDir;
+                    labubu.canTurn = false; // evita múltiples giros en el mismo nodo
+                }
             }
 
-            // ---------- GIRO AUTOMÁTICO (SEGÚN MODO DEL LABUBU) ----------
+            // ---------- GIRO AUTOMÁTICO (TU SISTEMA ORIGINAL) ----------
             if (body.blocked.up || body.blocked.down || body.blocked.left || body.blocked.right) {
 
                 if (labubu.turnMode === "normal") {
@@ -417,27 +491,30 @@ export class GameScene extends Phaser.Scene {
                     newDirection = this.getTurnDirectionReverse(labubu.currentDirection);
                 }
             }
+
             // ---------- APLICAR MOVIMIENTO ----------
             labubu.currentDirection = newDirection;
+
             switch (labubu.currentDirection) {
                 case 'up': labubu.sprite.setVelocity(0, -speed); break;
                 case 'down': labubu.sprite.setVelocity(0, speed); break;
                 case 'left': labubu.sprite.setVelocity(-speed, 0); break;
                 case 'right': labubu.sprite.setVelocity(speed, 0); break;
             }
+
             // ---------- REDUCIR COOLDOWN ----------
-            if(labubu.cooldown > 0) {
+            if (labubu.cooldown > 0) {
                 labubu.cooldown--;
             }
 
         });
 
     }
-    createRailNodes() {
+    /*createRailNodes() {
         this.nodes = this.physics.add.staticGroup();
 
         const nodePositions = [
-            //{ x: 287, y: 95 },
+            { x: 287, y: 95, allowedTurns: ['down'] },
             //{ x: 100, y: 100 },
             // { x: 100, y: 470 },
             // { x: 192, y: 128 },
@@ -446,38 +523,32 @@ export class GameScene extends Phaser.Scene {
         ];
 
         nodePositions.forEach(p => {
-            /*let n = this.nodes.create(p.x, p.y, null);
-            n.setDisplaySize(74, 74).setVisible(true);
-            n.refreshBody();*/
-            const node = this.nodes.create(p.x, p.y, 'colliderCuadrado'); // textura real
+            const node = this.nodes.create(p.x, p.y, 'colliderCuadrado');
             node.setDisplaySize(64, 64);
-            node.setVisible(true); // invisible en juego
+            node.setVisible(true);
             node.refreshBody();
+            node.allowedTurns = p.allowedTurns; // anexo la info de giros permitidos
+
+            // Cuando un labubu entra en un nodo puede girar
+            this.players.forEach(player => {
+                this.physics.add.overlap(player.sprite, this.nodes, () => {
+                    player.canTurn = true;
+                });
+            });
+
         });
+    }*/
+    setRailNodes() {
+        this.nodes = this.add.group(); // sin classType
 
-        function tryTurn(labubu) {
+        this.nodes.add(new RailNode(this, 287, 95, ["down"]));
+        this.nodes.add(new RailNode(this, 400, 300, ["up"]));
+        //this.nodes.add(new RailNode(this, 400, 300, ["up"]));
+        //this.nodes.add(new RailNode(this, 600, 300, ["left", "right"]));
 
-            const speed = labubu.baseSpeed;
-
-            switch (labubu.nextDirection) {
-                case 'up':
-                    labubu.sprite.setVelocity(0, -speed);
-                    labubu.currentDirection = 'up';
-                    break;
-                case 'down':
-                    labubu.sprite.setVelocity(0, speed);
-                    labubu.currentDirection = 'down';
-                    break;
-                case 'left':
-                    labubu.sprite.setVelocity(-speed, 0);
-                    labubu.currentDirection = 'left';
-                    break;
-                case 'right':
-                    labubu.sprite.setVelocity(speed, 0);
-                    labubu.currentDirection = 'right';
-                    break;
-            }
-        }
+        // Puedes agregar más nodos según tu mapa
+        // Ejemplo:
+        // this.nodes.add(new RailNode(this, 500, 200, ["up", "right"]));
     }
 
     shoot(dir, x, y) {
@@ -507,7 +578,7 @@ export class GameScene extends Phaser.Scene {
         // COLISIONES LABUBUS
         this.players.forEach(labubu => {
             this.physics.add.overlap(bullet.sprite, labubu.sprite, () => {
-                if(bullet.currentDirection === labubu.currentDirection) {
+                if (bullet.currentDirection === labubu.currentDirection) {
                     //ACIERTO
                     this.hit(labubu);
                     this.bullets = this.bullets.filter(b => b !== bullet);
