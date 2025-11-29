@@ -18,7 +18,7 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* --- NUEVO: Layout Principal --- */
+/* --- Layout Principal --- */
 .main-layout {
     display: flex;
     align-items: center; /* Alinea los paneles verticalmente con el juego */
@@ -35,47 +35,55 @@ body {
     flex-shrink: 0; /* Evita que el juego se aplaste si la pantalla es pequeña */
 }
 
-/* --- NUEVO: Paneles de Texto --- */
+/* --- Paneles de Texto --- */
 .info-panel {
-    background: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+    background: rgba(0, 0, 0, 0.5);
     color: white;
-    padding: 20px;
-    border-radius: 15px;
-    width: 200px; /* Ancho fijo para mantener simetría */
+    padding: 25px; /* AUMENTADO: Más relleno interno */
+    border-radius: 20px; /* AUMENTADO: Bordes más redondos */
+    width: 260px; /* AUMENTADO: De 200px a 260px para que quepa mejor el texto */
     text-align: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    border: 2px solid rgba(255,255,255,0.3);
 }
 
-/* Estilos de texto dentro de los paneles */
+/* Estilos de texto */
 .info-panel h2 {
-    color: #ffcc00; /* Amarillo para resaltar títulos */
+    color: #5eb232;
+    text-shadow: 0px 0px 10px #3f3f3f;
     margin-top: 0;
-    font-size: 1.2rem;
+    font-size: 1.6rem; /* AUMENTADO: Título más grande */
     border-bottom: 2px solid rgba(255,255,255,0.2);
-    padding-bottom: 10px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .info-panel h3 {
-    font-size: 0.9rem;
-    color: #66ccff; /* Azul clarito para subtítulos */
-    margin-bottom: 5px;
+    font-size: 1.2rem; /* AUMENTADO: Subtítulo más legible */
+    color: #553922;
+    margin-bottom: 8px;
+    text-shadow: 0px 0px 10px #ffffff;
 }
 
 .info-panel p, .info-panel li {
-    font-size: 0.8rem;
-    line-height: 1.4;
-    list-style: none; /* Quitamos los puntos feos de la lista */
-    margin: 5px 0;
+    font-size: 1rem; /* AUMENTADO: Tamaño estándar (antes era muy pequeño) */
+    line-height: 1.5;
+    list-style: none;
+    margin: 8px 0;
 }
 
 .info-panel ul {
     padding: 0;
 }
 
-/* Nota: En pantallas muy pequeñas (móviles), ocultamos los paneles para que se pueda jugar */
-@media (max-width: 1200px) {
+/* En pantallas medianas (laptops pequeñas), reducimos un poco el zoom automáticamente */
+@media (max-width: 1300px) {
+    .main-layout {
+        transform: scale(0.85); /* Se hace un poco más pequeño para caber */
+    }
+}
+
+@media (max-width: 1000px) {
     .info-panel {
-        display: none;
+        display: none; /* Se oculta en móviles */
     }
 }

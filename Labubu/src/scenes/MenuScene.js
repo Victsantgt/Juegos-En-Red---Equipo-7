@@ -14,12 +14,6 @@ export class MenuScene extends Phaser.Scene {
     create() {
     let menuFondo = this.add.image(0, 0, 'menuFondo').setOrigin(0, 0);
 
-        this.add.text(400, 100, 'LABUBU MATCHUP', {
-        fontFamily: 'Lemon', 
-        fontSize: '64px',
-        color: '#ffffff'
-    }).setOrigin(0.57, 0);
-
         const localBtn = this.add.text(400, 320, 'Local 2 Player', {
             fontFamily: 'Lemon',
             fontSize: '24px',
