@@ -287,7 +287,7 @@ export class GameScene extends Phaser.Scene {
             loop: true
         });
 
-        /*
+        
         //COLLIDER CHOQUE JUGADORES
         this.physics.add.overlap(this.players.get('player1').sprite, this.players.get('player2').sprite, () => {
                 if (this.players.get('player1').turnMode !== this.players.get('player2').turnMode) {
@@ -318,8 +318,6 @@ export class GameScene extends Phaser.Scene {
                     });
                 }
             });
-            */
-
 
         this.spawnPowerup();
 
