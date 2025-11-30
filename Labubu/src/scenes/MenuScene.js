@@ -100,5 +100,16 @@ export class MenuScene extends Phaser.Scene {
             });
             this.musica.play();
         }
+
+        musicaAnterior = this.sound.get('musicaVictoria');
+        if (musicaAnterior) {
+            musicaAnterior.stop();
+            musicaAnterior.destroy();
+            this.musica = this.sound.add('musicaFondo', {
+                loop: true,
+                volume: 0.5
+            });
+            this.musica.play();
+        }
     }
 }
