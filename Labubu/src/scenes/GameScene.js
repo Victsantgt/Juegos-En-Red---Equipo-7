@@ -39,6 +39,7 @@ export class GameScene extends Phaser.Scene {
         this.load.image('colliderRectangulo', 'assets/colliderRectangulo.png');
         this.load.image('tapioca', 'assets/tapioca.png');
 
+        this.load.audio('musicaBatalla', 'assets/audio/battleTheme.mp3');
 
         //SPRITES LABUBUS
 
@@ -215,6 +216,15 @@ export class GameScene extends Phaser.Scene {
             fontSize: '48px',
             color: '#8a452e'
         });
+
+        //MÚSICA
+        this.sound.stopAll();
+        this.sound.removeAll();
+        this.musica = this.sound.add('musicaBatalla', {
+            loop: true,
+            volume: 0.5
+        });
+        this.musica.play();
 
         this.createBounds();
         this.setRailNodes();

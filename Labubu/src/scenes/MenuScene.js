@@ -89,5 +89,16 @@ export class MenuScene extends Phaser.Scene {
                 }
             });
         });
+
+        let musicaAnterior = this.sound.get('musicaBatalla');
+        if (musicaAnterior) {
+            musicaAnterior.stop();
+            musicaAnterior.destroy();
+            this.musica = this.sound.add('musicaFondo', {
+                loop: true,
+                volume: 0.5
+            });
+            this.musica.play();
+        }
     }
 }

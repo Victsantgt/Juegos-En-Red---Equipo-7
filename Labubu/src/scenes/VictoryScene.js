@@ -26,14 +26,23 @@ export class VictoryScene extends Phaser.Scene {
         this.load.image('happyB1', 'assets/spritesVic/happyB1.png'); // Para j2Ganador
         this.load.image('happyB2', 'assets/spritesVic/happyB2.png'); // Para j2Ganador
 
-
         this.load.image('Botones', 'assets/pantallaVictoria/Botones.png');
+
+        this.load.audio('musicaVictoria', 'assets/audio/winTheme.mp3');
     }
 
     create() {
         // --- Fondo Oscuro ---
         this.add.rectangle(0, 0, 704, 576, 0x000000, 0.8).setOrigin(0, 0);
 
+        //MÚSICA
+        this.sound.stopAll();
+        this.sound.removeAll();
+        this.musica = this.sound.add('musicaVictoria', {
+            loop: true,
+            volume: 0.5
+        });
+        this.musica.play();
         
         // Variables para las claves de las imágenes
         let winnerAsset = '';
