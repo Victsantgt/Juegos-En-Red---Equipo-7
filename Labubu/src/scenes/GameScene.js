@@ -12,6 +12,8 @@ import { PowerupHealth } from '../entities/PowerupHealth';
 collider1: Phaser.Physics.Arcade.Image;
 nodes: Phaser.Physics.Arcade.StaticGroup;
 
+//borrame
+
 export class GameScene extends Phaser.Scene {
 
     constructor() {
