@@ -19,14 +19,13 @@ export class MenuScene extends Phaser.Scene {
 
         // --- CAPA DE OSCURECIMIENTO (OVERLAY) ---
         // Creamos un rectángulo negro que ocupa toda la pantalla, pero invisible (alpha 0)
-        // Asumimos un tamaño de 800x600 (ajústalo al tamaño de tu juego)
         const overlay = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x000000)
             .setOrigin(0, 0)
             .setAlpha(0)
             .setDepth(10); // Depth alto para que tape los botones
 
-        // --- BOTÓN LOCAL (Lógica anterior) ---
-        const localBtn = this.add.text(610, 285, 'Local 2 Jugadores', {
+        // --- BOTÓN LOCAL ---
+        const localBtn = this.add.text(625, 163, 'Local 2 Jugadores', {
             fontFamily: 'Lemon',
             fontSize: '24px',
             color: '#5eb232',
@@ -43,14 +42,14 @@ export class MenuScene extends Phaser.Scene {
         });
 
         // --- BOTÓN ONLINE ---
-        this.add.text(590, 365, 'Online (no disponible)', {
+        this.add.text(600, 255, 'Online (no disponible)', {
             fontFamily: 'Lemon',
             fontSize: '20px',
-            color: '#5eb232',
+            color: '#b23232ff',
         }).setOrigin(0.6, 0.6);
         
         // --- BOTÓN CRÉDITOS ---
-        const creditBtn = this.add.text(600, 535, 'Créditos', {
+        const creditBtn = this.add.text(110, 545, 'Créditos', {
             fontFamily: 'Lemon',
             fontSize: '24px',
             color: '#5eb232',

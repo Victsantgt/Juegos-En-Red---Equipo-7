@@ -70,7 +70,7 @@ export class VictoryScene extends Phaser.Scene {
         // --- ANIMACIÓN ---
         // 352 píxels es el centro
 
-        // EL GANADOR (Entra por la IZQUIERDA)
+        // EL GANADOR
         const winnerSprite = this.add.image(-300, 288, winnerAsset)
             .setDepth(1); // Profundidad 1 (por encima del perdedor y la imagen triste)
         winnerSprite.setScale(1);
@@ -92,8 +92,8 @@ export class VictoryScene extends Phaser.Scene {
                 { key: happyAsset1 },
                 { key: happyAsset2 }
             ],
-            frameRate: 4, // Velocidad de la animación (puedes ajustar este número)
-            repeat: -1    // Repetir infinitamente
+            frameRate: 4,
+            repeat: -1
         });
 
         const happySprite = this.add.sprite(-300, 288, happyAsset1)
@@ -110,9 +110,8 @@ export class VictoryScene extends Phaser.Scene {
             yoyo: false
         });
 
-        // EL PERDEDOR (Entra por la DERECHA)
+        // EL PERDEDOR
         const loserSprite = this.add.image(1004, 288, loserAsset);
-        // Profundidad 0 por defecto (detrás de todo)
         loserSprite.setScale(1);
 
         this.tweens.add({
@@ -138,7 +137,7 @@ export class VictoryScene extends Phaser.Scene {
             yoyo: false
         });
 
-        // BOTONES (Entra por la DERECHA)
+        // BOTONES
         const botonesSprite = this.add.image(1004, 288, 'Botones');
         botonesSprite.setScale(1);
 
@@ -152,10 +151,10 @@ export class VictoryScene extends Phaser.Scene {
         });
 
         // --- Botón del Menú ---
-        const menuBtn = this.add.text(1130, 108, 'VOLVER AL MENÚ', { 
+        const menuBtn = this.add.text(1133, 90, 'VOLVER AL MENÚ', { 
             fontFamily: 'Lemon',
-            fontSize: '25px',
-            color: '#ffffff',
+            fontSize: '35px',
+            color: '#000000ff',
         }).setOrigin(0.5)
           .setInteractive({ useHandCursor: true })
           .setDepth(2); 
@@ -169,8 +168,8 @@ export class VictoryScene extends Phaser.Scene {
             yoyo: false
         });
 
-        menuBtn.on('pointerover', () => menuBtn.setColor('#a3a3a3ff'));
-        menuBtn.on('pointerout', () => menuBtn.setColor('#ffffff'));
+        menuBtn.on('pointerover', () => menuBtn.setColor('#424242ff'));
+        menuBtn.on('pointerout', () => menuBtn.setColor('#000000ff'));
 
         menuBtn.on('pointerdown', () => {
             this.cameras.main.fadeOut(500, 0, 0, 0);
@@ -180,11 +179,11 @@ export class VictoryScene extends Phaser.Scene {
             });
         });
 
-        // --- Botón de Resume (Reiniciar) ---
-        const resumeBtn = this.add.text(1130, 240, 'REVANCHA', {
+        // --- Botón de Revancha ---
+        const resumeBtn = this.add.text(1130, 220, 'REVANCHA', {
             fontFamily: 'Lemon',
-            fontSize: '25px',
-            color: '#ffffffff',
+            fontSize: '40px',
+            color: '#000000ff',
         }).setOrigin(0.5) //0.5 para alinear centro con el botón de menú
           .setInteractive({ useHandCursor: true })
           .setDepth(2);
@@ -198,8 +197,8 @@ export class VictoryScene extends Phaser.Scene {
             yoyo: false
         });
 
-        resumeBtn.on('pointerover', () => resumeBtn.setColor('#a3a3a3ff'));
-        resumeBtn.on('pointerout', () => resumeBtn.setColor('#ffffff'));
+        resumeBtn.on('pointerover', () => resumeBtn.setColor('#424242ff'));
+        resumeBtn.on('pointerout', () => resumeBtn.setColor('#000000ff'));
         resumeBtn.on('pointerdown', () => {
             // Reiniciamos la partida
             this.cameras.main.fadeOut(500, 0, 0, 0);

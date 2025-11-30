@@ -12,9 +12,10 @@ export class StartScene extends Phaser.Scene {
     create() {
         //MÚSICA
         this.musica = this.sound.add('musicaFondo', {
-            loop: true,      // que la música se repita
-            volume: 0.5      // volumen inicial
+            loop: true,
+            volume: 0.5
         });
+        this.sound.volume = parseFloat(localStorage.getItem("volume")) || 1;    //Cargar el volumen de partidas anteriores
 
         // FADE IN
         this.cameras.main.setBackgroundColor('#ffffff');

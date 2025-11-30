@@ -61,15 +61,8 @@ export class CreditScene extends Phaser.Scene {
             
             menuBtn.disableInteractive();
 
-            // Fundido a blanco
-            this.cameras.main.fadeOut(1000, 255, 255, 255);
-
-            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-                if (data && data.originalScene) {
-                    this.scene.stop(data.originalScene);
-                }
-                this.scene.start('MenuScene');
-            });
+            this.scene.stop();
+            this.scene.resume('MenuScene');
         });
     }
 }

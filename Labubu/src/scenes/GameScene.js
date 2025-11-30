@@ -40,9 +40,11 @@ export class GameScene extends Phaser.Scene {
         this.load.image('tapioca', 'assets/tapioca.png');
 
         this.load.audio('musicaBatalla', 'assets/audio/battleTheme.mp3');
+        this.load.audio('spawn', 'assets/audio/itemSpawn.mp3');
         this.load.audio('powerupSonido', 'assets/audio/powerup.mp3');
         this.load.audio('aciertoSonido', 'assets/audio/hit.mp3');
         this.load.audio('disparoSonido', 'assets/audio/shoot.mp3');
+        this.load.audio('choque', 'assets/audio/choque.mp3');
 
         //SPRITES LABUBUS
 
@@ -151,7 +153,7 @@ export class GameScene extends Phaser.Scene {
             repeat: -1
         });
 
-        //ANIMACIONES ABAJO JUGADOR 2//
+        //ANIMACIONES JUGADOR 2//
 
         this.anims.create({
             key: 'labubu2-down',
@@ -207,14 +209,14 @@ export class GameScene extends Phaser.Scene {
 
         // puntuaciones
         //j1 arriba izquierda
-        this.scoreLeft = this.add.text(17, 0, '3', {
+        this.scoreLeft = this.add.text(17, 0, '1', {
             fontFamily: 'Lemon',
             fontSize: '48px',
             color: '#e6dd38'
         });
 
         //j2 arriba derecha
-        this.rightScore = this.add.text(657, 0, '3', {
+        this.rightScore = this.add.text(657, 0, '1', {
             fontFamily: 'Lemon',
             fontSize: '48px',
             color: '#8a452e'
@@ -225,9 +227,14 @@ export class GameScene extends Phaser.Scene {
         this.sound.removeAll();
         this.musica = this.sound.add('musicaBatalla', {
             loop: true,
-            volume: 0.5
+            volume: 0.3
         });
         this.musica.play();
+
+        this.sfxcolision = this.sound.add('choque', {
+            loop: false,
+            volume: 1
+        });
 
         this.createBounds();
         this.setRailNodes();
@@ -316,9 +323,9 @@ export class GameScene extends Phaser.Scene {
                                 player.turnCooldown = 10;
                                 player.alternateTurnmode();
                                 break;
-                                
                         }
                     });
+                    this.sfxcolision.play();
                 }
             });
 
@@ -331,7 +338,7 @@ export class GameScene extends Phaser.Scene {
         const jugadorUno = new Labubu(this, 'player1', 96, 288, 'labubu1-down');
         const jugadorDos = new Labubu(this, 'player2', 608, 288, 'labubu2-down');
 
-        //Empiezan con 1 vida cada uno
+        //Empiezan con 1 vida cada uno para testear (luego lo cambio)
         jugadorUno.score = 1;
         jugadorDos.score = 1;
 
@@ -373,7 +380,7 @@ export class GameScene extends Phaser.Scene {
     spawnPowerup(){
         
         let type = Math.ceil(Math.random()*3)
-        //let type = 2
+        //let type = 2    //testear el cambio de direccion
         let p;
         
         switch(type){
@@ -389,7 +396,12 @@ export class GameScene extends Phaser.Scene {
                 p = new PowerupHealth(this,'powerupHealth');
                 p.sprite.play('powerupHealth');
                 break;
-        }    
+        }
+        this.sfxspawn = this.sound.add('spawn', {
+            loop: false,
+            volume: 1
+        });
+        this.sfxspawn.play();    
     }
 
     scoreUpdate() {
@@ -416,7 +428,7 @@ export class GameScene extends Phaser.Scene {
         
         this.sfxpowerup = this.sound.add('powerupSonido', {
                 loop: false,
-                volume: 0.5
+                volume: 1
             });
             this.sfxpowerup.play();
 
@@ -649,7 +661,7 @@ endGame(winnerId) {
                     labubu.cooldown = 300;
                     this.sfxshot = this.sound.add('disparoSonido', {
                         loop: false,
-                        volume: 0.5
+                        volume: 1
                     });
                     this.sfxshot.play();
                 }
@@ -796,7 +808,7 @@ endGame(winnerId) {
                     this.scoreUpdate();
                     this.sfxhit = this.sound.add('aciertoSonido', {
                         loop: false,
-                        volume: 0.5
+                        volume: 1
                     });
                     this.sfxhit.play();
                 }
@@ -804,6 +816,7 @@ endGame(winnerId) {
                     //FALLO
                     this.bullets = this.bullets.filter(b => b !== bullet);
                     bullet.sprite.destroy();
+                    this.sfxcolision.play();
                 }
             });
         });
