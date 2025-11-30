@@ -37,15 +37,60 @@ export class GameScene extends Phaser.Scene {
         this.load.image('colliderRectangulo', 'assets/colliderRectangulo.png');
         this.load.image('tapioca', 'assets/tapioca.png');
 
-        //SPRITES//
+
+        //SPRITES LABUBUS
+
+        //labubu
+
         this.load.spritesheet('labubu', 'assets/yellow/down.png', {
             frameWidth: 68,
             frameHeight: 88
         });
+
         this.load.spritesheet('labubu2', 'assets/brownanim/down.png', {
             frameWidth: 68,
             frameHeight: 88
         });
+
+        this.load.spritesheet('labubu-l', 'assets/yellow/left.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        this.load.spritesheet('labubu-r', 'assets/yellow/right.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        this.load.spritesheet('labubu-u', 'assets/yellow/up.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+        
+        //labubu 2
+
+        this.load.spritesheet('labubu2', 'assets/brownanim/down.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        this.load.spritesheet('labubu2-l', 'assets/brownanim/left.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        this.load.spritesheet('labubu2-r', 'assets/brownanim/right.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        this.load.spritesheet('labubu2-u', 'assets/brownanim/up.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        //SPRITES POWERUPS
+
         this.load.spritesheet('powerupSpeed','assets/chocolate/chocolateSpeed.png',{
             frameWidth: 48,
             frameHeight: 48
@@ -69,7 +114,9 @@ export class GameScene extends Phaser.Scene {
 
         let fondo = this.add.image(0, 0, 'fondo').setOrigin(0, 0);
 
-        ////ANIMACIÓN ABAJO JUGADOR 1////
+
+        ////ANIMACIONES JUGADOR 1////
+
         this.anims.create({
             key: 'labubu1-down',
             frames: this.anims.generateFrameNumbers('labubu', { start: 0, end: 3 }),
@@ -77,10 +124,53 @@ export class GameScene extends Phaser.Scene {
             repeat: -1
         });
 
-        //ANIMACIÓN ABAJO JUGADOR 2//
+        this.anims.create({
+            key: 'labubu1-left',
+            frames: this.anims.generateFrameNumbers('labubu-l', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'labubu1-right',
+            frames: this.anims.generateFrameNumbers('labubu-r', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'labubu1-up',
+            frames: this.anims.generateFrameNumbers('labubu-u', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        //ANIMACIONES ABAJO JUGADOR 2//
+
         this.anims.create({
             key: 'labubu2-down',
             frames: this.anims.generateFrameNumbers('labubu2', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'labubu2-left',
+            frames: this.anims.generateFrameNumbers('labubu2-l', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'labubu2-right',
+            frames: this.anims.generateFrameNumbers('labubu2-r', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'labubu2-up',
+            frames: this.anims.generateFrameNumbers('labubu2-u', { start: 0, end: 3 }),
             frameRate: 10,
             repeat: -1
         });
@@ -421,15 +511,17 @@ endGame(winnerId) {
         return reverseTurns[dir];
     }
 
+    updateAnim(player){
+
+
+
+    }
+
+
+
     update() {
 
-        if (this.escKey.isDown && !this.escWasDown) {
-            this.togglePause();
-        }
 
-
-
-        /* 
 
 
         this.inputMappings.forEach(mapping => {
@@ -468,7 +560,7 @@ endGame(winnerId) {
 
          if (this.escKey.isDown && !this.escWasDown) {
         this.togglePause();
-    }*/
+    }
         // MOVIMIENTO BALAS
         this.bullets.forEach(bullet => {
             switch (bullet.currentDirection) {
@@ -578,6 +670,28 @@ endGame(winnerId) {
                 }
             }
             
+            let anim = labubu.sprite.anims.currentAnim?.key;
+
+            if (
+                (anim.endsWith('down') && labubu.currentDirection !== 'down') ||
+                (anim.endsWith('left') && labubu.currentDirection !== 'left') ||
+                (anim.endsWith('right') && labubu.currentDirection !== 'right') ||
+                (anim.endsWith('up') && labubu.currentDirection !== 'up'))
+                {
+                    
+                    if(labubu.currentDirection==='right'&&anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-right');
+                    if(labubu.currentDirection==='left'&&anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-left');
+                    if(labubu.currentDirection==='down'&&anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-down');
+                    if(labubu.currentDirection==='up'&&anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-up');
+
+                    if(labubu.currentDirection==='right'&&anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-right');
+                    if(labubu.currentDirection==='left'&&anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-left');
+                    if(labubu.currentDirection==='down'&&anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-down');
+                    if(labubu.currentDirection==='up'&&anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-up');
+
+
+                }   
+
 
             // ---------- APLICAR MOVIMIENTO ----------
 
