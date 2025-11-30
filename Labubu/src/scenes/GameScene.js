@@ -40,6 +40,9 @@ export class GameScene extends Phaser.Scene {
         this.load.image('tapioca', 'assets/tapioca.png');
 
         this.load.audio('musicaBatalla', 'assets/audio/battleTheme.mp3');
+        this.load.audio('powerupSonido', 'assets/audio/powerup.mp3');
+        this.load.audio('aciertoSonido', 'assets/audio/hit.mp3');
+        this.load.audio('disparoSonido', 'assets/audio/shoot.mp3');
 
         //SPRITES LABUBUS
 
@@ -414,7 +417,14 @@ export class GameScene extends Phaser.Scene {
 
     collectPowerup(player, powerup){
         
-        let speedmult = 1.4;        
+        let speedmult = 1.4; 
+        
+        this.sfxpowerup = this.sound.add('powerupSonido', {
+                loop: false,
+                volume: 0.5
+            });
+            this.sfxpowerup.play();
+
         if(powerup.poweruptype=='Speed'){
         
           player.playerInstance.baseSpeed *=speedmult;
@@ -647,6 +657,11 @@ endGame(winnerId) {
                 if (mapping.shootKeyObj.isDown && labubu.cooldown === 0) {
                     this.shoot(labubu.currentDirection, labubu.sprite.x, labubu.sprite.y);
                     labubu.cooldown = 300;
+                    this.sfxshot = this.sound.add('disparoSonido', {
+                        loop: false,
+                        volume: 0.5
+                    });
+                    this.sfxshot.play();
                 }
             }
 
@@ -826,6 +841,11 @@ endGame(winnerId) {
                     this.bullets = this.bullets.filter(b => b !== bullet);
                     bullet.sprite.destroy();
                     this.scoreUpdate();
+                    this.sfxhit = this.sound.add('aciertoSonido', {
+                        loop: false,
+                        volume: 0.5
+                    });
+                    this.sfxhit.play();
                 }
                 else {
                     //FALLO
