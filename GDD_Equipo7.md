@@ -1,20 +1,30 @@
----
-output: 
-  bookdown::html_document2:
-    toc: yes
-    toc_float: yes
-  bookdown::pdf_document2:
-    includes:
-      in_header: preamble.tex
+<details>
+<summary><strong>Haz clic aquí para ver el Índice</strong></summary>
+
+<br>
+
+- [1. Miembros del Equipo](#1-miembros-del-equipo)
+- [2. Temática y Especificaciones](#2-temática-y-especificaciones)
+- [3. Inspiraciones](#3-inspiraciones)
+- [4. Objetivo del Juego](#4-objetivo-del-juego)
+- [5. Mecánicas](#5-mecánicas)
+- [6. Físicas del Juego](#6-físicas-del-juego)
+- [7. Controles](#7-controles)
+- [8. Aspectos Técnicos](#8-aspectos-técnicos)
+- [9. Descripción del Escenario](#9-descripción-del-escenario)
+- [10. Diagrama de Flujo](#10-diagrama-de-flujo)
+- [11. Estilo Visual y Assets](#11-estilo-visual-y-assets)
+- [12. Bocetos](#12-bocetos)
+- [13. Logotipo](#13-logotipo)
+- [14. Música y Efectos Sonoros](#14-música-y-efectos-sonoros)
+- [15. Historia y Desarrollo de Personajes](#15-historia-y-desarrollo-de-personajes)
+- [16. Estrategia de Marketing](#16-estrategia-de-marketing)
+- [17. Referencias](#17-referencias)
+
+</details>
+
 ---
 
-```{r setup, include=FALSE, purl=FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-                      eval = TRUE, 
-                      warning = FALSE,
-                      message = FALSE,
-                      error = TRUE)
-                      
 # LABUBU MATCH-UP: Documento de Diseño de Juego (GDD)
 
 ## 1\. Miembros del Equipo
