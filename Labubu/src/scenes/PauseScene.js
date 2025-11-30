@@ -7,39 +7,53 @@ export class PauseScene extends Phaser.Scene {
     }
 
     create(data) {    
+        // --- REFERENCIAS DE PANTALLA (704x576) ---
+        const width = 704;
+        const height = 576;
+        const centerX = width / 2;
+        const centerY = height / 2;
 
-        this.add.rectangle(400, 300, 800, 600, 0x000000, 0.7);
+        // --- FONDO SEMITRANSPARENTE ---
+        // Cubrimos toda la pantalla
+        this.add.rectangle(0, 0, width, height, 0x000000, 0.7).setOrigin(0, 0);
 
-        this.add.text(400, 200, 'Game Paused', {
+        // --- TÍTULO (Game Paused) ---
+        this.add.text(centerX, centerY - 100, 'Game Paused', {
             fontFamily: 'Lemon',
             fontSize: '64px',
-            color: '#ffffff'
-        }).setOrigin(0.6, 0);
+            color: '#8b4a00ff'
+        }).setOrigin(0.5, 0.5); // Centro absoluto del texto
 
-        const resumeBtn = this.add.text(400, 320, 'Resume', {
+        // --- BOTÓN RESUME ---
+        const resumeBtn = this.add.text(centerX, centerY + 20, 'Resume', {
             fontFamily: 'Lemon',
             fontSize: '32px',
-            color: '#00a6ffff',
-        }).setOrigin(0.8, 0.3)
-        .setInteractive({useHandCursor: true})
-        .on('pointover', () => resumeBtn.setColor('#ffd900ff'))
-        .on('pointerout', () => resumeBtn.setColor('#00a6ffff'))
+            color: '#5eb232',
+        }).setOrigin(0.5, 0.5)
+        .setInteractive({ useHandCursor: true })
+        .on('pointerover', () => resumeBtn.setColor('#553922')) 
+        .on('pointerout', () => resumeBtn.setColor('#5eb232'))
         .on('pointerdown', () => {
             this.scene.stop();
-            this.scene.resume(data.originalScene);
-            this.scene.get(data.originalScene).resume();
+            
+            if (data && data.originalScene) {
+                this.scene.resume(data.originalScene);
+            }
         });
 
-        const menuBtn = this.add.text(400, 400, 'Return to Main Menu', {
+        // --- BOTÓN RETURN TO MENU ---
+        const menuBtn = this.add.text(centerX, centerY + 100, 'Return to Main Menu', {
             fontFamily: 'Lemon',
             fontSize: '32px',
-            color: '#0015ffff',
-        }).setOrigin(0.6, 0.6)
+            color: '#5eb232',
+        }).setOrigin(0.5, 0.5)
         .setInteractive({ useHandCursor: true })
-        .on('pointerover', () => menuBtn.setColor('#ff0000ff'))
-        .on('pointerout', () => menuBtn.setColor('#0015ffff'))
+        .on('pointerover', () => menuBtn.setColor('#553922'))
+        .on('pointerout', () => menuBtn.setColor('#5eb232'))
         .on('pointerdown', () => {
-            this.scene.stop(data.originalScene);
+            if (data && data.originalScene) {
+                this.scene.stop(data.originalScene);
+            }
             this.scene.start('MenuScene');
         });
     }
