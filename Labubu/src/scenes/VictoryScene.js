@@ -18,6 +18,11 @@ export class VictoryScene extends Phaser.Scene {
         this.load.image('j2Perdedor', 'assets/pantallaVictoria/j2Perdedor.png');
 
         this.load.image('Botones', 'assets/pantallaVictoria/Botones.png');
+
+        this.load.image('Botones', 'assets/spritesVic/happyb.png');
+        this.load.image('Botones', 'assets/spritesVic/happyy.png');
+        this.load.image('Botones', 'assets/spritesVic/sady.png');
+        this.load.image('Botones', 'assets/spritesVic/sadb.png');
     }
 
     create() {

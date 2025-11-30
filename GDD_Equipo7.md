@@ -1,3 +1,20 @@
+---
+output: 
+  bookdown::html_document2:
+    toc: yes
+    toc_float: yes
+  bookdown::pdf_document2:
+    includes:
+      in_header: preamble.tex
+---
+
+```{r setup, include=FALSE, purl=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      eval = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      error = TRUE)
+                      
 # LABUBU MATCH-UP: Documento de Diseño de Juego (GDD)
 
 ## 1\. Miembros del Equipo
@@ -127,13 +144,13 @@ Diseño del escenario
 
 -----
 
-## 10\. 📊 Diagrama de Flujo
+## 10\. Diagrama de Flujo
 
 <img width="1054" height="619" alt="image" src="https://github.com/user-attachments/assets/1c710e3b-2c6c-42e4-8185-3f3a5c1e945b" />
 
 -----
 
-## 11\. 🎨 Estilo Visual y Assets
+## 11\. Estilo Visual y Assets
 
 ### Estilo Visual
 
