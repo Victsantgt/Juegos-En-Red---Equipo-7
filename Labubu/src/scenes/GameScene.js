@@ -24,7 +24,6 @@ export class GameScene extends Phaser.Scene {
     init() {
         this.players = new Map();
         this.inputMappings = [];
-        //this.ball = null;
         this.isPaused = false;
         this.escWasDown = false;
         this.processor = new CommandProcessor();
@@ -39,11 +38,11 @@ export class GameScene extends Phaser.Scene {
         this.load.image('tapioca', 'assets/tapioca.png');
 
         //SPRITES//
-        this.load.spritesheet('labubu', 'assets/brownanim/down.png', {
+        this.load.spritesheet('labubu', 'assets/yellow/down.png', {
             frameWidth: 68,
             frameHeight: 88
         });
-        this.load.spritesheet('labubu2', 'assets/yellow/down.png', {
+        this.load.spritesheet('labubu2', 'assets/brownanim/down.png', {
             frameWidth: 68,
             frameHeight: 88
         });
