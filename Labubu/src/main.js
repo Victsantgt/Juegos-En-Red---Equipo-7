@@ -4,6 +4,8 @@ import { MenuScene } from './scenes/MenuScene.js';
 import { GameScene } from './scenes/GameScene.js';
 import { PauseScene } from './scenes/PauseScene.js';
 import { VictoryScene } from './scenes/VictoryScene.js';
+import { CreditScene } from './scenes/CreditScene.js';
+
 
 const config = {
     type: Phaser.AUTO,
@@ -17,7 +19,7 @@ const config = {
             debug: false
         }
     },
-    scene: [StartScene, MenuScene, GameScene,PauseScene, VictoryScene],
+    scene: [StartScene, MenuScene, GameScene,PauseScene, VictoryScene, CreditScene],
     backgroundColor: '#ffffff',
 };
 
