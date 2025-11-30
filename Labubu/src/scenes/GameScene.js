@@ -266,6 +266,15 @@ export class GameScene extends Phaser.Scene {
             this.physics.add.overlap(player.sprite,this.powerups,this.collectPowerup,null,this);
         });
 
+
+        this.time.addEvent({
+            delay: 8000,
+            callback: () => {
+                this.spawnPowerup();
+            },
+            loop: true
+        });
+
         /*
         //COLLIDER CHOQUE JUGADORES
         this.physics.add.overlap(this.players.get('player1').sprite, this.players.get('player2').sprite, () => {
