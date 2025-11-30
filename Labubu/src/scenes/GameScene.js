@@ -233,7 +233,7 @@ export class GameScene extends Phaser.Scene {
         this.setRailNodes();
 
 
-        // ---------- PAREDES DEL ESCENARIO ----------
+        //PAREDES DEL ESCENARIO 
         this.walls = this.physics.add.staticGroup();
 
         let wall1 = this.walls.create(192, 190, 'colliderCuadrado');
@@ -290,7 +290,7 @@ export class GameScene extends Phaser.Scene {
             loop: true
         });
 
-        /*
+        
         //COLLIDER CHOQUE JUGADORES
         this.physics.add.overlap(this.players.get('player1').sprite, this.players.get('player2').sprite, () => {
                 if (this.players.get('player1').turnMode !== this.players.get('player2').turnMode) {
@@ -321,8 +321,6 @@ export class GameScene extends Phaser.Scene {
                     });
                 }
             });
-            */
-
 
         this.spawnPowerup();
 
@@ -332,18 +330,15 @@ export class GameScene extends Phaser.Scene {
     setUpPlayers() {
         const jugadorUno = new Labubu(this, 'player1', 96, 288, 'labubu1-down');
         const jugadorDos = new Labubu(this, 'player2', 608, 288, 'labubu2-down');
-        //const powerupprueba = new PowerupSpeed(this, 300, 400, 'powerupSpeed');
 
-        //Empiezan con 3 vidas cada uno
-        jugadorUno.score = 3;
-        jugadorDos.score = 3;
+        //Empiezan con 1 vida cada uno
+        jugadorUno.score = 1;
+        jugadorDos.score = 1;
 
         this.players.set('player1', jugadorUno);
         this.players.set('player2', jugadorDos);
         this.players.get('player1').turnMode = "reverse";
         this.players.get('player2').turnMode = "normal";
-
-        //this.players.get('player2').currentDirection = "up";
 
         const InputConfig = [
             {
@@ -621,15 +616,12 @@ endGame(winnerId) {
 
             let newDirection = labubu.currentDirection;
 
-            // --- reset de flags por frame ---
+            //eset de flags por frame
             labubu.canTurn = false;
             labubu.allowedTurns = labubu.allowedTurns || [];
 
             labubu.updateCenterCollider();
-            //console.log("LABUBU : " + labubu.centerCollider.y);
-
-
-            // --- detectar si está sobre un nodo ---
+            //detectar si está sobre un nodo 
             this.physics.overlap(labubu.centerCollider, this.nodes, (spr, node) => {
                 if(Phaser.Math.Distance.Between(labubu.centerCollider.x, labubu.centerCollider.y, node['x'], node['y']) > 18){
                     return;
@@ -638,12 +630,10 @@ endGame(winnerId) {
                 
                 currentRailx = node['x'];
                 currentRaily = node['y'];
-                // Usar node['allowedTurns'] en vez de node.allowedTurns
-
                 labubu.allowedTurns = node['allowedTurns'] || [];
             });
 
-            // ---------- INPUT ----------
+            //INPUT 
             const mapping = this.inputMappings.find(m => m.playerId === labubu.id);
             let inputDir = null;
 
@@ -653,7 +643,7 @@ endGame(winnerId) {
                 else if (mapping.leftKeyObj.isDown) inputDir = 'left';
                 else if (mapping.rightKeyObj.isDown) inputDir = 'right';
 
-                // --- disparo ---
+                //disparo
                 if (mapping.shootKeyObj.isDown && labubu.cooldown === 0) {
                     this.shoot(labubu.currentDirection, labubu.sprite.x, labubu.sprite.y);
                     labubu.cooldown = 300;
@@ -665,20 +655,20 @@ endGame(winnerId) {
                 }
             }
 
-            // ---------- GIRO POR INPUT SOLO EN NODO ----------
+            //GIRO POR INPUT SOLO EN NODO
             if (inputDir && labubu.canTurn && !labubu.blockMove && labubu.turnCooldown === 0) {
 
 
                 // Verifica si la dirección que quiere el jugador está permitida por el nodo
                 if (labubu.allowedTurns.includes(inputDir) && !body.blocked[inputDir]) {
-                    // Giro permitido → actualizar dirección
+                    // Giro permitido: actualizar dirección
                     newDirection = inputDir;
                     labubu.canTurn = false; // evita múltiples giros en el mismo nodo
-                    // labubu.sprite.setPosition(currentRailx, currentRaily);
+                    
+                    //hacer el giro más fluido
                     this.tweens.add({
                         targets: labubu.sprite,
                         x: currentRailx,
-                        //y: currentRaily,
                         duration:600,
                         ease: 'Sine',
                         onComplete: () => { 
@@ -688,12 +678,12 @@ endGame(winnerId) {
 
 
                 } else {
-                    // Giro no permitido → mantener la dirección anterior
+                    // Giro no permitido: mantener la dirección anterior
                     newDirection = labubu.currentDirection;
                 }
             }
 
-            // ---------- GIRO AUTOMÁTICO ----------
+            //GIRO AUTOMÁTICO 
             if(labubu.turnCooldown === 0) {
                     if (body.blocked.up || body.blocked.down || body.blocked.left || body.blocked.right) {
                     if (labubu.turnMode === "normal") {
@@ -729,7 +719,7 @@ endGame(winnerId) {
                 }   
 
 
-            // ---------- APLICAR MOVIMIENTO ----------
+            //APLICAR MOVIMIENTO
 
             if(!labubu.blockMove){
 
@@ -747,7 +737,7 @@ endGame(winnerId) {
                 labubu.sprite.setVelocity(0, 0);
             }
 
-            // ---------- REDUCIR COOLDOWN ----------
+            // REDUCIR COOLDOWN
             if (labubu.cooldown > 0) {
                 labubu.cooldown--;
             }
@@ -759,34 +749,6 @@ endGame(winnerId) {
         });
 
     }
-    /*createRailNodes() {
-        this.nodes = this.physics.add.staticGroup();
-
-        const nodePositions = [
-            { x: 287, y: 95, allowedTurns: ['down'] },
-            //{ x: 100, y: 100 },
-            // { x: 100, y: 470 },
-            // { x: 192, y: 128 },
-            // { x: 192, y: 192 },
-
-        ];
-
-        nodePositions.forEach(p => {
-            const node = this.nodes.create(p.x, p.y, 'colliderCuadrado');
-            node.setDisplaySize(64, 64);
-            node.setVisible(true);
-            node.refreshBody();
-            node.allowedTurns = p.allowedTurns; // anexo la info de giros permitidos
-
-            // Cuando un labubu entra en un nodo puede girar
-            this.players.forEach(player => {
-                this.physics.add.overlap(player.sprite, this.nodes, () => {
-                    player.canTurn = true;
-                });
-            });
-
-        });
-    }*/
     setRailNodes() {
         this.nodes = this.add.group(); // sin classType
 
@@ -797,15 +759,6 @@ endGame(winnerId) {
         this.nodes.add(new RailNode(this, 416.5, 288.5, ["down", "right", "left"]));
         this.nodes.add(new RailNode(this, 608.5, 288.5, ["up", "down", "left"]));
         this.nodes.add(new RailNode(this, 416.5, 480.5, ["up", "right", "left"]));
-
-
-
-        //this.nodes.add(new RailNode(this, 400, 300, ["up"]));
-        //this.nodes.add(new RailNode(this, 600, 300, ["left", "right"]));
-
-        // Puedes agregar más nodos según tu mapa
-        // Ejemplo:
-        // this.nodes.add(new RailNode(this, 500, 200, ["up", "right"]));
     }
 
     shoot(dir, x, y) {
