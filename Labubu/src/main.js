@@ -17,7 +17,7 @@ const config = {
             debug: false
         }
     },
-    scene: [StartScene, MenuScene, GameScene, PauseScene, VictoryScene],
+    scene: [StartScene, MenuScene, GameScene,PauseScene, VictoryScene],
     backgroundColor: '#ffffff',
 };
 

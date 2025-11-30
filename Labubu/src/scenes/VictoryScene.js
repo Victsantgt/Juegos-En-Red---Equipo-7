@@ -17,52 +17,84 @@ export class VictoryScene extends Phaser.Scene {
         this.load.image('j1Perdedor', 'assets/pantallaVictoria/j1Perdedor.png');
         this.load.image('j2Perdedor', 'assets/pantallaVictoria/j2Perdedor.png');
 
-        this.load.image('Botones', 'assets/pantallaVictoria/Botones.png');
+        this.load.image('sady', 'assets/spritesVic/sady.png'); // Para j1Perdedor
+        this.load.image('sadb', 'assets/spritesVic/sadb.png'); // Para j2Perdedor
 
-        this.load.image('Botones', 'assets/spritesVic/happyb.png');
-        this.load.image('Botones', 'assets/spritesVic/happyy.png');
-        this.load.image('Botones', 'assets/spritesVic/sady.png');
-        this.load.image('Botones', 'assets/spritesVic/sadb.png');
+        this.load.image('happyY1', 'assets/spritesVic/happyY1.png'); // Para j1Ganador
+        this.load.image('happyY2', 'assets/spritesVic/happyY2.png'); // Para j1Ganador
+
+        this.load.image('happyB1', 'assets/spritesVic/happyB1.png'); // Para j2Ganador
+        this.load.image('happyB2', 'assets/spritesVic/happyB2.png'); // Para j2Ganador
+
+
+        this.load.image('Botones', 'assets/pantallaVictoria/Botones.png');
     }
 
     create() {
         // --- Fondo Oscuro ---
         this.add.rectangle(0, 0, 704, 576, 0x000000, 0.8).setOrigin(0, 0);
 
-        // --- LÓGICA DE GANADOR / PERDEDOR ---
-        let winnerText = '';
-        let winnerColor = '';
         
         // Variables para las claves de las imágenes
         let winnerAsset = '';
         let loserAsset = '';
+        let sadAsset = ''; 
+        let happyAsset1 = '';
+        let happyAsset2 = '';
 
         if (this.winnerId === 'player1') {
             // Gana J1
-            winnerText = '¡JUGADOR 1 GANA!';
-            winnerColor = '#e6dd38'; // Amarillo
-            
             winnerAsset = 'j1Ganador';  // Imagen J1 Ganando
             loserAsset = 'j2Perdedor';  // Imagen J2 Perdiendo
+            sadAsset = 'sadb';          // Imagen triste asociada a J2
+            happyAsset1 = 'happyY1';
+            happyAsset2 = 'happyY2';
         } else {
-            // Gana J2
-            winnerText = '¡JUGADOR 2 GANA!';
-            winnerColor = '#8a452e'; // Marrón/Rojo (según tu código pasado)
-            
+            // Gana J2            
             winnerAsset = 'j2Ganador';  // Imagen J2 Ganando
             loserAsset = 'j1Perdedor';  // Imagen J1 Perdiendo
+            sadAsset = 'sady';          // Imagen triste asociada a J1
+            happyAsset1 = 'happyB1';
+            happyAsset2 = 'happyB2';
         }
 
-        // --- ANIMACIÓN SIMULTÁNEA ---
+        // --- ANIMACIÓN ---
+        // 352 píxels es el centro
 
         // EL GANADOR (Entra por la IZQUIERDA)
         const winnerSprite = this.add.image(-300, 288, winnerAsset)
-            .setDepth(1); 
+            .setDepth(1); // Profundidad 1 (por encima del perdedor y la imagen triste)
         winnerSprite.setScale(1);
 
         this.tweens.add({
             targets: winnerSprite,
-            x: 280,         // Destino: Un poco a la izquierda del centro
+            x: 352,        
+            duration: 1000,
+            ease: 'Linear',
+            repeat: 0,
+            yoyo: false
+        });
+
+        // HAPPY ANIMATION
+        // Creamos la animación específica para esta victoria
+        this.anims.create({
+            key: 'happyAnim',
+            frames: [
+                { key: happyAsset1 },
+                { key: happyAsset2 }
+            ],
+            frameRate: 4, // Velocidad de la animación (puedes ajustar este número)
+            repeat: -1    // Repetir infinitamente
+        });
+
+        const happySprite = this.add.sprite(-300, 288, happyAsset1)
+            .setDepth(1.5) // Por encima del ganador base (1) pero debajo del texto (2)
+            .play('happyAnim');
+        happySprite.setScale(1);
+
+        this.tweens.add({
+            targets: happySprite,
+            x: 352,        
             duration: 1000,
             ease: 'Linear',
             repeat: 0,
@@ -71,11 +103,26 @@ export class VictoryScene extends Phaser.Scene {
 
         // EL PERDEDOR (Entra por la DERECHA)
         const loserSprite = this.add.image(1004, 288, loserAsset);
+        // Profundidad 0 por defecto (detrás de todo)
         loserSprite.setScale(1);
 
         this.tweens.add({
             targets: loserSprite,
-            x: 424,         // Destino: Un poco a la derecha del centro
+            x: 352,        
+            duration: 1000,
+            ease: 'Linear',
+            repeat: 0,
+            yoyo: false
+        });
+
+        // SAD
+        const sadSprite = this.add.image(1004, 288, sadAsset)
+            .setDepth(0.5); // Profundidad 0.5 (entre el perdedor y el ganador)
+        sadSprite.setScale(1);
+
+        this.tweens.add({
+            targets: sadSprite,
+            x: 352,        
             duration: 1000,
             ease: 'Linear',
             repeat: 0,
@@ -88,7 +135,7 @@ export class VictoryScene extends Phaser.Scene {
 
         this.tweens.add({
             targets: botonesSprite,
-            x: 424,         // Destino: Un poco a la derecha del centro
+            x: 352,        
             duration: 1000,
             ease: 'Linear',
             repeat: 0,
@@ -106,14 +153,14 @@ export class VictoryScene extends Phaser.Scene {
 
         this.tweens.add({
             targets: menuBtn,
-            x: 550,
+            x: 520,
             duration: 1000,
             ease: 'Linear',
             repeat: 0,
             yoyo: false
         });
 
-        menuBtn.on('pointerover', () => menuBtn.setColor('#cccccc'));
+        menuBtn.on('pointerover', () => menuBtn.setColor('#a3a3a3ff'));
         menuBtn.on('pointerout', () => menuBtn.setColor('#ffffff'));
 
         menuBtn.on('pointerdown', () => {
@@ -121,6 +168,35 @@ export class VictoryScene extends Phaser.Scene {
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
                 this.scene.stop('GameScene');
                 this.scene.start('MenuScene');
+            });
+        });
+
+        // --- Botón de Resume (Reiniciar) ---
+        const resumeBtn = this.add.text(1130, 240, 'REVANCHA', {
+            fontFamily: 'Lemon',
+            fontSize: '25px',
+            color: '#ffffffff',
+        }).setOrigin(0.5) //0.5 para alinear centro con el botón de menú
+          .setInteractive({ useHandCursor: true })
+          .setDepth(2);
+
+        this.tweens.add({
+            targets: resumeBtn,
+            x: 560,
+            duration: 1000,
+            ease: 'Linear',
+            repeat: 0,
+            yoyo: false
+        });
+
+        resumeBtn.on('pointerover', () => resumeBtn.setColor('#a3a3a3ff'));
+        resumeBtn.on('pointerout', () => resumeBtn.setColor('#ffffff'));
+        resumeBtn.on('pointerdown', () => {
+            // Reiniciamos la partida
+            this.cameras.main.fadeOut(500, 0, 0, 0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                this.scene.stop('GameScene'); 
+                this.scene.start('GameScene');
             });
         });
     }
