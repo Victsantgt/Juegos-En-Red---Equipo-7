@@ -26,10 +26,10 @@ export class CreditScene extends Phaser.Scene {
 
         // --- LISTA DE CRÉDITOS (En el centro absoluto) ---
         const equipo = [
-            "Carla Calvache Amador - Programadora, aspecto visual",
-            "Daniel Redondo Pascual - Programador, arte",
-            "Tinka Armas Martí - Programadora, arte",
-            "Víctor Santiago Gil Torres - Programador, músico"
+            "Carla Calvache Amador - Programadora UIs, community manager",
+            "Daniel Redondo Pascual - concept art, ilustración 2D, programador",
+            "Tinka Armas Martí - concept art, ilustración 2D, programadora",
+            "Víctor Santiago Gil Torres - Compositor, programador, guionista"
         ];
 
         // Espacio entre líneas
@@ -43,7 +43,7 @@ export class CreditScene extends Phaser.Scene {
         equipo.forEach((texto, index) => {
             this.add.text(centerX, startY + (index * gap), texto, {
                 fontFamily: 'Lemon',
-                fontSize: '18px', 
+                fontSize: '14px', 
                 color: '#e0e0e0', 
                 align: 'center'
             }).setOrigin(0.5, 0.5);

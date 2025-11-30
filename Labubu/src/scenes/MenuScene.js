@@ -6,7 +6,7 @@ export class MenuScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('menuFondo', 'assets/menuFondo.jpg');
+        this.load.image('menuFondo', 'assets/menuFondo.png');
         this.load.audio('musicaFondo', 'assets/audio/menuPpal.mp3');
     }
 
@@ -26,7 +26,7 @@ export class MenuScene extends Phaser.Scene {
             .setDepth(10); // Depth alto para que tape los botones
 
         // --- BOTÓN LOCAL (Lógica anterior) ---
-        const localBtn = this.add.text(400, 320, 'Local 2 Jugadores', {
+        const localBtn = this.add.text(610, 285, 'Local 2 Jugadores', {
             fontFamily: 'Lemon',
             fontSize: '24px',
             color: '#5eb232',
@@ -43,14 +43,14 @@ export class MenuScene extends Phaser.Scene {
         });
 
         // --- BOTÓN ONLINE ---
-        this.add.text(400, 390, 'Online Multiplayer (Not available)', {
+        this.add.text(590, 365, 'Online (no disponible)', {
             fontFamily: 'Lemon',
-            fontSize: '24px',
+            fontSize: '20px',
             color: '#5eb232',
         }).setOrigin(0.6, 0.6);
         
         // --- BOTÓN CRÉDITOS ---
-        const creditBtn = this.add.text(400, 200, 'Créditos', {
+        const creditBtn = this.add.text(600, 535, 'Créditos', {
             fontFamily: 'Lemon',
             fontSize: '24px',
             color: '#5eb232',
