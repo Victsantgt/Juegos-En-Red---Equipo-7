@@ -5,6 +5,8 @@ import { GameScene } from './scenes/GameScene.js';
 import { PauseScene } from './scenes/PauseScene.js';
 import { VictoryScene } from './scenes/VictoryScene.js';
 import { CreditScene } from './scenes/CreditScene.js';
+import { ConnectionLostScene } from './scenes/ConnectionLostScene.js';
+
 
 
 const config = {
@@ -19,7 +21,7 @@ const config = {
             debug: false
         }
     },
-    scene: [StartScene, MenuScene, GameScene,PauseScene, VictoryScene, CreditScene],
+    scene: [StartScene, MenuScene, GameScene,PauseScene, VictoryScene, CreditScene, ConnectionLostScene],
     backgroundColor: '#ffffff',
 };
 

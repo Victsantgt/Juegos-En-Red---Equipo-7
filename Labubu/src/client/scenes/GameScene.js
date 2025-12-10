@@ -9,6 +9,7 @@ import { Powerup } from '../entities/Powerup';
 import { PowerupSpeed } from '../entities/PowerupSpeed';
 import { PowerupTurn } from '../entities/PowerupTurn';
 import { PowerupHealth } from '../entities/PowerupHealth';
+import { connectionManager } from '../services/ConnectionManager';
 collider1: Phaser.Physics.Arcade.Image;
 nodes: Phaser.Physics.Arcade.StaticGroup;
 
@@ -332,7 +333,28 @@ export class GameScene extends Phaser.Scene {
         this.spawnPowerup();
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+
+        //////////////NUEVO///////////////////////////////////////////////////////////////////////
+        this.connectionListener = (data) => {
+            if (!data.connected && this.scene.isActive()) {
+                this.onConnectionLost();
+            }
+        };
+        connectionManager.addListener(this.connectionListener);
     }
+
+    onConnectionLost() {
+        this.scene.pause();
+        this.scene.launch('ConnectionLostScene', {previousScene: 'GameScene' });
+    }
+
+    shutdown() {
+        // Remover el listener
+        if (this.connectionListener) {
+            connectionManager.removeListener(this.connectionListener);
+        }
+    }
+    ///////////////////////////////////////////////////////////////////
 
     setUpPlayers() {
         const jugadorUno = new Labubu(this, 'player1', 96, 288, 'labubu1-down');

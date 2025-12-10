@@ -1,0 +1,124 @@
+/* --- Estilos Generales --- */
+body {
+    animation: gradientAnimation 15s ease infinite;
+    background: linear-gradient(270deg, #ffcc00, #ff6699, #66ccff, #ffcc00);
+    background-size: 400% 400%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* Centrado horizontal */
+    align-items: center;     /* Centrado vertical */
+    min-height: 100vh;
+    font-family: 'Lemon', cursive, sans-serif; /* Aplicamos la fuente a todo */
+}
+
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- Layout Principal --- */
+.main-layout {
+    display: flex;
+    align-items: center; /* Alinea los paneles verticalmente con el juego */
+    gap: 20px; /* Espacio entre los paneles y el juego */
+    padding: 20px;
+}
+
+/* --- ESTILO DEL JUEGO --- */
+#game-container {
+    box-shadow: 0px 15px 60px 10px rgba(0, 0, 0, 0.7); /* Opción A recomendada */
+    border-radius: 20px;
+    overflow: hidden;
+    font-size: 0;
+    flex-shrink: 0; /* Evita que el juego se aplaste si la pantalla es pequeña */
+}
+
+/* --- Paneles de Texto --- */
+.info-panel {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 25px; /* Más relleno interno */
+    border-radius: 20px; /* Bordes más redondos */
+    width: 260px; /* De 200px a 260px para que quepa mejor el texto */
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* Estilos de texto */
+.info-panel h2 {
+    color: #5eb232;
+    text-shadow: 0px 0px 10px #3f3f3f;
+    margin-top: 0;
+    font-size: 1.6rem;
+    border-bottom: 2px solid rgba(255,255,255,0.2);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.info-panel h3 {
+    font-size: 1.2rem; 
+    color: #553922;
+    margin-bottom: 8px;
+    text-shadow: 0px 0px 10px #ffffff;
+}
+
+/* Color específico para JUGADOR 1 (Panel Izquierdo) */
+.info-panel.left h2 {
+    color: #e6dd38;
+}
+
+/* Color específico para JUGADOR 2 (Panel Derecho) */
+.info-panel.right h2 {
+    color: #8a452e;
+}
+
+.info-panel.right h2 {
+    color: #8a452e;
+    text-shadow: 0px 0px 15px #ffffff; /* Resplandor blanco difuminado */
+}
+
+.info-panel p, .info-panel li {
+    font-size: 1rem; 
+    line-height: 1.5;
+    list-style: none;
+    margin: 8px 0;
+}
+
+.info-panel ul {
+    padding: 0;
+}
+
+/* --- Columna Central Vertical --- */
+.center-column {
+    display: flex;
+    flex-direction: column; /* Pone el texto encima del juego */
+    align-items: center;    /* Lo centra todo */
+    gap: 30px;              /* Espacio entre el texto "ESC" y el juego */
+}
+
+/* --- Estilo del mensaje de ESC --- */
+.esc-message {
+    font-family: 'Lemon', cursive;
+    color: #553922; /* Amarillo a juego con el tema */
+    font-size: 2.0rem;
+    margin: 0;
+    text-shadow: 0px 0px 10px #ffffff; /* Borde negro para que resalte */
+    
+    /* Animación opcional: un parpadeo suave para que llame la atención */
+    animation: blink 3s infinite;
+}
+
+/* En pantallas medianas, reducimos un poco el zoom automáticamente */
+@media (max-width: 1300px) {
+    .main-layout {
+        transform: scale(0.85); /* Se hace un poco más pequeño para caber */
+    }
+}
+
+@media (max-width: 1000px) {
+    .info-panel {
+        display: none; /* Se oculta en móviles */
+    }
+}

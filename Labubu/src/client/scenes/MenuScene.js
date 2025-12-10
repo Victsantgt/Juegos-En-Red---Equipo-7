@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import { connectionManager } from '../services/ConnectionManager';
+
 
 export class MenuScene extends Phaser.Scene {
     constructor() {
@@ -109,6 +111,46 @@ export class MenuScene extends Phaser.Scene {
                 volume: 0.5
             });
             this.musica.play();
+        }
+
+        //////ESTO ES NUEVO//////////////
+        // Indicador de conexión al servidor
+        this.connectionText = this.add.text(400, 500, 'Servidor: Comprobando...', {
+            fontSize: '18px',
+            color: '#ffff00'
+        }).setOrigin(0.5);
+
+        // Listener para cambios de conexión ESTO ES DE CLASE NUEVO
+        this.connectionListener = (data) => {
+            this.updateConnectionDisplay(data);
+        };
+        connectionManager.addListener(this.connectionListener);
+    }
+
+    // ESTO ES NUEVO DE CLASE ////////////////////////////////////////////////////////////
+    updateConnectionDisplay(data) {
+        // Solo actualizar si el texto existe (la escena está creada)
+        if (!this.connectionText || !this.scene || !this.scene.isActive('MenuScene')) {
+            return;
+        }
+
+        try {
+            if (data.connected) {
+                this.connectionText.setText(`Servidor: ${data.count} usuario(s) conectado(s)`);
+                this.connectionText.setColor('#000dffff');
+            } else {
+                this.connectionText.setText('Servidor: Desconectado');
+                this.connectionText.setColor('#ff0000');
+            }
+        } catch (error) {
+            console.error('[MenuScene] Error updating connection display:', error);
+        }
+    }
+
+    shutdown() {
+        // Remover el listener
+        if (this.connectionListener) {
+            connectionManager.removeListener(this.connectionListener);
         }
     }
 }
