@@ -27,7 +27,7 @@ export class MenuScene extends Phaser.Scene {
             .setDepth(10); // Depth alto para que tape los botones
 
         // --- BOTÓN LOCAL ---
-        const localBtn = this.add.text(625, 163, 'Local 2 Jugadores', {
+        const localBtn = this.add.text(610, 163, 'Modo Local', {
             fontFamily: 'Lemon',
             fontSize: '24px',
             color: '#5eb232',
@@ -44,11 +44,17 @@ export class MenuScene extends Phaser.Scene {
         });
 
         // --- BOTÓN ONLINE ---
-        this.add.text(600, 255, 'Online (no disponible)', {
+        const onlineBtn = this.add.text(600, 255, 'Modo Online', {
             fontFamily: 'Lemon',
-            fontSize: '20px',
-            color: '#b23232ff',
-        }).setOrigin(0.6, 0.6);
+            fontSize: '24px',
+            color: '#5eb232',
+        }).setOrigin(0.6, 0.6)
+        .setInteractive({useHandCursor: true})
+        .on('pointerover', () => onlineBtn.setColor('#553922'))
+        .on('pointerout', () => onlineBtn.setColor('#5eb232'))
+        .on('pointerdown', () => {
+            this.scene.start('LobbyScene');
+        });
         
         // --- BOTÓN CRÉDITOS ---
         const creditBtn = this.add.text(110, 545, 'Créditos', {

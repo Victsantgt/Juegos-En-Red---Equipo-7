@@ -1,6 +1,7 @@
 {
   "name": "LABUBU MATCHUP",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
@@ -20,7 +21,8 @@
   "description": "Un juego de labubus",
   "dependencies": {
     "express": "^5.1.0",
-    "phaser": "^3.90.0"
+    "phaser": "^3.90.0",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

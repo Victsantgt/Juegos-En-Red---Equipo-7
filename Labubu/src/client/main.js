@@ -6,6 +6,8 @@ import { PauseScene } from './scenes/PauseScene.js';
 import { VictoryScene } from './scenes/VictoryScene.js';
 import { CreditScene } from './scenes/CreditScene.js';
 import { ConnectionLostScene } from './scenes/ConnectionLostScene.js';
+import LobbyScene from './scenes/LobbyScene.js';
+import { MultiplayerGameScene } from './scenes/MultiplayerGameScene.js';
 
 
 
@@ -21,7 +23,7 @@ const config = {
             debug: false
         }
     },
-    scene: [StartScene, MenuScene, GameScene,PauseScene, VictoryScene, CreditScene, ConnectionLostScene],
+    scene: [StartScene, MenuScene, GameScene,PauseScene, VictoryScene, CreditScene, ConnectionLostScene, LobbyScene, MultiplayerGameScene],
     backgroundColor: '#ffffff',
 };
 
