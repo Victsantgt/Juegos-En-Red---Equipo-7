@@ -2,6 +2,10 @@
  * Servicio para gestionar la conexión con el servidor
  * Maneja el polling al endpoint /api/connected y detecta pérdidas de conexión
  */
+
+
+//PARA TRABAJAR MOVIMIENTO EN LOCAL
+const LOCAL_MODE = true;
 export class ConnectionManager {
   constructor() {
     this.connectedCount = 0;
@@ -13,7 +17,20 @@ export class ConnectionManager {
     this.intervalId = null;
 
     // Iniciar el polling automático
-    this.startPolling(); //comprobar conexión
+    //this.startPolling(); //comprobar conexión
+    if (LOCAL_MODE) {
+      this.isConnected = true;
+      this.connectedCount = 1;
+      this.lastCheckTime = Date.now();
+
+
+      setTimeout(() => {
+        this.notifyListeners({ connected: true, count: 1 });
+      }, 0);
+
+    } else {
+      this.startPolling();
+    }
   }
 
   /**

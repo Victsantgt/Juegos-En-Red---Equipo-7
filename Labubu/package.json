@@ -1,5 +1,5 @@
 {
-  "name": "LABUBU MATCHUP",
+  "name": "labubu-matchup",
   "version": "1.0.0",
   "type": "module",
   "main": "index.js",
@@ -20,7 +20,7 @@
   "license": "Apache-2.0",
   "description": "Un juego de labubus",
   "dependencies": {
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "phaser": "^3.90.0",
     "ws": "^8.18.0"
   },
@@ -36,5 +36,8 @@
     "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
+  },
+  "directories": {
+    "test": "test"
   }
 }

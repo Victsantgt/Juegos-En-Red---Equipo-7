@@ -75,7 +75,7 @@ export class GameScene extends Phaser.Scene {
             frameWidth: 68,
             frameHeight: 88
         });
-        
+
         //labubu 2
 
         this.load.spritesheet('labubu2', 'assets/brownanim/down.png', {
@@ -100,21 +100,21 @@ export class GameScene extends Phaser.Scene {
 
         //SPRITES POWERUPS
 
-        this.load.spritesheet('powerupSpeed','assets/chocolate/chocolateSpeed.png',{
-            frameWidth: 48,
-            frameHeight: 48
-        });
-        
-        this.load.spritesheet('powerupTurn','assets/chocolate/chocolateTurn.png',{
+        this.load.spritesheet('powerupSpeed', 'assets/chocolate/chocolateSpeed.png', {
             frameWidth: 48,
             frameHeight: 48
         });
 
-        this.load.spritesheet('powerupHealth','assets/chocolate/chocolateHealth.png',{
+        this.load.spritesheet('powerupTurn', 'assets/chocolate/chocolateTurn.png', {
             frameWidth: 48,
             frameHeight: 48
         });
-        
+
+        this.load.spritesheet('powerupHealth', 'assets/chocolate/chocolateHealth.png', {
+            frameWidth: 48,
+            frameHeight: 48
+        });
+
     }
 
     create() {
@@ -194,10 +194,10 @@ export class GameScene extends Phaser.Scene {
 
         //ANIMACIÓN POWERUP SPEED
         this.anims.create({
-            key:'powerupSpeed',
-            frames: this.anims.generateFrameNumbers('powerupSpeed',{start:0,end:3}),
+            key: 'powerupSpeed',
+            frames: this.anims.generateFrameNumbers('powerupSpeed', { start: 0, end: 3 }),
             frameRate: 6,
-            repeat: -1            
+            repeat: -1
         })
 
         //ANIMACIÓN POWERUP TURN
@@ -286,7 +286,7 @@ export class GameScene extends Phaser.Scene {
             }, null, this);
 
             //COLLIDERS CON POWERUPS
-            this.physics.add.overlap(player.sprite,this.powerups,this.collectPowerup,null,this);
+            this.physics.add.overlap(player.sprite, this.powerups, this.collectPowerup, null, this);
         });
 
 
@@ -298,37 +298,37 @@ export class GameScene extends Phaser.Scene {
             loop: true
         });
 
-        
+
         //COLLIDER CHOQUE JUGADORES
         this.physics.add.overlap(this.players.get('player1').sprite, this.players.get('player2').sprite, () => {
-                if (this.players.get('player1').turnMode !== this.players.get('player2').turnMode) {
-                    this.players.forEach((player) => {
-                        switch(player.currentDirection){
-                            case 'down': 
-                                player.currentDirection = 'up';
-                                player.turnCooldown = 10;
-                                player.alternateTurnmode();
-                                break;
-                            case 'up': 
-                                player.currentDirection = 'down';
-                                player.turnCooldown = 10;
-                                player.alternateTurnmode();
-                                break;
-                            case 'left': 
-                                player.currentDirection = 'right';
-                                player.turnCooldown = 10;
-                                player.alternateTurnmode();
-                                break;
-                            case 'right': 
-                                player.currentDirection = 'left';
-                                player.turnCooldown = 10;
-                                player.alternateTurnmode();
-                                break;
-                        }
-                    });
-                    this.sfxcolision.play();
-                }
-            });
+            if (this.players.get('player1').turnMode !== this.players.get('player2').turnMode) {
+                this.players.forEach((player) => {
+                    switch (player.currentDirection) {
+                        case 'down':
+                            player.currentDirection = 'up';
+                            player.turnCooldown = 10;
+                            player.alternateTurnmode();
+                            break;
+                        case 'up':
+                            player.currentDirection = 'down';
+                            player.turnCooldown = 10;
+                            player.alternateTurnmode();
+                            break;
+                        case 'left':
+                            player.currentDirection = 'right';
+                            player.turnCooldown = 10;
+                            player.alternateTurnmode();
+                            break;
+                        case 'right':
+                            player.currentDirection = 'left';
+                            player.turnCooldown = 10;
+                            player.alternateTurnmode();
+                            break;
+                    }
+                });
+                this.sfxcolision.play();
+            }
+        });
 
         this.spawnPowerup();
 
@@ -345,7 +345,7 @@ export class GameScene extends Phaser.Scene {
 
     onConnectionLost() {
         this.scene.pause();
-        this.scene.launch('ConnectionLostScene', {previousScene: 'GameScene' });
+        this.scene.launch('ConnectionLostScene', { previousScene: 'GameScene' });
     }
 
     shutdown() {
@@ -363,6 +363,8 @@ export class GameScene extends Phaser.Scene {
         //Empiezan con 1 vida cada uno para testear (luego lo cambio)
         jugadorUno.score = 1;
         jugadorDos.score = 1;
+
+
 
         this.players.set('player1', jugadorUno);
         this.players.set('player2', jugadorDos);
@@ -399,23 +401,23 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
-    spawnPowerup(){
-        
-        let type = Math.ceil(Math.random()*3)
+    spawnPowerup() {
+
+        let type = Math.ceil(Math.random() * 3)
         //let type = 2    //testear el cambio de direccion
         let p;
-        
-        switch(type){
+
+        switch (type) {
             case 1:
-                p = new PowerupSpeed(this,'powerupSpeed');
+                p = new PowerupSpeed(this, 'powerupSpeed');
                 p.sprite.play('powerupSpeed');
                 break;
             case 2:
-                p = new PowerupTurn(this,'powerupTurn');
+                p = new PowerupTurn(this, 'powerupTurn');
                 p.sprite.play('powerupTurn');
                 break;
             case 3:
-                p = new PowerupHealth(this,'powerupHealth');
+                p = new PowerupHealth(this, 'powerupHealth');
                 p.sprite.play('powerupHealth');
                 break;
         }
@@ -423,7 +425,7 @@ export class GameScene extends Phaser.Scene {
             loop: false,
             volume: 1
         });
-        this.sfxspawn.play();    
+        this.sfxspawn.play();
     }
 
     scoreUpdate() {
@@ -432,7 +434,7 @@ export class GameScene extends Phaser.Scene {
 
         const player1 = this.players.get('player1');
         const player2 = this.players.get('player2');
-        
+
         this.scoreLeft.setText(player1.score.toString());
         this.rightScore.setText(player2.score.toString());
 
@@ -444,49 +446,49 @@ export class GameScene extends Phaser.Scene {
         }
     }
 
-    collectPowerup(player, powerup){
-        
-        let speedmult = 1.4; 
-        
+    collectPowerup(player, powerup) {
+
+        let speedmult = 1.4;
+
         this.sfxpowerup = this.sound.add('powerupSonido', {
-                loop: false,
-                volume: 1
+            loop: false,
+            volume: 1
+        });
+        this.sfxpowerup.play();
+
+        if (powerup.poweruptype == 'Speed') {
+
+            player.playerInstance.baseSpeed *= speedmult;
+            player.playerInstance.scene.time.delayedCall(5000, () => {
+                player.playerInstance.baseSpeed /= speedmult;
             });
-            this.sfxpowerup.play();
 
-        if(powerup.poweruptype=='Speed'){
-        
-          player.playerInstance.baseSpeed *=speedmult;
-          player.playerInstance.scene.time.delayedCall(5000, () => {
-          player.playerInstance.baseSpeed /= speedmult;  
-          });     
+        } else if (powerup.poweruptype == 'Turn') {
+            switch (player.playerInstance.currentDirection) {
+                case 'down':
+                    player.playerInstance.currentDirection = 'up';
+                    player.playerInstance.turnCooldown = 50;
+                    player.playerInstance.alternateTurnmode();
+                    break;
+                case 'up':
+                    player.playerInstance.currentDirection = 'down';
+                    player.playerInstance.turnCooldown = 50;
+                    player.playerInstance.alternateTurnmode();
+                    break;
+                case 'left':
+                    player.playerInstance.currentDirection = 'right';
+                    player.playerInstance.turnCooldown = 50;
+                    player.playerInstance.alternateTurnmode();
+                    break;
+                case 'right':
+                    player.playerInstance.currentDirection = 'left';
+                    player.playerInstance.turnCooldown = 50;
+                    player.playerInstance.alternateTurnmode();
+                    break;
+            }
 
-        }else if(powerup.poweruptype == 'Turn'){        
-        switch(player.playerInstance.currentDirection){
-            case 'down': 
-                player.playerInstance.currentDirection = 'up';
-                player.playerInstance.turnCooldown = 50;
-                player.playerInstance.alternateTurnmode();
-                break;
-            case 'up': 
-                player.playerInstance.currentDirection = 'down';
-                player.playerInstance.turnCooldown = 50;
-                player.playerInstance.alternateTurnmode();
-                break;
-            case 'left': 
-                player.playerInstance.currentDirection = 'right';
-                player.playerInstance.turnCooldown = 50;
-                player.playerInstance.alternateTurnmode();
-                break;
-            case 'right': 
-                player.playerInstance.currentDirection = 'left';
-                player.playerInstance.turnCooldown = 50;
-                player.playerInstance.alternateTurnmode();
-                break;
-        }       
-
-        }else {
-            player.playerInstance.score++;  
+        } else {
+            player.playerInstance.score++;
             this.scoreUpdate();
         }
 
@@ -495,20 +497,20 @@ export class GameScene extends Phaser.Scene {
 
     }
 
-endGame(winnerId) {
-    if (this.gameEnded) return;
-    this.gameEnded = true;
+    endGame(winnerId) {
+        if (this.gameEnded) return;
+        this.gameEnded = true;
 
-    // Congelar físicas (balas y jugadores quietos)
-    this.physics.pause();
+        // Congelar físicas (balas y jugadores quietos)
+        this.physics.pause();
 
-    // Pausar la escena actual por completo (para que deje de procesar inputs o update)
-    this.scene.pause();
+        // Pausar la escena actual por completo (para que deje de procesar inputs o update)
+        this.scene.pause();
 
-    // Lanzar la escena de Victoria ENCIMA de esta (Overlay)
-    // Pasamos el ID del ganador
-    this.scene.launch('VictoryScene', { winnerId: winnerId });
-}
+        // Lanzar la escena de Victoria ENCIMA de esta (Overlay)
+        // Pasamos el ID del ganador
+        this.scene.launch('VictoryScene', { winnerId: winnerId });
+    }
 
 
     createBounds() {
@@ -571,27 +573,20 @@ endGame(winnerId) {
         return reverseTurns[dir];
     }
 
-    updateAnim(player){
+    updateAnim(player) {
 
 
 
     }
 
-
-
     update() {
-
-
-
 
         this.inputMappings.forEach(mapping => {
 
             const labubu = this.players.get(mapping.playerId);
             let newAnim = labubu.animKey;
-
-            
             //Resetea la velocidad antes de aplicar movimiento
-            labubu.sprite.setVelocity(0,16);
+            labubu.sprite.setVelocity(0, 16);
 
             //Movimiento en las cuatro direciones
             if (mapping.upKeyObj.isDown) {
@@ -618,9 +613,9 @@ endGame(winnerId) {
 
         });
 
-         if (this.escKey.isDown && !this.escWasDown) {
-        this.togglePause();
-    }
+        if (this.escKey.isDown && !this.escWasDown) {
+            this.togglePause();
+        }
         // MOVIMIENTO BALAS
         this.bullets.forEach(bullet => {
             switch (bullet.currentDirection) {
@@ -642,32 +637,26 @@ endGame(winnerId) {
         //LABUBUS
         this.players.forEach(labubu => {
 
-
             const speed = labubu.baseSpeed;
             const body = labubu.sprite.body;
-            let currentRailx = 0;
-            let currentRaily = 0;
-
             let newDirection = labubu.currentDirection;
 
-            //eset de flags por frame
-            labubu.canTurn = false;
-            labubu.allowedTurns = labubu.allowedTurns || [];
-
             labubu.updateCenterCollider();
-            //detectar si está sobre un nodo 
+
+            //DETECTAR SI ESTÁ SOBRE UN NODO
             this.physics.overlap(labubu.centerCollider, this.nodes, (spr, node) => {
-                if(Phaser.Math.Distance.Between(labubu.centerCollider.x, labubu.centerCollider.y, node['x'], node['y']) > 18){
+                if (Phaser.Math.Distance.Between(labubu.centerCollider.x, labubu.centerCollider.y, node['x'], node['y']) > 18) {
                     return;
-                }        
-                labubu.canTurn = true;
-                
-                currentRailx = node['x'];
-                currentRaily = node['y'];
+                }
+                if (labubu.lastNode === node) return; //evitar que se vuelva a triggear
+                labubu.lastNode = node;
+                labubu.isWaitingAtNode = true;
                 labubu.allowedTurns = node['allowedTurns'] || [];
+                //parar en seco
+                labubu.sprite.setVelocity(0, 0);
             });
 
-            //INPUT 
+            //INPUT. Leer input solo si espera en un nodo
             const mapping = this.inputMappings.find(m => m.playerId === labubu.id);
             let inputDir = null;
 
@@ -687,89 +676,52 @@ endGame(winnerId) {
                     });
                     this.sfxshot.play();
                 }
-            }
-
-            //GIRO POR INPUT SOLO EN NODO
-            if (inputDir && labubu.canTurn && !labubu.blockMove && labubu.turnCooldown === 0) {
-
-
-                // Verifica si la dirección que quiere el jugador está permitida por el nodo
-                if (labubu.allowedTurns.includes(inputDir) && !body.blocked[inputDir]) {
-                    // Giro permitido: actualizar dirección
-                    newDirection = inputDir;
-                    labubu.canTurn = false; // evita múltiples giros en el mismo nodo
-                    
-                    //hacer el giro más fluido
-                    this.tweens.add({
-                        targets: labubu.sprite,
-                        x: currentRailx,
-                        duration:600,
-                        ease: 'Sine',
-                        onComplete: () => { 
-                            labubu.blockMove = false} 
-                    });
-                    labubu.turnCooldown = 50;
-
-
-                } else {
-                    // Giro no permitido: mantener la dirección anterior
-                    newDirection = labubu.currentDirection;
+                if (
+                    labubu.isWaitingAtNode &&
+                    inputDir &&
+                    labubu.allowedTurns.includes(inputDir)
+                ) {
+                    labubu.currentDirection = inputDir;
+                    labubu.isWaitingAtNode = false;
+                    labubu.lastNode = null;
                 }
             }
 
-            //GIRO AUTOMÁTICO 
-            if(labubu.turnCooldown === 0) {
-                    if (body.blocked.up || body.blocked.down || body.blocked.left || body.blocked.right) {
-                    if (labubu.turnMode === "normal") {
-                        newDirection = this.getTurnDirectionNormal(labubu.currentDirection);
-                        labubu.turnCooldown = 50;
-                    } else if (labubu.turnMode === "reverse") {
-                        newDirection = this.getTurnDirectionReverse(labubu.currentDirection);
-                        labubu.turnCooldown = 50;
-                    }
-                }
+            if (labubu.isWaitingAtNode && inputDir && labubu.allowedTurns.includes(inputDir)) {
+
+                // aceptar dirección
+                labubu.currentDirection = inputDir;
+                labubu.isWaitingAtNode = false;
+
+                //liberar last node
+                labubu.lastNode = null;
+
             }
-            
+
+            //APICAR MOVIMIENTO CONSTANTE
+            this.handleRailMovement(labubu);
+
+            //ANIMACIONES
             let anim = labubu.sprite.anims.currentAnim?.key;
 
             if (
                 (anim.endsWith('down') && labubu.currentDirection !== 'down') ||
                 (anim.endsWith('left') && labubu.currentDirection !== 'left') ||
                 (anim.endsWith('right') && labubu.currentDirection !== 'right') ||
-                (anim.endsWith('up') && labubu.currentDirection !== 'up'))
-                {
-                    
-                    if(labubu.currentDirection==='right'&&anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-right');
-                    if(labubu.currentDirection==='left'&&anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-left');
-                    if(labubu.currentDirection==='down'&&anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-down');
-                    if(labubu.currentDirection==='up'&&anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-up');
+                (anim.endsWith('up') && labubu.currentDirection !== 'up')) {
 
-                    if(labubu.currentDirection==='right'&&anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-right');
-                    if(labubu.currentDirection==='left'&&anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-left');
-                    if(labubu.currentDirection==='down'&&anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-down');
-                    if(labubu.currentDirection==='up'&&anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-up');
+                if (labubu.currentDirection === 'right' && anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-right');
+                if (labubu.currentDirection === 'left' && anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-left');
+                if (labubu.currentDirection === 'down' && anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-down');
+                if (labubu.currentDirection === 'up' && anim.startsWith('labubu1-')) labubu.sprite.play('labubu1-up');
 
-
-                }   
-
-
-            //APLICAR MOVIMIENTO
-
-            if(!labubu.blockMove){
-
-            labubu.currentDirection = newDirection;
-
-            switch (labubu.currentDirection) {
-                case 'up': labubu.sprite.setVelocity(0, -speed); break;
-                case 'down': labubu.sprite.setVelocity(0, speed); break;
-                case 'left': labubu.sprite.setVelocity(-speed, 0); break;
-                case 'right': labubu.sprite.setVelocity(speed, 0); break;
-            }
+                if (labubu.currentDirection === 'right' && anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-right');
+                if (labubu.currentDirection === 'left' && anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-left');
+                if (labubu.currentDirection === 'down' && anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-down');
+                if (labubu.currentDirection === 'up' && anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-up');
 
             }
-            else{
-                labubu.sprite.setVelocity(0, 0);
-            }
+
 
             // REDUCIR COOLDOWN
             if (labubu.cooldown > 0) {
@@ -780,9 +732,51 @@ endGame(winnerId) {
                 labubu.turnCooldown--;
             }
 
-        });
+        }
+        );
 
     }
+
+    //NUEVA FUNCIÓN PARA EL MOVIMIENTO
+    handleRailMovement(labubu) {
+
+        if (labubu.isWaitingAtNode) {
+            labubu.sprite.setVelocity(0, 0);
+            return;
+        }
+
+        const body = labubu.sprite.body;
+        let mustTurn = false;
+        // Comprobar bloqueo SOLO en la dirección actual
+        switch (labubu.currentDirection) {
+            case 'up': mustTurn = body.blocked.up; break;
+            case 'down': mustTurn = body.blocked.down; break;
+            case 'left': mustTurn = body.blocked.left; break;
+            case 'right': mustTurn = body.blocked.right; break;
+        }
+
+        // Giro automático del rail
+        if (mustTurn) {
+            if (labubu.turnMode === "reverse") {
+                labubu.currentDirection =
+                    this.getTurnDirectionReverse(labubu.currentDirection);
+            } else {
+                labubu.currentDirection =
+                    this.getTurnDirectionNormal(labubu.currentDirection);
+            }
+        }
+
+        const speed = labubu.baseSpeed;
+
+        switch (labubu.currentDirection) {
+            case 'up': labubu.sprite.setVelocity(0, -speed); break;
+            case 'down': labubu.sprite.setVelocity(0, speed); break;
+            case 'left': labubu.sprite.setVelocity(-speed, 0); break;
+            case 'right': labubu.sprite.setVelocity(speed, 0); break;
+        }
+    }
+
+
     setRailNodes() {
         this.nodes = this.add.group(); // sin classType
 

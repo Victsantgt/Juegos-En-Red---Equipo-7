@@ -6,6 +6,9 @@ import { connectionManager } from '../services/ConnectionManager';
  * Pausa el resto de escenas y comprueba continuamente hasta que se restablezca
  */
 export class ConnectionLostScene extends Phaser.Scene {
+
+    
+
     constructor() {
         super('ConnectionLostScene');
         this.reconnectCheckInterval = null;
@@ -74,6 +77,7 @@ export class ConnectionLostScene extends Phaser.Scene {
         this.attemptText.setText(`Intentos: ${this.attemptCount}`);
         await connectionManager.checkConnection();
     }
+    
 
     onReconnected() {
         // Limpiar interval

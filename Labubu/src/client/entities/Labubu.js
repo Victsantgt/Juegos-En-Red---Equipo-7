@@ -8,6 +8,8 @@ export class Labubu {
         this.turnCooldown = 0;
         this.baseSpeed = 300;
         this.blockMove=false;
+        this.isWaitingAtNode=false;
+        this.lastNode = null; //anti re-trigger
 
 
         // Crear sprite físico del jugador usando el spritesheet
@@ -41,6 +43,7 @@ export class Labubu {
 
         this.currentDirection = 'down';     // dirección inicial
         this.turnMode = "normal";
+        
     }
 
     updateCenterCollider() {
