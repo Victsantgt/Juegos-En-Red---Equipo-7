@@ -8,6 +8,7 @@ import { CreditScene } from './scenes/CreditScene.js';
 import { ConnectionLostScene } from './scenes/ConnectionLostScene.js';
 import LobbyScene from './scenes/LobbyScene.js';
 import { MultiplayerGameScene } from './scenes/MultiplayerGameScene.js';
+import { UserScene } from './scenes/UserScene.js';
 
 
 
@@ -23,7 +24,10 @@ const config = {
             debug: false
         }
     },
-    scene: [StartScene, MenuScene, GameScene,PauseScene, VictoryScene, CreditScene, ConnectionLostScene, LobbyScene, MultiplayerGameScene],
+    dom: {
+        createContainer: true
+    },
+    scene: [UserScene, StartScene, MenuScene, GameScene,PauseScene, VictoryScene, CreditScene, ConnectionLostScene, LobbyScene, MultiplayerGameScene],
     backgroundColor: '#ffffff',
 };
 
