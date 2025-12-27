@@ -246,7 +246,15 @@ export class UserScene extends Phaser.Scene
     }
 
   confirm() {
-    if (this.username.length === 0) return;
+    if (this.username.length === 0) {
+        this.placeholder.setText('¡Nombre obligatorio!');
+        this.placeholder.setColor('#ff0000');
+        this.time.delayedCall(1200, () => {
+            this.placeholder.setText('Escribe tu nombre...');
+            this.placeholder.setColor('#999999');
+        });
+        return
+    };
 
     // Enviar datos al almacenamiento local
     localStorage.setItem("username", this.username);
