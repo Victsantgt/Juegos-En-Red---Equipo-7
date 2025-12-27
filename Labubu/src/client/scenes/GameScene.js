@@ -272,7 +272,7 @@ export class GameScene extends Phaser.Scene {
         this.players.forEach((player) => {
 
             //COLLIDERS CON LOS OBJETOS DEL ESCENARIO
-            this.physics.add.collider(player.sprite, this.walls);
+            //this.physics.add.collider(player.sprite, this.walls);
 
             //COLLIDERS CON LÍMITES DE PAREDES
             this.physics.add.collider(player.sprite, this.leftWall);
@@ -357,8 +357,8 @@ export class GameScene extends Phaser.Scene {
     ///////////////////////////////////////////////////////////////////
 
     setUpPlayers() {
-        const jugadorUno = new Labubu(this, 'player1', 96, 288, 'labubu1-down');
-        const jugadorDos = new Labubu(this, 'player2', 608, 288, 'labubu2-down');
+        const jugadorUno = new Labubu(this, 'player1', 96, 220, 'labubu1-down');
+        const jugadorDos = new Labubu(this, 'player2', 608, 220, 'labubu2-down');
 
         //Empiezan con 1 vida cada uno para testear (luego lo cambio)
         jugadorUno.score = 1;
@@ -585,26 +585,6 @@ export class GameScene extends Phaser.Scene {
 
             const labubu = this.players.get(mapping.playerId);
             let newAnim = labubu.animKey;
-            //Resetea la velocidad antes de aplicar movimiento
-            labubu.sprite.setVelocity(0, 16);
-
-            //Movimiento en las cuatro direciones
-            if (mapping.upKeyObj.isDown) {
-                labubu.sprite.setVelocityY(-labubu.baseSpeed);
-                newAnim = 'labubu-down';
-
-            } else if (mapping.downKeyObj.isDown) {
-                labubu.sprite.setVelocityY(labubu.baseSpeed);
-                newAnim = 'labubu-down';
-            }
-            if (mapping.leftKeyObj.isDown) {
-                labubu.sprite.setVelocityX(-labubu.baseSpeed);
-                newAnim = 'labubu-down';
-            } else if (mapping.rightKeyObj.isDown) {
-                labubu.sprite.setVelocityX(labubu.baseSpeed);
-                newAnim = 'labubu-down';
-            }
-
             //REPRODUCIR ANIMACIÓN SOLO SI CAMBIA
             if (newAnim && labubu.currentAnim !== newAnim) {
                 labubu.sprite.play(newAnim, true);
@@ -651,9 +631,14 @@ export class GameScene extends Phaser.Scene {
                 if (labubu.lastNode === node) return; //evitar que se vuelva a triggear
                 labubu.lastNode = node;
                 labubu.isWaitingAtNode = true;
-                labubu.allowedTurns = node['allowedTurns'] || [];
+                //labubu.allowedTurns = node['allowedTurns'] || [];
+
+                // Guardar direcciones válidas
+                labubu.allowedTurns = node['allowedTurns'].map(e => e.direction);
+                labubu.nodeRules = node['allowedTurns']; // ahora array de objetos {direction, turnMode}
                 //parar en seco
-                labubu.sprite.setVelocity(0, 0);
+                //labubu.sprite.setVelocity(0, 0);
+                this.snapLabubuToNode(labubu, node);
             });
 
             //INPUT. Leer input solo si espera en un nodo
@@ -676,7 +661,7 @@ export class GameScene extends Phaser.Scene {
                     });
                     this.sfxshot.play();
                 }
-                if (
+                /*if (
                     labubu.isWaitingAtNode &&
                     inputDir &&
                     labubu.allowedTurns.includes(inputDir)
@@ -684,13 +669,19 @@ export class GameScene extends Phaser.Scene {
                     labubu.currentDirection = inputDir;
                     labubu.isWaitingAtNode = false;
                     labubu.lastNode = null;
-                }
+                }*/
             }
 
             if (labubu.isWaitingAtNode && inputDir && labubu.allowedTurns.includes(inputDir)) {
 
                 // aceptar dirección
                 labubu.currentDirection = inputDir;
+
+                // Buscar la regla correspondiente en el array
+                const rule = labubu.nodeRules.find(e => e.direction === inputDir);
+                if (rule) {
+                    labubu.turnMode = rule.turnMode;
+                }
                 labubu.isWaitingAtNode = false;
 
                 //liberar last node
@@ -698,8 +689,7 @@ export class GameScene extends Phaser.Scene {
 
             }
 
-            //APICAR MOVIMIENTO CONSTANTE
-            this.handleRailMovement(labubu);
+
 
             //ANIMACIONES
             let anim = labubu.sprite.anims.currentAnim?.key;
@@ -731,6 +721,8 @@ export class GameScene extends Phaser.Scene {
             if (labubu.turnCooldown > 0) {
                 labubu.turnCooldown--;
             }
+            //APICAR MOVIMIENTO CONSTANTE
+            this.handleRailMovement(labubu);
 
         }
         );
@@ -739,7 +731,6 @@ export class GameScene extends Phaser.Scene {
 
     //NUEVA FUNCIÓN PARA EL MOVIMIENTO
     handleRailMovement(labubu) {
-
         if (labubu.isWaitingAtNode) {
             labubu.sprite.setVelocity(0, 0);
             return;
@@ -747,7 +738,8 @@ export class GameScene extends Phaser.Scene {
 
         const body = labubu.sprite.body;
         let mustTurn = false;
-        // Comprobar bloqueo SOLO en la dirección actual
+
+        // SOLO comprobar colisiones si NO estamos en nodo
         switch (labubu.currentDirection) {
             case 'up': mustTurn = body.blocked.up; break;
             case 'down': mustTurn = body.blocked.down; break;
@@ -755,7 +747,6 @@ export class GameScene extends Phaser.Scene {
             case 'right': mustTurn = body.blocked.right; break;
         }
 
-        // Giro automático del rail
         if (mustTurn) {
             if (labubu.turnMode === "reverse") {
                 labubu.currentDirection =
@@ -781,12 +772,25 @@ export class GameScene extends Phaser.Scene {
         this.nodes = this.add.group(); // sin classType
 
 
-        this.nodes.add(new RailNode(this, 288.5, 95.5, ["down", "left", "right"]));
-        this.nodes.add(new RailNode(this, 95.5, 288.5, ["up", "down", "left"]));
-        this.nodes.add(new RailNode(this, 288.5, 288.5, ["up", "right", "left"]));
-        this.nodes.add(new RailNode(this, 416.5, 288.5, ["down", "right", "left"]));
-        this.nodes.add(new RailNode(this, 608.5, 288.5, ["up", "down", "left"]));
-        this.nodes.add(new RailNode(this, 416.5, 480.5, ["up", "right", "left"]));
+        this.nodes.add(new RailNode(this, 289, 84.5, [
+            { direction: "down", turnMode: "reverse" },
+            { direction: "left", turnMode: "normal" },
+            { direction: "down", turnMode: "normal" }], 0));
+        //this.nodes.add(new RailNode(this, 289, 83.5, ["down", "left", "right"],0));
+        //this.nodes.add(new RailNode(this, 96.5, 283.5, ["up", "down", "right"], 1));
+        //this.nodes.add(new RailNode(this, 288.5, 288.5, ["up", "right", "left"],2));
+        //this.nodes.add(new RailNode(this, 416.5, 288.5, ["down", "right", "left"],3));
+        //this.nodes.add(new RailNode(this, 608.5, 288.5, ["up", "down", "left"],4));
+        //this.nodes.add(new RailNode(this, 416.5, 466.5, ["up", "right", "left"]));
+    }
+    snapLabubuToNode(labubu, node) {
+
+        // Parar completamente
+        labubu.sprite.setVelocity(0, 0);
+        // Colocar EXACTO en el nodo
+        labubu.sprite.setPosition(node.x, node.y);
+        // Alinear el collider
+        labubu.updateCenterCollider();
     }
 
     shoot(dir, x, y) {
