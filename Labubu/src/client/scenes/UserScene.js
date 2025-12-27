@@ -7,6 +7,10 @@ export class UserScene extends Phaser.Scene
     }
 
     preload() {
+        this.username = localStorage.getItem("username") || "";
+        this.currentSkin = parseFloat(localStorage.getItem("skin"));
+        console.log(this.currentSkin)
+
         this.load.spritesheet('labubuMarron', 'assets/brownanim/skin.png', {
             frameWidth: 136,
             frameHeight: 176
@@ -64,7 +68,7 @@ export class UserScene extends Phaser.Scene
       .fillStyle(0x000000, 0.85)
       .fillRoundedRect(width / 2 - 175, height / 2 - 200, 350, 400, 14);
 
-    this.add.text(width / 2, height / 2 - 155, 'EDITAR USUARIO', {
+    this.add.text(width / 2, height / 2 - 170, 'EDITAR USUARIO', {
       fontSize: '22px',
       color: '#ffffff'
     }).setOrigin(0.5);
@@ -73,7 +77,7 @@ export class UserScene extends Phaser.Scene
     const inputWidth = 280;
     const inputHeight = 42;
     const inputX = width / 2 - inputWidth / 2;
-    const inputY = height / 2 - 130;
+    const inputY = height / 2 - 140;
 
     // Caja
     this.add.graphics()
@@ -81,8 +85,6 @@ export class UserScene extends Phaser.Scene
       .fillRoundedRect(inputX, inputY, inputWidth, inputHeight, 8)
       .lineStyle(2, 0x000000)
       .strokeRoundedRect(inputX, inputY, inputWidth, inputHeight, 8);
-
-    this.username = '';
 
     // Texto escrito
     this.nameText = this.add.text(
@@ -126,15 +128,11 @@ export class UserScene extends Phaser.Scene
 
     /* ================= SKINS ================= */
     this.skins = [
-        { name: 'Marrón', texture: 'labubuMarron', anim: 'labubuM' },
-        { name: 'Amarillo', texture: 'labubuAmarillo', anim: 'labubuA' },
-        { name: 'Morado', texture: 'labubuMorado', anim: 'labubuMo' },
-        { name: 'Rojo', texture: 'labubuRojo', anim: 'labubuR' }
+        { name: 'Marrón', texture: 'labubuMarron', anim: 'labubuM', color: '#ffa200ff' },
+        { name: 'Amarillo', texture: 'labubuAmarillo', anim: 'labubuA', color: '#fdeb51ff' },
+        { name: 'Morado', texture: 'labubuMorado', anim: 'labubuMo', color: '#7632fcff' },
+        { name: 'Rojo', texture: 'labubuRojo', anim: 'labubuR', color: '#ff2424ff' }
     ];
-
-    this.currentSkin = 0;
-
-    this.currentSkin = 0;
 
     this.add.text(width / 2, height / 2 - 70, 'ELIGE TU SKIN', {
       fontSize: '18px',
@@ -155,9 +153,37 @@ export class UserScene extends Phaser.Scene
         this.skins[this.currentSkin].name,
         {
             fontSize: '18px',
-            color: '#ffff00'
+            color: this.skins[this.currentSkin].color
         }
     ).setOrigin(0.5);
+
+    const buttonOffset = 120; // distancia del sprite
+    const buttonStyle = { fontSize: '32px', color: '#ffffff', backgroundColor: '#000000', padding: {x:10,y:5} };
+
+    // Botón izquierda
+    this.leftButton = this.add.text(
+    this.skinSprite.x - buttonOffset,
+    this.skinSprite.y,
+    '<',
+    buttonStyle
+    ).setOrigin(0.5)
+    .setInteractive({ useHandCursor: true })
+    .on('pointerdown', () => this.changeSkin(-1));
+
+    // Botón derecha
+    this.rightButton = this.add.text(
+    this.skinSprite.x + buttonOffset,
+    this.skinSprite.y,
+    '>',
+    buttonStyle
+    ).setOrigin(0.5)
+    .setInteractive({ useHandCursor: true })
+    .on('pointerdown', () => this.changeSkin(1));
+
+    [this.leftButton, this.rightButton].forEach(btn => {
+    btn.on('pointerover', () => btn.setStyle({ backgroundColor: '#555555' }));
+    btn.on('pointerout', () => btn.setStyle({ backgroundColor: '#000000' }));
+    });
 
 
     /* ================= INPUT TECLADO ================= */
@@ -180,7 +206,7 @@ export class UserScene extends Phaser.Scene
     /* ================= CONFIRMAR ================= */
     this.add.text(
       width / 2,
-      height / 2 + 160,
+      height / 2 + 170,
       'CONFIRMAR',
       {
         fontSize: '20px',
@@ -192,6 +218,10 @@ export class UserScene extends Phaser.Scene
       .setOrigin(0.5)
       .setInteractive({ useHandCursor: true })
       .on('pointerdown', () => this.confirm());
+  }
+
+  update() {
+    if (this.username !== '') this.updateNameField();
   }
 
   updateNameField() {
@@ -208,6 +238,7 @@ export class UserScene extends Phaser.Scene
 
         // Actualiza nombre debajo del sprite
         this.skinText.setText(skin.name);
+        this.skinText.setColor(skin.color);
 
         // Cambia la textura y la animación
         this.skinSprite.setTexture(skin.texture);
@@ -218,9 +249,10 @@ export class UserScene extends Phaser.Scene
     if (this.username.length === 0) return;
 
     // Enviar datos al almacenamiento local
-    localStorage.setItem("username", `${this.username}%`);
-    localStorage.setItem("skin", `${this.skins[this.currentSkin]}%`);
+    localStorage.setItem("username", this.username);
+    localStorage.setItem("skin", this.currentSkin);
 
     this.scene.stop();
+    this.scene.resume('MenuScene');
   }
 }

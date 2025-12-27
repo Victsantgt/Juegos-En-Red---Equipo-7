@@ -27,7 +27,7 @@ const config = {
     dom: {
         createContainer: true
     },
-    scene: [UserScene, StartScene, MenuScene, GameScene,PauseScene, VictoryScene, CreditScene, ConnectionLostScene, LobbyScene, MultiplayerGameScene],
+    scene: [StartScene, MenuScene, GameScene, PauseScene, VictoryScene, CreditScene, ConnectionLostScene, UserScene, LobbyScene, MultiplayerGameScene],
     backgroundColor: '#ffffff',
 };
 

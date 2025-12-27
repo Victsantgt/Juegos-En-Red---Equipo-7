@@ -55,6 +55,32 @@ export class MenuScene extends Phaser.Scene {
         .on('pointerdown', () => {
             this.scene.start('LobbyScene');
         });
+
+        // --- BOTÓN USUARIO ---
+        const userBtn = this.add.text(124, 487, 'Editar Usuario', {
+            fontFamily: 'Lemon',
+            fontSize: '20px',
+            color: '#5eb232',
+        }).setOrigin(0.7, 0.7)
+        .setInteractive({ useHandCursor: true })
+        .on('pointerover', () => userBtn.setColor('#553922'))
+        .on('pointerout', () => userBtn.setColor('#5eb232'))
+        .on('pointerdown', () => {
+            
+            userBtn.disableInteractive();
+
+            // TWEEN: Animamos el oscurecimiento suavemente
+            this.tweens.add({
+                targets: overlay,
+                alpha: 0.6, // Se oscurece al 60% (se sigue viendo el fondo)
+                duration: 500, // Duración del fundido (0.5 segundos)
+                onComplete: () => {
+                    // Una vez oscuro, pausamos y lanzamos
+                    this.scene.pause();
+                    this.scene.launch('UserScene');
+                }
+            });
+        });
         
         // --- BOTÓN CRÉDITOS ---
         const creditBtn = this.add.text(110, 545, 'Créditos', {
@@ -92,7 +118,9 @@ export class MenuScene extends Phaser.Scene {
                 onComplete: () => {
                     // Reactivamos el botón al terminar la animación
                     creditBtn.setInteractive();
-                    creditBtn.setColor('#5eb232'); 
+                    creditBtn.setColor('#5eb232');
+                    userBtn.setInteractive();
+                    userBtn.setColor('#5eb232');
                 }
             });
         });
