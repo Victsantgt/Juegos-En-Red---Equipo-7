@@ -249,10 +249,10 @@ export class GameScene extends Phaser.Scene {
         wall1.setVisible(true);
         wall1.refreshBody();
 
-        let wall2 = this.walls.create(512, 380, 'colliderCuadrado');
+        /*let wall2 = this.walls.create(512, 380, 'colliderCuadrado');
         wall2.body.setSize(128, 136);
         wall2.setVisible(true);
-        wall2.refreshBody();
+        wall2.refreshBody();*/
 
         let wall3 = this.walls.create(256, 380, 'colliderRectangulo');
         wall3.body.setSize(256, 136);
@@ -272,7 +272,7 @@ export class GameScene extends Phaser.Scene {
         this.players.forEach((player) => {
 
             //COLLIDERS CON LOS OBJETOS DEL ESCENARIO
-            //this.physics.add.collider(player.sprite, this.walls);
+            this.physics.add.collider(player.sprite, this.walls);
 
             //COLLIDERS CON LÍMITES DE PAREDES
             this.physics.add.collider(player.sprite, this.leftWall);
@@ -625,23 +625,25 @@ export class GameScene extends Phaser.Scene {
 
             //DETECTAR SI ESTÁ SOBRE UN NODO
             this.physics.overlap(labubu.centerCollider, this.nodes, (spr, node) => {
+                if (labubu.isWaitingAtNode) return;
+                if (labubu.lastNode === node) return;
+
                 if (Phaser.Math.Distance.Between(labubu.centerCollider.x, labubu.centerCollider.y, node['x'], node['y']) > 18) {
                     return;
                 }
-                if (labubu.lastNode === node) return; //evitar que se vuelva a triggear
+
                 labubu.lastNode = node;
                 labubu.isWaitingAtNode = true;
-                //labubu.allowedTurns = node['allowedTurns'] || [];
 
-                // Guardar direcciones válidas
+                // Guardar direcciones válidas (FUNCIONA)
                 labubu.allowedTurns = node['allowedTurns'].map(e => e.direction);
-                labubu.nodeRules = node['allowedTurns']; // ahora array de objetos {direction, turnMode}
+                labubu.nodeRules = node['allowedTurns'];
                 //parar en seco
-                //labubu.sprite.setVelocity(0, 0);
+                labubu.sprite.setVelocity(0, 0);
                 this.snapLabubuToNode(labubu, node);
             });
 
-            //INPUT. Leer input solo si espera en un nodo
+            //INPUT
             const mapping = this.inputMappings.find(m => m.playerId === labubu.id);
             let inputDir = null;
 
@@ -661,19 +663,11 @@ export class GameScene extends Phaser.Scene {
                     });
                     this.sfxshot.play();
                 }
-                /*if (
-                    labubu.isWaitingAtNode &&
-                    inputDir &&
-                    labubu.allowedTurns.includes(inputDir)
-                ) {
-                    labubu.currentDirection = inputDir;
-                    labubu.isWaitingAtNode = false;
-                    labubu.lastNode = null;
-                }*/
             }
 
             if (labubu.isWaitingAtNode && inputDir && labubu.allowedTurns.includes(inputDir)) {
 
+                console.log("GIRANDO A " + inputDir);
                 // aceptar dirección
                 labubu.currentDirection = inputDir;
 
@@ -684,8 +678,8 @@ export class GameScene extends Phaser.Scene {
                 }
                 labubu.isWaitingAtNode = false;
 
-                //liberar last node
-                labubu.lastNode = null;
+                labubu.exitingNode = true;
+                console.log(labubu.turnMode);
 
             }
 
@@ -765,6 +759,22 @@ export class GameScene extends Phaser.Scene {
             case 'left': labubu.sprite.setVelocity(-speed, 0); break;
             case 'right': labubu.sprite.setVelocity(speed, 0); break;
         }
+
+        //salida del nodo
+        if (labubu.exitingNode && labubu.currentNode) {
+
+            const stillOverlapping = this.physics.overlap(
+                labubu.centerCollider,
+                labubu.currentNode
+            );
+
+            if (!stillOverlapping) {
+                labubu.exitingNode = false;
+                labubu.currentNode = null;
+                labubu.isWaitingAtNode = false;
+            }
+        }
+
     }
 
 
@@ -772,16 +782,37 @@ export class GameScene extends Phaser.Scene {
         this.nodes = this.add.group(); // sin classType
 
 
-        this.nodes.add(new RailNode(this, 289, 84.5, [
+        this.nodes.add(new RailNode(this, 289, 82.5, [
             { direction: "down", turnMode: "reverse" },
-            { direction: "left", turnMode: "normal" },
+            { direction: "left", turnMode: "reverse" },
+            { direction: "right", turnMode: "normal" },
             { direction: "down", turnMode: "normal" }], 0));
-        //this.nodes.add(new RailNode(this, 289, 83.5, ["down", "left", "right"],0));
-        //this.nodes.add(new RailNode(this, 96.5, 283.5, ["up", "down", "right"], 1));
-        //this.nodes.add(new RailNode(this, 288.5, 288.5, ["up", "right", "left"],2));
-        //this.nodes.add(new RailNode(this, 416.5, 288.5, ["down", "right", "left"],3));
-        //this.nodes.add(new RailNode(this, 608.5, 288.5, ["up", "down", "left"],4));
-        //this.nodes.add(new RailNode(this, 416.5, 466.5, ["up", "right", "left"]));
+       /*     { direction: "up", turnMode: "reverse" },
+            { direction: "down", turnMode: "normal" },
+            { direction: "right", turnMode: "normal" }], 1));*/
+        /*this.nodes.add(new RailNode(this, 288.5, 288.5, [
+            { direction: "up", turnMode: "reverse" },
+            { direction: "right", turnMode: "normal" },
+            { direction: "left", turnMode: "normal" }], 1));*/
+        //this.nodes.add(new RailNode(this, 416.5, 288.5, [
+        this.nodes.add(new RailNode(this,  416.5, 274.5, [
+            { direction: "down", turnMode: "reverse" },
+            { direction: "left", turnMode: "reverse" },
+            { direction: "right", turnMode: "normal" },
+            ], 1));
+         this.nodes.add(new RailNode(this,  608.5, 274.5, [
+            { direction: "up", turnMode: "reverse" },
+            { direction: "left", turnMode: "reverse" },
+            { direction: "right", turnMode: "normal" },
+            { direction: "down", turnMode: "normal" },
+            ], 2));
+
+         this.nodes.add(new RailNode(this,  416.5, 460.5, [
+            { direction: "up", turnMode: "reverse" },
+            { direction: "left", turnMode: "normal" },
+            { direction: "right", turnMode: "normal" },
+            ], 3));
+        
     }
     snapLabubuToNode(labubu, node) {
 

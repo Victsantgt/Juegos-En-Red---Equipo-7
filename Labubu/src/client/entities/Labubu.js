@@ -10,6 +10,7 @@ export class Labubu {
         this.blockMove=false;
         this.isWaitingAtNode=false;
         this.lastNode = null; //anti re-trigger
+        this.exitingNode = false;
 
 
         // Crear sprite físico del jugador usando el spritesheet
