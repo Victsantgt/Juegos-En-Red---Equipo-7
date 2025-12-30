@@ -241,7 +241,7 @@ export class GameScene extends Phaser.Scene {
         this.setRailNodes();
 
 
-        //PAREDES DEL ESCENARIO 
+        //PAREDES DEL ESCENARIO. Todo esto se puede borrar cuando tengamos el escenario final, es solo para verlo visualmente
         this.walls = this.physics.add.staticGroup();
 
         let wall1 = this.walls.create(192, 190, 'colliderCuadrado');
@@ -272,7 +272,7 @@ export class GameScene extends Phaser.Scene {
         this.players.forEach((player) => {
 
             //COLLIDERS CON LOS OBJETOS DEL ESCENARIO
-            this.physics.add.collider(player.sprite, this.walls);
+            //this.physics.add.collider(player.sprite, this.walls);
 
             //COLLIDERS CON LÍMITES DE PAREDES
             this.physics.add.collider(player.sprite, this.leftWall);
@@ -302,6 +302,8 @@ export class GameScene extends Phaser.Scene {
         //COLLIDER CHOQUE JUGADORES
         this.physics.add.overlap(this.players.get('player1').sprite, this.players.get('player2').sprite, () => {
             if (this.players.get('player1').turnMode !== this.players.get('player2').turnMode) {
+                this.players.get('player1').lastNode = null;
+                this.players.get('player2').lastNode = null;
                 this.players.forEach((player) => {
                     switch (player.currentDirection) {
                         case 'down':
@@ -449,7 +451,7 @@ export class GameScene extends Phaser.Scene {
     collectPowerup(player, powerup) {
 
         let speedmult = 1.4;
-
+        player.lastNode = null; 
         this.sfxpowerup = this.sound.add('powerupSonido', {
             loop: false,
             volume: 1
@@ -772,6 +774,7 @@ export class GameScene extends Phaser.Scene {
                 labubu.exitingNode = false;
                 labubu.currentNode = null;
                 labubu.isWaitingAtNode = false;
+                labubu.lastNode = null;
             }
         }
 
@@ -781,36 +784,44 @@ export class GameScene extends Phaser.Scene {
     setRailNodes() {
         this.nodes = this.add.group(); // sin classType
 
-
+        //nodo superior
         this.nodes.add(new RailNode(this, 289, 82.5, [
             { direction: "down", turnMode: "reverse" },
             { direction: "left", turnMode: "reverse" },
             { direction: "right", turnMode: "normal" },
             { direction: "down", turnMode: "normal" }], 0));
-       /*     { direction: "up", turnMode: "reverse" },
-            { direction: "down", turnMode: "normal" },
-            { direction: "right", turnMode: "normal" }], 1));*/
-        /*this.nodes.add(new RailNode(this, 288.5, 288.5, [
+       
+        //nodo central derecho
+        this.nodes.add(new RailNode(this, 288.5,268.5, [
             { direction: "up", turnMode: "reverse" },
             { direction: "right", turnMode: "normal" },
-            { direction: "left", turnMode: "normal" }], 1));*/
-        //this.nodes.add(new RailNode(this, 416.5, 288.5, [
-        this.nodes.add(new RailNode(this,  416.5, 274.5, [
+            { direction: "left", turnMode: "normal" }], 1));
+        
+        //nodo central izquierdo
+        this.nodes.add(new RailNode(this,  416.5, 268.5, [
             { direction: "down", turnMode: "reverse" },
             { direction: "left", turnMode: "reverse" },
             { direction: "right", turnMode: "normal" },
             ], 1));
-         this.nodes.add(new RailNode(this,  608.5, 274.5, [
+        //nodo izquierdo
+         this.nodes.add(new RailNode(this,  608.5, 268.5, [
             { direction: "up", turnMode: "reverse" },
             { direction: "left", turnMode: "reverse" },
-            { direction: "right", turnMode: "normal" },
             { direction: "down", turnMode: "normal" },
             ], 2));
+        //nodo derecho
+         this.nodes.add(new RailNode(this,  98.5, 268.5, [
+            { direction: "up", turnMode: "normal" },
+            { direction: "right", turnMode: "normal" },
+            { direction: "down", turnMode: "reverse" },
+            ], 2));
 
+
+        //nodo abajo del todo
          this.nodes.add(new RailNode(this,  416.5, 460.5, [
             { direction: "up", turnMode: "reverse" },
             { direction: "left", turnMode: "normal" },
-            { direction: "right", turnMode: "normal" },
+            { direction: "right", turnMode: "reverse" },
             ], 3));
         
     }
