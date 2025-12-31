@@ -19,6 +19,8 @@ export class MenuScene extends Phaser.Scene {
 
         this.add.image(0, 0, 'menuFondo').setOrigin(0, 0);
 
+        this.events.removeAllListeners('resume');
+
         // --- CAPA DE OSCURECIMIENTO (OVERLAY) ---
         // Creamos un rectángulo negro que ocupa toda la pantalla, pero invisible (alpha 0)
         const overlay = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x000000)
@@ -108,7 +110,7 @@ export class MenuScene extends Phaser.Scene {
             });
         });
 
-        // --- EVENTO RESUME (Al volver de créditos) ---
+        // --- EVENTO RESUME ---
         this.events.on('resume', () => {
             // Quitamos el oscurecimiento suavemente
             this.tweens.add({

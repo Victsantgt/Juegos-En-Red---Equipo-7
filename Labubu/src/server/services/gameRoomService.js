@@ -25,10 +25,14 @@ export function createGameRoomService() {
         score: 0
       },
       active: true,
-      ballActive: true // Track if ball is in play (prevents duplicate goals)
     };
 
     rooms.set(roomId, room);
+
+    // Spawn powerups
+    spawnPowerup(player1Ws)
+    room.powerupInterval = setInterval(() => spawnPowerup(player1Ws), 8000);
+
 
     // Store room ID on WebSocket for quick lookup
     player1Ws.roomId = roomId;
@@ -42,7 +46,7 @@ export function createGameRoomService() {
    * @param {WebSocket} ws - Player's WebSocket
    * @param {number} y - Paddle Y position
    */
-  function handlePaddleMove(ws, y) {
+  function handlePaddleMove(ws, x, y) {
     const roomId = ws.roomId;
     if (!roomId) return;
 
@@ -55,9 +59,41 @@ export function createGameRoomService() {
     if (opponent.readyState === 1) { // WebSocket.OPEN
       opponent.send(JSON.stringify({
         type: 'paddleUpdate',
+        x,
         y
       }));
     }
+  }
+
+  // FUNCION PARA MANEJAR EL SPAWN DE POWERUPS
+  function spawnPowerup(ws) {
+    const roomId = ws.roomId;
+    if (!roomId) return;
+
+    const room = rooms.get(roomId);
+    if (!room || !room.active) return;
+
+    let posIndex = Math.floor(Math.random()*5);
+    let powerupPositions = [[96,96],[608,96],[96,480],[608,480],[352,288]];
+
+    const x = powerupPositions[posIndex][0];
+    const y = powerupPositions[posIndex][1];
+
+    let powerupType = Math.ceil(Math.random() * 3)
+
+    room.player1.ws.send(JSON.stringify({
+        type: 'powerupSpawn',
+        powerupType: powerupType,
+        x: x,
+        y: y
+    }));
+
+    room.player2.ws.send(JSON.stringify({
+        type: 'powerupSpawn',
+        powerupType: powerupType,
+        x: x,
+        y: y
+    }));
   }
 
   /**
@@ -165,6 +201,10 @@ export function createGameRoomService() {
           type: 'playerDisconnected'
         }));
       }
+    }
+
+    if (room.powerupInterval) {
+      clearInterval(room.powerupInterval);
     }
 
     // Clean up room

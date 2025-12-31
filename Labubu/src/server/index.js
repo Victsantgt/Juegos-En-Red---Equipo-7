@@ -133,7 +133,11 @@ wss.on('connection', (ws) => {
           break;
 
         case 'paddleMove':
-          gameRoomService.handlePaddleMove(ws, data.y);
+          gameRoomService.handlePaddleMove(ws, data.x, data.y);
+          break;
+
+        case 'powerupSpawn':
+          gameRoomService.spawnPowerup(ws);
           break;
 
         case 'goal':
