@@ -11,20 +11,31 @@ export class VictoryScene extends Phaser.Scene {
 
     preload() {
         // Carga de imágenes
+
+
+
         this.load.image('j1Ganador', 'assets/pantallaVictoria/j1Ganador.png');
         this.load.image('j2Ganador', 'assets/pantallaVictoria/j2Ganador.png');
 
         this.load.image('j1Perdedor', 'assets/pantallaVictoria/j1Perdedor.png');
         this.load.image('j2Perdedor', 'assets/pantallaVictoria/j2Perdedor.png');
 
-        this.load.image('sady', 'assets/spritesVic/sady.png'); // Para j1Perdedor
-        this.load.image('sadb', 'assets/spritesVic/sadb.png'); // Para j2Perdedor
+        this.load.image('sady', 'assets/spritesVic/sady.png'); 
+        this.load.image('sadb', 'assets/spritesVic/sadb.png');
+        this.load.image('sadp', 'assets/spritesVic/sadp.png');
+        this.load.image('sadr', 'assets/spritesVic/sadr.png');
 
-        this.load.image('happyY1', 'assets/spritesVic/happyY1.png'); // Para j1Ganador
-        this.load.image('happyY2', 'assets/spritesVic/happyY2.png'); // Para j1Ganador
+        this.load.image('happyY1', 'assets/spritesVic/happyY1.png'); //amarillo
+        this.load.image('happyY2', 'assets/spritesVic/happyY2.png'); 
 
-        this.load.image('happyB1', 'assets/spritesVic/happyB1.png'); // Para j2Ganador
-        this.load.image('happyB2', 'assets/spritesVic/happyB2.png'); // Para j2Ganador
+        this.load.image('happyB1', 'assets/spritesVic/happyB1.png'); //marron
+        this.load.image('happyB2', 'assets/spritesVic/happyB2.png'); 
+
+        this.load.image('happyP1', 'assets/spritesVic/happyP1.png'); //morado
+        this.load.image('happyP2', 'assets/spritesVic/happyP2.png'); 
+
+        this.load.image('happyR1', 'assets/spritesVic/happyR1.png'); //rojo
+        this.load.image('happyR2', 'assets/spritesVic/happyR2.png'); 
 
         this.load.image('Botones', 'assets/pantallaVictoria/Botones.png');
 
@@ -65,6 +76,31 @@ export class VictoryScene extends Phaser.Scene {
             sadAsset = 'sady';          // Imagen triste asociada a J1
             happyAsset1 = 'happyB1';
             happyAsset2 = 'happyB2';
+        }
+        switch(parseInt(localStorage.getItem("skin"),10)){
+            case 0:
+                sadAsset = 'sady';
+                happyAsset1 = 'happyB1';
+                happyAsset2 = 'happyB2';
+            break;
+            
+            case 1:
+                sadAsset = 'sadb';
+                happyAsset1 = 'happyY1';
+                happyAsset2 = 'happyY2';
+            break;
+            
+            case 2:
+                sadAsset = 'sady';
+                happyAsset1 = 'happyP1';
+                happyAsset2 = 'happyP2';
+            break;
+            
+            case 3:
+                sadAsset = 'sady';
+                happyAsset1 = 'happyR1';
+                happyAsset2 = 'happyR2';
+            break;
         }
 
         // --- ANIMACIÓN ---
