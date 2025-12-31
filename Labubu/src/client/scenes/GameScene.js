@@ -5,7 +5,6 @@ import { RailNode } from '../entities/RailNode';
 import { CommandProcessor } from '../commands/CommandProcessor';
 import { MovePaddleCommand } from '../commands/MovePaddleCommand';
 import { PauseGameCommand } from '../commands/PuaseGameCommand';
-import { Powerup } from '../entities/Powerup';
 import { PowerupSpeed } from '../entities/PowerupSpeed';
 import { PowerupTurn } from '../entities/PowerupTurn';
 import { PowerupHealth } from '../entities/PowerupHealth';
@@ -31,6 +30,7 @@ export class GameScene extends Phaser.Scene {
         this.escWasDown = false;
         this.processor = new CommandProcessor();
         this.bullets = [];
+        this.gameEnded = false;
     }
 
     preload() {
@@ -52,11 +52,6 @@ export class GameScene extends Phaser.Scene {
         //labubu
 
         this.load.spritesheet('labubu', 'assets/yellow/down.png', {
-            frameWidth: 68,
-            frameHeight: 88
-        });
-
-        this.load.spritesheet('labubu2', 'assets/brownanim/down.png', {
             frameWidth: 68,
             frameHeight: 88
         });
@@ -97,6 +92,50 @@ export class GameScene extends Phaser.Scene {
             frameWidth: 68,
             frameHeight: 88
         });
+        
+        //labubu 3
+
+        this.load.spritesheet('labubu3', 'assets/purpleanim/down.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        this.load.spritesheet('labubu3-l', 'assets/purpleanim/left.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        this.load.spritesheet('labubu3-r', 'assets/purpleanim/right.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        this.load.spritesheet('labubu3-u', 'assets/purpleanim/up.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        //labubu 4
+
+        this.load.spritesheet('labubu4', 'assets/redanim/down.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        this.load.spritesheet('labubu4-l', 'assets/redanim/left.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        this.load.spritesheet('labubu4-r', 'assets/redanim/right.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
+
+        this.load.spritesheet('labubu4-u', 'assets/redanim/up.png', {
+            frameWidth: 68,
+            frameHeight: 88
+        });
 
         //SPRITES POWERUPS
 
@@ -124,7 +163,7 @@ export class GameScene extends Phaser.Scene {
         let fondo = this.add.image(0, 0, 'fondo').setOrigin(0, 0);
 
 
-        ////ANIMACIONES JUGADOR 1////
+        ////ANIMACIONES LABUBU 1////
 
         this.anims.create({
             key: 'labubu1-down',
@@ -154,7 +193,7 @@ export class GameScene extends Phaser.Scene {
             repeat: -1
         });
 
-        //ANIMACIONES JUGADOR 2//
+        //ANIMACIONES LABUBU 2//
 
         this.anims.create({
             key: 'labubu2-down',
@@ -183,6 +222,67 @@ export class GameScene extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
+
+        //ANIMACIONES LABUBU 3//
+
+        this.anims.create({
+            key: 'labubu3-down',
+            frames: this.anims.generateFrameNumbers('labubu3', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'labubu3-left',
+            frames: this.anims.generateFrameNumbers('labubu3-l', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'labubu3-right',
+            frames: this.anims.generateFrameNumbers('labubu3-r', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'labubu3-up',
+            frames: this.anims.generateFrameNumbers('labubu3-u', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        //ANIMACIONES LABUBU 4//
+
+        this.anims.create({
+            key: 'labubu4-down',
+            frames: this.anims.generateFrameNumbers('labubu4', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'labubu4-left',
+            frames: this.anims.generateFrameNumbers('labubu4-l', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'labubu4-right',
+            frames: this.anims.generateFrameNumbers('labubu4-r', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'labubu4-up',
+            frames: this.anims.generateFrameNumbers('labubu4-u', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
 
         //ANIMACIÓN POWERUP HEALTH
         this.anims.create({
@@ -366,8 +466,6 @@ export class GameScene extends Phaser.Scene {
         jugadorUno.score = 1;
         jugadorDos.score = 1;
 
-
-
         this.players.set('player1', jugadorUno);
         this.players.set('player2', jugadorDos);
         this.players.get('player1').turnMode = "reverse";
@@ -466,7 +564,7 @@ export class GameScene extends Phaser.Scene {
             });
 
         } else if (powerup.poweruptype == 'Turn') {
-            switch (player.playerInstance.currentDirection) {
+            /*switch (player.playerInstance.currentDirection) {
                 case 'down':
                     player.playerInstance.currentDirection = 'up';
                     player.playerInstance.turnCooldown = 50;
@@ -487,7 +585,13 @@ export class GameScene extends Phaser.Scene {
                     player.playerInstance.turnCooldown = 50;
                     player.playerInstance.alternateTurnmode();
                     break;
-            }
+            }*/
+           if(player.playerId=='player1'){
+                this.players.get('player2').playerInstance.score--;
+           }else{
+                this.players.get('player1').playerInstance.score--;
+           }
+            
 
         } else {
             player.playerInstance.score++;
