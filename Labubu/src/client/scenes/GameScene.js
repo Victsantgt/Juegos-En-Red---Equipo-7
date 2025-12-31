@@ -463,8 +463,8 @@ export class GameScene extends Phaser.Scene {
         const jugadorDos = new Labubu(this, 'player2', 608, 220, 'labubu2-down');
 
         //Empiezan con 1 vida cada uno para testear (luego lo cambio)
-        jugadorUno.score = 1;
-        jugadorDos.score = 1;
+        jugadorUno.score = 3;
+        jugadorDos.score = 3;
 
         this.players.set('player1', jugadorUno);
         this.players.set('player2', jugadorDos);
@@ -548,6 +548,8 @@ export class GameScene extends Phaser.Scene {
 
     collectPowerup(player, powerup) {
 
+        console.debug(this.players.get('player2').playerInstance)
+
         let speedmult = 1.4;
         player.lastNode = null; 
         this.sfxpowerup = this.sound.add('powerupSonido', {
@@ -586,12 +588,14 @@ export class GameScene extends Phaser.Scene {
                     player.playerInstance.alternateTurnmode();
                     break;
             }*/
-           if(player.playerId=='player1'){
-                this.players.get('player2').playerInstance.score--;
-           }else{
-                this.players.get('player1').playerInstance.score--;
-           }
-            
+                if(player.id=='player1'){
+                    this.players.get('player2').score--;
+                }
+                else{
+                    this.players.get('player1').score--;
+                }
+                this.scoreUpdate();
+        
 
         } else {
             player.playerInstance.score++;
