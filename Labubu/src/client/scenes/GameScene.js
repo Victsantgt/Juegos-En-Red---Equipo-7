@@ -310,14 +310,14 @@ export class GameScene extends Phaser.Scene {
 
         // puntuaciones
         //j1 arriba izquierda
-        this.scoreLeft = this.add.text(17, 0, '1', {
+        this.scoreLeft = this.add.text(17, 0, '3', {
             fontFamily: 'Lemon',
             fontSize: '48px',
             color: '#e6dd38'
         });
 
         //j2 arriba derecha
-        this.rightScore = this.add.text(657, 0, '1', {
+        this.rightScore = this.add.text(657, 0, '3', {
             fontFamily: 'Lemon',
             fontSize: '48px',
             color: '#8a452e'
@@ -459,8 +459,38 @@ export class GameScene extends Phaser.Scene {
     ///////////////////////////////////////////////////////////////////
 
     setUpPlayers() {
-        const jugadorUno = new Labubu(this, 'player1', 96, 220, 'labubu1-down');
-        const jugadorDos = new Labubu(this, 'player2', 608, 220, 'labubu2-down');
+
+        console.log(parseInt(localStorage.getItem("skin"),10));
+
+
+        let jugadorUno = new Labubu(this, 'player1', 96, 220, 'labubu1-down');
+        let jugadorDos = new Labubu(this, 'player2', 608, 220, 'labubu2-down');
+
+
+
+
+        switch(parseInt(localStorage.getItem("skin"),10)){
+            case 0:
+                jugadorUno.animKey='labubu1-down';
+                jugadorDos.animKey='labubu2-down';
+            break;
+            
+            case 1:
+                jugadorUno.animKey='labubu2-down';
+                jugadorDos.animKey='labubu1-down';
+            break;
+            
+            case 2:
+                jugadorUno.animKey='labubu3-down';
+                jugadorDos.animKey='labubu1-down';
+            break;
+            
+            case 3:
+                jugadorUno.animKey='labubu4-down';
+                jugadorDos.animKey='labubu1-down';
+            break;
+        }
+        
 
         //Empiezan con 1 vida cada uno para testear (luego lo cambio)
         jugadorUno.score = 3;
@@ -469,8 +499,7 @@ export class GameScene extends Phaser.Scene {
         this.players.set('player1', jugadorUno);
         this.players.set('player2', jugadorDos);
         this.players.get('player1').turnMode = "reverse";
-        this.players.get('player2').turnMode = "normal";
-
+        this.players.get('player2').turnMode = "normal"
         const InputConfig = [
             {
                 playerId: 'player1',
@@ -588,12 +617,7 @@ export class GameScene extends Phaser.Scene {
                     player.playerInstance.alternateTurnmode();
                     break;
             }*/
-                if(player.id=='player1'){
-                    this.players.get('player2').score--;
-                }
-                else{
-                    this.players.get('player1').score--;
-                }
+                player.playerInstance.score--;
                 this.scoreUpdate();
         
 
@@ -813,6 +837,17 @@ export class GameScene extends Phaser.Scene {
                 if (labubu.currentDirection === 'left' && anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-left');
                 if (labubu.currentDirection === 'down' && anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-down');
                 if (labubu.currentDirection === 'up' && anim.startsWith('labubu2-')) labubu.sprite.play('labubu2-up');
+
+                if (labubu.currentDirection === 'right' && anim.startsWith('labubu3-')) labubu.sprite.play('labubu3-right');
+                if (labubu.currentDirection === 'left' && anim.startsWith('labubu3-')) labubu.sprite.play('labubu3-left');
+                if (labubu.currentDirection === 'down' && anim.startsWith('labubu3-')) labubu.sprite.play('labubu3-down');
+                if (labubu.currentDirection === 'up' && anim.startsWith('labubu3-')) labubu.sprite.play('labubu3-up');
+
+                if (labubu.currentDirection === 'right' && anim.startsWith('labubu4-')) labubu.sprite.play('labubu4-right');
+                if (labubu.currentDirection === 'left' && anim.startsWith('labubu4-')) labubu.sprite.play('labubu4-left');
+                if (labubu.currentDirection === 'down' && anim.startsWith('labubu4-')) labubu.sprite.play('labubu4-down');
+                if (labubu.currentDirection === 'up' && anim.startsWith('labubu4-')) labubu.sprite.play('labubu4-up');
+
 
             }
 

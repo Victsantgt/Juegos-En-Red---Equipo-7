@@ -8,8 +8,11 @@ export class UserScene extends Phaser.Scene
 
     preload() {
         this.username = localStorage.getItem("username") || "";
-        this.currentSkin = parseFloat(localStorage.getItem("skin"));
-        console.log(this.currentSkin)
+        const savedSkin = parseInt(localStorage.getItem("skin"), 10);
+        this.currentSkin = Number.isInteger(savedSkin) && savedSkin >= 0
+          ? savedSkin
+          : 0;
+        console.log(this.currentSkin);
 
         this.load.spritesheet('labubuMarron', 'assets/brownanim/skin.png', {
             frameWidth: 136,
