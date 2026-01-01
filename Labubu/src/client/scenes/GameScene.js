@@ -482,12 +482,12 @@ export class GameScene extends Phaser.Scene {
             
             case 2:
                 jugadorUno.animKey='labubu3-down';
-                jugadorDos.animKey='labubu1-down';
+                jugadorDos.animKey='labubu4-down';
             break;
             
             case 3:
                 jugadorUno.animKey='labubu4-down';
-                jugadorDos.animKey='labubu1-down';
+                jugadorDos.animKey='labubu3-down';
             break;
         }
         

@@ -7,43 +7,65 @@ export default class LobbyScene extends Phaser.Scene {
     this.ws = null;
   }
 
+  preload(){
+        this.load.image('matchamaking', 'assets/matchamaking.png');
+  }
+
   create() {
     const width = this.cameras.main.width;
     const height = this.cameras.main.height;
     this.cameras.main.setBackgroundColor('#000000ff');
 
+    let matchamaking = this.add.image(0, 0, 'matchamaking').setOrigin(0, 0);
+
     // Title
-    this.add.text(width / 2, 100, 'Online Multiplayer', {
-      fontSize: '48px',
-      color: '#ffffff'
+    this.add.text(4+(width / 2), 104, 'MATCHA-MAKING...!', {
+      fontFamily: 'Lemon',
+      fontSize: '52px',
+      color: '#f35b15ff'
+    }).setOrigin(0.5);
+
+    this.add.text(2+(width / 2), 102, 'MATCHA-MAKING...!', {
+      fontFamily: 'Lemon',
+      fontSize: '52px',
+      color: '#ff9a1eff'
+    }).setOrigin(0.5);
+    
+    this.add.text(width / 2, 100, 'MATCHA-MAKING...!', {
+      fontFamily: 'Lemon',
+      fontSize: '52px',
+      color: '#ffc720ff'
     }).setOrigin(0.5);
 
     // Status text
     this.statusText = this.add.text(width / 2, height / 2 - 50, 'Connecting to server...', {
+      fontFamily: 'Lemon',
       fontSize: '24px',
-      color: '#ffff00'
+      color: '#646F4B'
     }).setOrigin(0.5);
 
     // Player count text
     this.playerCountText = this.add.text(width / 2, height / 2 + 20, '', {
+      fontFamily: 'Lemon',
       fontSize: '20px',
-      color: '#00ff00'
+      color: '#F5B800'
     }).setOrigin(0.5);
 
     // Cancel button
     const cancelButton = this.add.text(width / 2, height - 100, 'Cancel', {
+      fontFamily: 'Lemon',
       fontSize: '24px',
-      color: '#ff6666',
-      backgroundColor: '#333333',
+      color: '#CA3C25',
+      backgroundColor: '#F5B800',
       padding: { x: 20, y: 10 }
     }).setOrigin(0.5).setInteractive();
 
     cancelButton.on('pointerover', () => {
-      cancelButton.setColor('#ff0000');
+      cancelButton.setColor('#671E13');
     });
 
     cancelButton.on('pointerout', () => {
-      cancelButton.setColor('#ff6666');
+      cancelButton.setColor('#CA3C25');
     });
 
     cancelButton.on('pointerdown', () => {
@@ -82,20 +104,20 @@ export default class LobbyScene extends Phaser.Scene {
       this.ws.onerror = (error) => {
         console.error('WebSocket error:', error);
         this.statusText.setText('Connection error!');
-        this.statusText.setColor('#ff0000');
+        this.statusText.setColor('#CA3C25');
       };
 
       this.ws.onclose = () => {
         console.log('WebSocket connection closed');
         if (this.scene.isActive('LobbyScene')) {
           this.statusText.setText('Connection lost!');
-          this.statusText.setColor('#ff0000');
+          this.statusText.setColor('#CA3C25');
         }
       };
     } catch (error) {
       console.error('Error connecting to server:', error);
       this.statusText.setText('Failed to connect!');
-      this.statusText.setColor('#ff0000');
+      this.statusText.setColor('#CA3C25');
     }
   }
 

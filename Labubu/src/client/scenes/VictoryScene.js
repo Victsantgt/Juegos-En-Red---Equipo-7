@@ -91,13 +91,13 @@ export class VictoryScene extends Phaser.Scene {
             break;
             
             case 2:
-                sadAsset = 'sady';
+                sadAsset = 'sadr';
                 happyAsset1 = 'happyP1';
                 happyAsset2 = 'happyP2';
             break;
             
             case 3:
-                sadAsset = 'sady';
+                sadAsset = 'sadp';
                 happyAsset1 = 'happyR1';
                 happyAsset2 = 'happyR2';
             break;
