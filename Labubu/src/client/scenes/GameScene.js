@@ -3,7 +3,6 @@ import { Labubu } from '../entities/Labubu';
 import { Bullet } from '../entities/Bullet';
 import { RailNode } from '../entities/RailNode';
 import { CommandProcessor } from '../commands/CommandProcessor';
-import { MovePaddleCommand } from '../commands/MovePaddleCommand';
 import { PauseGameCommand } from '../commands/PuaseGameCommand';
 import { PowerupSpeed } from '../entities/PowerupSpeed';
 import { PowerupTurn } from '../entities/PowerupTurn';
@@ -462,13 +461,18 @@ export class GameScene extends Phaser.Scene {
 
         console.log(parseInt(localStorage.getItem("skin"),10));
 
-
+        
+        
         let jugadorUno = new Labubu(this, 'player1', 96, 220, 'labubu1-down');
         let jugadorDos = new Labubu(this, 'player2', 608, 220, 'labubu2-down');
-
-
-
-
+        
+        this.jugadorTexto = this.add.text(jugadorUno.sprite.x, jugadorUno.sprite.y - jugadorUno.sprite.height/1.65, ' '+localStorage.getItem("username")+' ', {
+            fontSize: '14px',
+            fontFamily: 'Lemon',
+            backgroundColor: '#2525257b',
+            color: '#ffffff'
+        }).setOrigin();
+        
         switch(parseInt(localStorage.getItem("skin"),10)){
             case 0:
                 jugadorUno.animKey='labubu1-down';
@@ -748,6 +752,8 @@ export class GameScene extends Phaser.Scene {
             }
         });
 
+        
+
         //LABUBUS
         this.players.forEach(labubu => {
 
@@ -776,6 +782,11 @@ export class GameScene extends Phaser.Scene {
                 labubu.sprite.setVelocity(0, 0);
                 this.snapLabubuToNode(labubu, node);
             });
+
+            // USERNAME
+
+            this.jugadorTexto.x = this.players.get('player1').sprite.x;
+            this.jugadorTexto.y = this.players.get('player1').sprite.y - this.players.get('player1').sprite.height/1.65;
 
             //INPUT
             const mapping = this.inputMappings.find(m => m.playerId === labubu.id);

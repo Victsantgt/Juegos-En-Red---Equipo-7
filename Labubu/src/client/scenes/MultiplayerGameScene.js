@@ -909,8 +909,8 @@ export class MultiplayerGameScene extends Phaser.Scene {
             this.localLabubu.cooldown = 300;
         }
 
-
         /*
+ 
         //ANIMACIONES LABUBU LOCAL
         let anim = this.localLabubu.sprite.anims.currentAnim?.key;
 
@@ -940,7 +940,6 @@ export class MultiplayerGameScene extends Phaser.Scene {
             if (this.localLabubu.currentDirection === 'down' && anim.startsWith('labubu4-')) this.localLabubu.sprite.play('labubu4-down');
             if (this.localLabubu.currentDirection === 'up' && anim.startsWith('labubu4-')) this.localLabubu.sprite.play('labubu4-up');
         }
-
         //ANIMACIONES LABUBU REMOTO
         anim = this.remoteLabubu.sprite.anims.currentAnim?.key;
 
