@@ -473,6 +473,7 @@ export class MultiplayerGameScene extends Phaser.Scene {
         });
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         //////////////NUEVO///////////////////////////////////////////////////////////////////////
         this.connectionListener = (data) => {
@@ -775,13 +776,23 @@ export class MultiplayerGameScene extends Phaser.Scene {
  
     handleServerMessage(data) {
         switch (data.type) {
-            case 'paddleUpdate':
+            case 'labubuUpdate':
                 this.remoteLabubu.sprite.x = data.x;
                 this.remoteLabubu.sprite.y = data.y;
+                this.remoteLabubu.currentDirection = data.dir;
                 break;
 
             case 'powerupSpawn':
                 this.spawnPowerup(data);
+                break;
+
+            case 'shoot':
+                this.shoot(data);
+                this.sfxshot = this.sound.add('disparoSonido', {
+                    loop: false,
+                    volume: 1
+                });
+                this.sfxshot.play();
                 break;
 
             case 'playerDisconnected':
@@ -881,10 +892,22 @@ export class MultiplayerGameScene extends Phaser.Scene {
         }
         
         this.sendMessage({
-            type: 'paddleMove',
+            type: 'labubuMove',
             x: this.localLabubu.sprite.x,
-            y: this.localLabubu.sprite.y
+            y: this.localLabubu.sprite.y,
+            dir: this.localLabubu.currentDirection
         });
+
+        if (Phaser.Input.Keyboard.JustDown(this.spaceKey) && this.localLabubu.cooldown <= 0) 
+        {
+            this.sendMessage({
+                type: 'shoot',
+                x: this.localLabubu.sprite.x,
+                y: this.localLabubu.sprite.y,
+                dir: this.localLabubu.currentDirection
+            });
+            this.localLabubu.cooldown = 300;
+        }
 
 
         /*
@@ -1028,13 +1051,13 @@ export class MultiplayerGameScene extends Phaser.Scene {
         labubu.updateCenterCollider();
     }
 
-    shoot(dir, x, y) {
+    shoot(data) {
 
-        let bullet = new Bullet(this, x, y, dir);
+        let bullet = new Bullet(this, data.x, data.y, data.dir);
 
         //las balas tienen un poco de offset para que se coloquen bien y no se choquen
         //con los labubus
-        switch (dir) {
+        switch (data.dir) {
             case 'up':
                 bullet.sprite.y -= 50;
                 break;

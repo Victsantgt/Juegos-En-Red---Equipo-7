@@ -46,7 +46,7 @@ export function createGameRoomService() {
    * @param {WebSocket} ws - Player's WebSocket
    * @param {number} y - Paddle Y position
    */
-  function handlePaddleMove(ws, x, y) {
+  function handleLabubuMove(ws, x, y, dir) {
     const roomId = ws.roomId;
     if (!roomId) return;
 
@@ -58,9 +58,10 @@ export function createGameRoomService() {
 
     if (opponent.readyState === 1) { // WebSocket.OPEN
       opponent.send(JSON.stringify({
-        type: 'paddleUpdate',
+        type: 'labubuUpdate',
         x,
-        y
+        y,
+        dir
       }));
     }
   }
@@ -81,19 +82,50 @@ export function createGameRoomService() {
 
     let powerupType = Math.ceil(Math.random() * 3)
 
-    room.player1.ws.send(JSON.stringify({
-        type: 'powerupSpawn',
-        powerupType: powerupType,
-        x: x,
-        y: y
-    }));
+    if (room.player1.ws.readyState === 1) {
+      room.player1.ws.send(JSON.stringify({
+          type: 'powerupSpawn',
+          powerupType: powerupType,
+          x: x,
+          y: y
+      }));
+    }
 
-    room.player2.ws.send(JSON.stringify({
-        type: 'powerupSpawn',
-        powerupType: powerupType,
-        x: x,
-        y: y
-    }));
+    if (room.player2.ws.readyState === 1) {
+      room.player2.ws.send(JSON.stringify({
+          type: 'powerupSpawn',
+          powerupType: powerupType,
+          x: x,
+          y: y
+      }));
+    }
+  }
+
+  // FUNCION PARA DISPAROS
+  function shoot(ws, x, y, dir) {
+    const roomId = ws.roomId;
+    if (!roomId) return;
+
+    const room = rooms.get(roomId);
+    if (!room || !room.active) return;
+
+    if (room.player1.ws.readyState === 1) { // WebSocket.OPEN
+      room.player1.ws.send(JSON.stringify({
+        type: 'shoot',
+        x,
+        y,
+        dir
+      }));
+    }
+
+    if (room.player2.ws.readyState === 1) { // WebSocket.OPEN
+      room.player2.ws.send(JSON.stringify({
+        type: 'shoot',
+        x,
+        y,
+        dir
+      }));
+    }
   }
 
   /**
@@ -222,7 +254,8 @@ export function createGameRoomService() {
 
   return {
     createRoom,
-    handlePaddleMove,
+    handleLabubuMove,
+    shoot,
     handleGoal,
     handleDisconnect,
     getActiveRoomCount
