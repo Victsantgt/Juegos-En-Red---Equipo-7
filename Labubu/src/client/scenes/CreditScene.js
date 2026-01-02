@@ -13,43 +13,44 @@ export class CreditScene extends Phaser.Scene {
         const centerX = width / 2;
         const centerY = height / 2;
 
-        // Fondo semitransparente oscuro
-        this.add.rectangle(0, 0, width, height, 0x000000, 0.6).setOrigin(0,0);
+        // --- FONDO SEMITRANSPARENTE ---
+        this.add.rectangle(0, 0, width, height, 0x000000, 0.6).setOrigin(0, 0);
 
-        // --- TÍTULO (Arriba del centro) ---
-        // Lo subimos 200px desde el centro
-        this.add.text(centerX, centerY - 200, 'Créditos', {
+        // --- TÍTULO ---
+        this.add.text(centerX, centerY - 180, 'CRÉDITOS', {
             fontFamily: 'Lemon', 
-            fontSize: '48px',
+            fontSize: '64px',
             color: '#8b4a00ff'
         }).setOrigin(0.5, 0.5);
 
-        // --- LISTA DE CRÉDITOS (En el centro absoluto) ---
+        // --- LISTA DE CRÉDITOS ---
         const equipo = [
-            "Carla Calvache Amador - Programadora UIs, community manager",
-            "Daniel Redondo Pascual - concept art, ilustración 2D, programador",
-            "Tinka Armas Martí - concept art, ilustración 2D, programadora",
-            "Víctor Santiago Gil Torres - Compositor, programador, guionista"
+            "Carla Calvache Amador\nProgramadora UIs, community manager",
+            "Daniel Redondo Pascual\nConcept art, ilustración 2D, programador",
+            "Tinka Armas Martí\nConcept art, ilustración 2D, programadora",
+            "Víctor Santiago Gil Torres\nCompositor, programador, guionista"
         ];
 
-        // Espacio entre líneas
-        const gap = 45; 
+        // Ajustamos el espaciado para que quepa bien con letra más grande
+        const gap = 70; 
         
-        // Calculamos dónde empieza el primer nombre para que el bloque quede centrado
-        // (Mitad de la pantalla) - (Mitad de la altura del bloque de texto)
+        // Calculamos altura total para centrar el bloque verticalmente
         const totalHeight = (equipo.length - 1) * gap;
-        const startY = centerY - (totalHeight / 2);
+        // Bajamos un poco el punto de inicio (+20) para separarlo del título grande
+        const startY = (centerY - (totalHeight / 2)) + 20;
 
         equipo.forEach((texto, index) => {
             this.add.text(centerX, startY + (index * gap), texto, {
                 fontFamily: 'Lemon',
-                fontSize: '14px', 
-                color: '#e0e0e0', 
+                fontSize: '18px', // Subido de 14px a 18px para mejor lectura
+                color: '#ffffff', // Blanco para contrastar con el fondo oscuro
                 align: 'center'
             }).setOrigin(0.5, 0.5);
         });
 
-        const menuBtn = this.add.text(centerX, centerY + 200, 'Volver al menú', {
+        // --- BOTÓN VOLVER ---
+        // Estilo idéntico al botón 'Continuar' y 'Volver al Menú' de la Pausa
+        const menuBtn = this.add.text(centerX, centerY + 220, 'Volver al Menú', {
             fontFamily: 'Lemon',
             fontSize: '32px',
             color: '#5eb232', 
@@ -58,9 +59,7 @@ export class CreditScene extends Phaser.Scene {
         .on('pointerover', () => menuBtn.setColor('#553922')) 
         .on('pointerout', () => menuBtn.setColor('#5eb232')) 
         .on('pointerdown', () => {
-            
             menuBtn.disableInteractive();
-
             this.scene.stop();
             this.scene.resume('MenuScene');
         });

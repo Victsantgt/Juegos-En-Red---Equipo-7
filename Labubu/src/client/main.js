@@ -5,12 +5,11 @@ import { GameScene } from './scenes/GameScene.js';
 import { PauseScene } from './scenes/PauseScene.js';
 import { VictoryScene } from './scenes/VictoryScene.js';
 import { CreditScene } from './scenes/CreditScene.js';
+import { ControlsScene } from './scenes/ControlsScene.js'; // <--- NUEVO IMPORT
 import { ConnectionLostScene } from './scenes/ConnectionLostScene.js';
 import LobbyScene from './scenes/LobbyScene.js';
 import { MultiplayerGameScene } from './scenes/MultiplayerGameScene.js';
 import { UserScene } from './scenes/UserScene.js';
-
-
 
 const config = {
     type: Phaser.AUTO,
@@ -27,11 +26,24 @@ const config = {
     dom: {
         createContainer: true
     },
-    scene: [StartScene, MenuScene, GameScene, PauseScene, VictoryScene, CreditScene, ConnectionLostScene, UserScene, LobbyScene, MultiplayerGameScene],
+    // He añadido ControlsScene a la lista:
+    scene: [
+        StartScene, 
+        MenuScene, 
+        GameScene, 
+        PauseScene, 
+        VictoryScene, 
+        CreditScene, 
+        ControlsScene, // <--- AÑADIDA AQUÍ
+        ConnectionLostScene, 
+        UserScene, 
+        LobbyScene, 
+        MultiplayerGameScene
+    ],
     backgroundColor: '#ffffff',
 };
 
 document.fonts.ready.then(() => {
     //Para la fuente
     new Phaser.Game(config);
-    });
+});

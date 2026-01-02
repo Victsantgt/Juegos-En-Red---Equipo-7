@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import { connectionManager } from '../services/ConnectionManager';
 
-
 export class MenuScene extends Phaser.Scene {
     constructor() {
         super('MenuScene');
@@ -22,11 +21,10 @@ export class MenuScene extends Phaser.Scene {
         this.events.removeAllListeners('resume');
 
         // --- CAPA DE OSCURECIMIENTO (OVERLAY) ---
-        // Creamos un rectángulo negro que ocupa toda la pantalla, pero invisible (alpha 0)
         const overlay = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x000000)
             .setOrigin(0, 0)
             .setAlpha(0)
-            .setDepth(10); // Depth alto para que tape los botones
+            .setDepth(10); 
 
         // --- BOTÓN LOCAL ---
         const localBtn = this.add.text(610, 163, 'Modo Local', {
@@ -45,7 +43,8 @@ export class MenuScene extends Phaser.Scene {
             });
         });
 
-        // --- BOTÓN ONLINE ---
+        
+        // --- BOTÓN ONLINE (ACTIVO) ---
         const onlineBtn = this.add.text(600, 255, 'Modo Online', {
             fontFamily: 'Lemon',
             fontSize: '24px',
@@ -57,6 +56,33 @@ export class MenuScene extends Phaser.Scene {
         .on('pointerdown', () => {
             this.scene.start('LobbyScene');
         });
+        
+        /*
+        // --- BOTÓN CONTROLES ---
+        // Descomentar esto y comentar el de arriba cuando se suba a alguna plataforma
+        
+        const controlsBtn = this.add.text(600, 255, 'Controles', {
+            fontFamily: 'Lemon',
+            fontSize: '24px',
+            color: '#5eb232',
+        }).setOrigin(0.6, 0.6)
+        .setInteractive({ useHandCursor: true })
+        .on('pointerover', () => controlsBtn.setColor('#553922'))
+        .on('pointerout', () => controlsBtn.setColor('#5eb232'))
+        .on('pointerdown', () => {
+            controlsBtn.disableInteractive();
+
+            this.tweens.add({
+                targets: overlay, 
+                alpha: 0.6,
+                duration: 500,
+                onComplete: () => {
+                    this.scene.pause();
+                    this.scene.launch('ControlsScene');
+                }
+            });
+        });
+        */
 
         // --- BOTÓN USUARIO ---
         const userBtn = this.add.text(124, 487, 'Editar Usuario', {
@@ -68,16 +94,12 @@ export class MenuScene extends Phaser.Scene {
         .on('pointerover', () => userBtn.setColor('#553922'))
         .on('pointerout', () => userBtn.setColor('#5eb232'))
         .on('pointerdown', () => {
-            
             userBtn.disableInteractive();
-
-            // TWEEN: Animamos el oscurecimiento suavemente
             this.tweens.add({
                 targets: overlay,
-                alpha: 0.6, // Se oscurece al 60% (se sigue viendo el fondo)
-                duration: 500, // Duración del fundido (0.5 segundos)
+                alpha: 0.6,
+                duration: 500,
                 onComplete: () => {
-                    // Una vez oscuro, pausamos y lanzamos
                     this.scene.pause();
                     this.scene.launch('UserScene');
                 }
@@ -94,16 +116,12 @@ export class MenuScene extends Phaser.Scene {
         .on('pointerover', () => creditBtn.setColor('#553922'))
         .on('pointerout', () => creditBtn.setColor('#5eb232'))
         .on('pointerdown', () => {
-            
             creditBtn.disableInteractive();
-
-            // TWEEN: Animamos el oscurecimiento suavemente
             this.tweens.add({
                 targets: overlay,
-                alpha: 0.6, // Se oscurece al 60% (se sigue viendo el fondo)
-                duration: 500, // Duración del fundido (0.5 segundos)
+                alpha: 0.6,
+                duration: 500,
                 onComplete: () => {
-                    // Una vez oscuro, pausamos y lanzamos
                     this.scene.pause();
                     this.scene.launch('CreditScene');
                 }
@@ -112,29 +130,35 @@ export class MenuScene extends Phaser.Scene {
 
         // --- EVENTO RESUME ---
         this.events.on('resume', () => {
-            // Quitamos el oscurecimiento suavemente
             this.tweens.add({
                 targets: overlay,
-                alpha: 0, // Vuelve a ser invisible
+                alpha: 0,
                 duration: 300,
                 onComplete: () => {
-                    // Reactivamos el botón al terminar la animación
                     creditBtn.setInteractive();
                     creditBtn.setColor('#5eb232');
+                    
                     userBtn.setInteractive();
                     userBtn.setColor('#5eb232');
+                    
+                    // --- BOTÓN CONTROLES ---
+                    // Descomentar esto cuando se active el botón de controles
+                    /*
+                    if (controlsBtn) {
+                        controlsBtn.setInteractive();
+                        controlsBtn.setColor('#5eb232');
+                    }
+                    */
                 }
             });
         });
 
+        // --- GESTIÓN DE AUDIO ---
         let musicaAnterior = this.sound.get('musicaBatalla');
         if (musicaAnterior) {
             musicaAnterior.stop();
             musicaAnterior.destroy();
-            this.musica = this.sound.add('musicaFondo', {
-                loop: true,
-                volume: 0.5
-            });
+            this.musica = this.sound.add('musicaFondo', { loop: true, volume: 0.5 });
             this.musica.play();
         }
 
@@ -142,42 +166,50 @@ export class MenuScene extends Phaser.Scene {
         if (musicaAnterior) {
             musicaAnterior.stop();
             musicaAnterior.destroy();
-            this.musica = this.sound.add('musicaFondo', {
-                loop: true,
-                volume: 0.5
-            });
+            this.musica = this.sound.add('musicaFondo', { loop: true, volume: 0.5 });
             this.musica.play();
         }
 
-        //////ESTO ES NUEVO//////////////
-        // Indicador de conexión al servidor
+        // --- GESTIÓN DE CONEXIÓN ---
         this.connectionText = this.add.text(127, 20, 'Comprobando servidor...', {
             fontSize: '14px',
             fontFamily: 'Lemon',
-            color: '#ffc400ff'
+            color: '#ffa200ff'
         }).setOrigin(0.5);
 
-        // Listener para cambios de conexión ESTO ES DE CLASE NUEVO
         this.connectionListener = (data) => {
             this.updateConnectionDisplay(data);
         };
         connectionManager.addListener(this.connectionListener);
+
+        const status = connectionManager.getStatus();
+
+        const datosParaMostrar = {
+            connected: status.isConnected,
+            count: status.connectedCount
+        };
+
+        this.updateConnectionDisplay(datosParaMostrar);
     }
 
-    // ESTO ES NUEVO DE CLASE ////////////////////////////////////////////////////////////
     updateConnectionDisplay(data) {
-        // Solo actualizar si el texto existe (la escena está creada)
-        if (!this.connectionText || !this.scene || !this.scene.isActive('MenuScene')) {
+        // Quite la comprobación de ".isActive", porque a veces falla 
+        // justo en el milisegundo en que se crea la escena.
+        
+        // Si el texto no existe (la escena se cerró), no hacemos nada.
+        if (!this.connectionText) {
             return;
         }
+
+        console.log('Actualizando conexión:', data); // Chivato para la consola
 
         try {
             if (data.connected) {
                 this.connectionText.setText(`${data.count} usuario(s) conectado(s)`);
-                this.connectionText.setColor('#5eb232');
+                this.connectionText.setColor('#5eb232'); // Verde
             } else {
                 this.connectionText.setText('Servidor desconectado');
-                this.connectionText.setColor('#ff0000');
+                this.connectionText.setColor('#ff0000'); // Rojo
             }
         } catch (error) {
             console.error('[MenuScene] Error updating connection display:', error);
@@ -185,7 +217,6 @@ export class MenuScene extends Phaser.Scene {
     }
 
     shutdown() {
-        // Remover el listener
         if (this.connectionListener) {
             connectionManager.removeListener(this.connectionListener);
         }
