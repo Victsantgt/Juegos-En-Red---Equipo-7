@@ -31,7 +31,8 @@ El objetivo es **disparar a la parte trasera de la carroza enemiga**. El primer 
 El vagón avanza automáticamente. Los jugadores controlan:
 
 * **Disparo:** Lanzar proyectiles en línea recta hacia el enemigo. Cuenta con un tiempo de recarga.
-* **Giro en desvíos:** Tomar decisiones rápidas en las intersecciones para obtener ventaja ofensiva o defensiva.
+* **Parón en desviós:** Cuando el jugador llega a las intersecciones que pueden girar, se queda parado antes de tomar la decisión de la nueva direccion.
+* **Giro en desvíos:** Deberá tomar decisiones rápidas en las intersecciones para obtener ventaja ofensiva o defensiva.
 * **Protección de diana:** Posicionar estratégicamente el vagón para dificultar la línea de tiro del rival.
 * **Power-ups:** Habilidades que se activan automáticamente al recogerlas (Turbo, Curación, Cambio de Sentido).
 
