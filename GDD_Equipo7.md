@@ -174,7 +174,7 @@ El juego utilizará un estilo visual de **Pixel Art Moderno**.
 
 ### Assets Finales
 
-Los assets han sido todos finalizados, con un total de cuatro diferentes labubus con animaciones en las cuatro direcciones. El jugador podrá elegir el labubu que más le guste para su elección en el online.
+Los assets han sido todos finalizados, con un total de cuatro diferentes labubus con animaciones en las cuatro direcciones. El jugador podrá elegir el labubu que más le guste en el online.
 
 
 <img width="680" height="220" alt="image" src="https://github.com/user-attachments/assets/a96ea6e5-8868-453e-8706-b4e9891ce2e9" />
