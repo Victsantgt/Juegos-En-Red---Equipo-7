@@ -12,6 +12,7 @@ export class MenuScene extends Phaser.Scene {
     }
 
     create() {
+
         // --- CONFIGURACIÓN INICIAL ---
         this.cameras.main.setBackgroundColor('#ffffff');
         this.cameras.main.fadeIn(1000, 255, 255, 255);
@@ -20,11 +21,15 @@ export class MenuScene extends Phaser.Scene {
 
         this.events.removeAllListeners('resume');
 
+        //estado anterior para comparar con el nuevo
+        this.prevConnected = null;
+        this.prevCount = null;
+
         // --- CAPA DE OSCURECIMIENTO (OVERLAY) ---
         const overlay = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x000000)
             .setOrigin(0, 0)
             .setAlpha(0)
-            .setDepth(10); 
+            .setDepth(10);
 
         // --- BOTÓN LOCAL ---
         const localBtn = this.add.text(610, 163, 'Modo Local', {
@@ -32,31 +37,31 @@ export class MenuScene extends Phaser.Scene {
             fontSize: '24px',
             color: '#5eb232',
         }).setOrigin(0.7, 0.7)
-        .setInteractive({ useHandCursor: true })
-        .on('pointerover', () => localBtn.setColor('#553922'))
-        .on('pointerout', () => localBtn.setColor('#5eb232'))
-        .on('pointerdown', () => {
-            localBtn.disableInteractive();
-            this.cameras.main.fadeOut(1000, 255, 255, 255);
-            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-                this.scene.start('GameScene');
+            .setInteractive({ useHandCursor: true })
+            .on('pointerover', () => localBtn.setColor('#553922'))
+            .on('pointerout', () => localBtn.setColor('#5eb232'))
+            .on('pointerdown', () => {
+                localBtn.disableInteractive();
+                this.cameras.main.fadeOut(1000, 255, 255, 255);
+                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                    this.scene.start('GameScene');
+                });
             });
-        });
 
-        
+
         // --- BOTÓN ONLINE (ACTIVO) ---
         const onlineBtn = this.add.text(600, 255, 'Modo Online', {
             fontFamily: 'Lemon',
             fontSize: '24px',
             color: '#5eb232',
         }).setOrigin(0.6, 0.6)
-        .setInteractive({useHandCursor: true})
-        .on('pointerover', () => onlineBtn.setColor('#553922'))
-        .on('pointerout', () => onlineBtn.setColor('#5eb232'))
-        .on('pointerdown', () => {
-            this.scene.start('LobbyScene');
-        });
-        
+            .setInteractive({ useHandCursor: true })
+            .on('pointerover', () => onlineBtn.setColor('#553922'))
+            .on('pointerout', () => onlineBtn.setColor('#5eb232'))
+            .on('pointerdown', () => {
+                this.scene.start('LobbyScene');
+            });
+
         /*
         // --- BOTÓN CONTROLES ---
         // Descomentar esto y comentar el de arriba cuando se suba a alguna plataforma
@@ -90,43 +95,43 @@ export class MenuScene extends Phaser.Scene {
             fontSize: '20px',
             color: '#5eb232',
         }).setOrigin(0.7, 0.7)
-        .setInteractive({ useHandCursor: true })
-        .on('pointerover', () => userBtn.setColor('#553922'))
-        .on('pointerout', () => userBtn.setColor('#5eb232'))
-        .on('pointerdown', () => {
-            userBtn.disableInteractive();
-            this.tweens.add({
-                targets: overlay,
-                alpha: 0.6,
-                duration: 500,
-                onComplete: () => {
-                    this.scene.pause();
-                    this.scene.launch('UserScene');
-                }
+            .setInteractive({ useHandCursor: true })
+            .on('pointerover', () => userBtn.setColor('#553922'))
+            .on('pointerout', () => userBtn.setColor('#5eb232'))
+            .on('pointerdown', () => {
+                userBtn.disableInteractive();
+                this.tweens.add({
+                    targets: overlay,
+                    alpha: 0.6,
+                    duration: 500,
+                    onComplete: () => {
+                        this.scene.pause();
+                        this.scene.launch('UserScene');
+                    }
+                });
             });
-        });
-        
+
         // --- BOTÓN CRÉDITOS ---
         const creditBtn = this.add.text(110, 545, 'Créditos', {
             fontFamily: 'Lemon',
             fontSize: '24px',
             color: '#5eb232',
         }).setOrigin(0.7, 0.7)
-        .setInteractive({ useHandCursor: true })
-        .on('pointerover', () => creditBtn.setColor('#553922'))
-        .on('pointerout', () => creditBtn.setColor('#5eb232'))
-        .on('pointerdown', () => {
-            creditBtn.disableInteractive();
-            this.tweens.add({
-                targets: overlay,
-                alpha: 0.6,
-                duration: 500,
-                onComplete: () => {
-                    this.scene.pause();
-                    this.scene.launch('CreditScene');
-                }
+            .setInteractive({ useHandCursor: true })
+            .on('pointerover', () => creditBtn.setColor('#553922'))
+            .on('pointerout', () => creditBtn.setColor('#5eb232'))
+            .on('pointerdown', () => {
+                creditBtn.disableInteractive();
+                this.tweens.add({
+                    targets: overlay,
+                    alpha: 0.6,
+                    duration: 500,
+                    onComplete: () => {
+                        this.scene.pause();
+                        this.scene.launch('CreditScene');
+                    }
+                });
             });
-        });
 
         // --- EVENTO RESUME ---
         this.events.on('resume', () => {
@@ -137,10 +142,10 @@ export class MenuScene extends Phaser.Scene {
                 onComplete: () => {
                     creditBtn.setInteractive();
                     creditBtn.setColor('#5eb232');
-                    
+
                     userBtn.setInteractive();
                     userBtn.setColor('#5eb232');
-                    
+
                     // --- BOTÓN CONTROLES ---
                     // Descomentar esto cuando se active el botón de controles
                     /*
@@ -193,16 +198,42 @@ export class MenuScene extends Phaser.Scene {
     }
 
     updateConnectionDisplay(data) {
+
+
         // Quite la comprobación de ".isActive", porque a veces falla 
         // justo en el milisegundo en que se crea la escena.
-        
+
         // Si el texto no existe (la escena se cerró), no hacemos nada.
         if (!this.connectionText) {
             return;
         }
 
-        console.log('Actualizando conexión:', data); // Chivato para la consola
+        //DETECCIÓN DE CONEXIÓN/DESCONEXIÓN
 
+        // Alguien se conecta
+        if (data.count > this.prevCount) {
+            console.log('Jugador se ha conectado');
+        }
+
+        // Alguien se desconecta
+        if (data.count < this.prevCount) {
+            console.log('Jugador se ha desconectado');
+        }
+
+
+        // Servidor se desconecta
+        if (this.prevConnected && !data.connected) {
+            console.log('Servidor desconectado');
+        }
+
+        // Servidor se conecta
+        if (!this.prevConnected && data.connected) {
+            console.log('Servidor conectado');
+        }
+
+        console.log(data.count);
+
+        console.log('Actualizando conexión:', data);
         try {
             if (data.connected) {
                 this.connectionText.setText(`${data.count} usuario(s) conectado(s)`);

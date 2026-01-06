@@ -7,7 +7,7 @@
 //PARA TRABAJAR MOVIMIENTO EN LOCAL
 //poner en false para que el texto de usuarios conectados furule 
 //const LOCAL_MODE = false;
-const LOCAL_MODE = true;
+const LOCAL_MODE = false;
 export class ConnectionManager {
   constructor() {
     this.connectedCount = 0;
@@ -108,52 +108,53 @@ export class ConnectionManager {
     }
   }
 
-  /**
-   * Notificar a todos los listeners
-   * @param {Object} data - Datos del estado de conexión
-   */
-  notifyListeners(data) {
-    this.listeners.forEach(listener => listener(data));
+
+/**
+ * Notificar a todos los listeners
+ * @param {Object} data - Datos del estado de conexión
+ */
+notifyListeners(data) {
+  this.listeners.forEach(listener => listener(data));
+}
+
+/**
+ * Obtener el estado actual de conexión
+ * @returns {Object}
+ */
+getStatus() {
+  return {
+    isConnected: this.isConnected,
+    connectedCount: this.connectedCount,
+    lastCheckTime: this.lastCheckTime
+  };
+}
+
+/**
+ * Iniciar el polling automático de conexión
+ */
+startPolling() {
+  if (this.intervalId) {
+    return; // Ya está corriendo
   }
 
-  /**
-   * Obtener el estado actual de conexión
-   * @returns {Object}
-   */
-  getStatus() {
-    return {
-      isConnected: this.isConnected,
-      connectedCount: this.connectedCount,
-      lastCheckTime: this.lastCheckTime
-    };
-  }
+  // Comprobar inmediatamente
+  this.checkConnection();
 
-  /**
-   * Iniciar el polling automático de conexión
-   */
-  startPolling() {
-    if (this.intervalId) {
-      return; // Ya está corriendo
-    }
-
-    // Comprobar inmediatamente
+  // Luego comprobar cada X segundos
+  this.intervalId = setInterval(() => {
     this.checkConnection();
+  }, this.checkInterval);
+}
 
-    // Luego comprobar cada X segundos
-    this.intervalId = setInterval(() => {
-      this.checkConnection();
-    }, this.checkInterval);
+/**
+ * Detener el polling automático
+ */
+stopPolling() {
+  if (this.intervalId) {
+    clearInterval(this.intervalId);
+    this.intervalId = null;
   }
-
-  /**
-   * Detener el polling automático
-   */
-  stopPolling() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-    }
-  }
+}
 }
 
 // Crear instancia singleton
