@@ -90,7 +90,7 @@ export class GameScene extends Phaser.Scene {
             frameWidth: 68,
             frameHeight: 88
         });
-        
+
         //labubu 3
 
         this.load.spritesheet('labubu3', 'assets/purpleanim/down.png', {
@@ -427,6 +427,49 @@ export class GameScene extends Phaser.Scene {
                     }
                 });
                 this.sfxcolision.play();
+            } else if (this.players.get('player1').isWaitingAtNode) {
+                const player2 = this.players.get('player2');
+
+                switch (player2.currentDirection) {
+                    case 'down':
+                        player2.currentDirection = 'up';
+                        break;
+                    case 'up':
+                        player2.currentDirection = 'down';
+                        break;
+                    case 'left':
+                        player2.currentDirection = 'right';
+                        break;
+                    case 'right':
+                        player2.currentDirection = 'left';
+                        break;
+                }
+                this.players.get('player2').lastNode = null;
+                player2.turnCooldown = 10;
+                player2.alternateTurnmode();
+                this.sfxcolision.play();
+                
+            } else if (this.players.get('player2').isWaitingAtNode) {
+                const player1 = this.players.get('player1');
+
+                switch (player1.currentDirection) {
+                    case 'down':
+                        player1.currentDirection = 'up';
+                        break;
+                    case 'up':
+                        player1.currentDirection = 'down';
+                        break;
+                    case 'left':
+                        player1.currentDirection = 'right';
+                        break;
+                    case 'right':
+                        player1.currentDirection = 'left';
+                        break;
+                }
+                this.players.get('player1').lastNode = null;
+                player1.turnCooldown = 10;
+                player1.alternateTurnmode();
+                this.sfxcolision.play();
             }
         });
 
@@ -458,42 +501,42 @@ export class GameScene extends Phaser.Scene {
 
     setUpPlayers() {
 
-        console.log(parseInt(localStorage.getItem("skin"),10));
+        console.log(parseInt(localStorage.getItem("skin"), 10));
 
-        
-        
+
+
         let jugadorUno = new Labubu(this, 'player1', 96, 220, 'labubu1-down');
         let jugadorDos = new Labubu(this, 'player2', 608, 220, 'labubu2-down');
-        
-        this.jugadorTexto = this.add.text(jugadorUno.sprite.x, jugadorUno.sprite.y - jugadorUno.sprite.height/1.65, ' '+localStorage.getItem("username")+' ', {
+
+        this.jugadorTexto = this.add.text(jugadorUno.sprite.x, jugadorUno.sprite.y - jugadorUno.sprite.height / 1.65, ' ' + localStorage.getItem("username") + ' ', {
             fontSize: '14px',
             fontFamily: 'Lemon',
             backgroundColor: '#2525257b',
             color: '#ffffff'
         }).setOrigin();
-        
-        switch(parseInt(localStorage.getItem("skin"),10)){
+
+        switch (parseInt(localStorage.getItem("skin"), 10)) {
             case 0:
-                jugadorUno.animKey='labubu1-down';
-                jugadorDos.animKey='labubu2-down';
-            break;
-            
+                jugadorUno.animKey = 'labubu1-down';
+                jugadorDos.animKey = 'labubu2-down';
+                break;
+
             case 1:
-                jugadorUno.animKey='labubu2-down';
-                jugadorDos.animKey='labubu1-down';
-            break;
-            
+                jugadorUno.animKey = 'labubu2-down';
+                jugadorDos.animKey = 'labubu1-down';
+                break;
+
             case 2:
-                jugadorUno.animKey='labubu3-down';
-                jugadorDos.animKey='labubu4-down';
-            break;
-            
+                jugadorUno.animKey = 'labubu3-down';
+                jugadorDos.animKey = 'labubu4-down';
+                break;
+
             case 3:
-                jugadorUno.animKey='labubu4-down';
-                jugadorDos.animKey='labubu3-down';
-            break;
+                jugadorUno.animKey = 'labubu4-down';
+                jugadorDos.animKey = 'labubu3-down';
+                break;
         }
-        
+
 
         //Empiezan con 1 vida cada uno para testear (luego lo cambio)
         jugadorUno.score = 3;
@@ -583,7 +626,7 @@ export class GameScene extends Phaser.Scene {
         console.debug(this.players.get('player2').playerInstance)
 
         let speedmult = 1.4;
-        player.lastNode = null; 
+        player.lastNode = null;
         this.sfxpowerup = this.sound.add('powerupSonido', {
             loop: false,
             volume: 1
@@ -620,9 +663,9 @@ export class GameScene extends Phaser.Scene {
                     player.playerInstance.alternateTurnmode();
                     break;
             }*/
-                player.playerInstance.score--;
-                this.scoreUpdate();
-        
+            player.playerInstance.score--;
+            this.scoreUpdate();
+
 
         } else {
             player.playerInstance.score++;
@@ -751,7 +794,7 @@ export class GameScene extends Phaser.Scene {
             }
         });
 
-        
+
 
         //LABUBUS
         this.players.forEach(labubu => {
@@ -785,7 +828,7 @@ export class GameScene extends Phaser.Scene {
             // USERNAME
 
             this.jugadorTexto.x = this.players.get('player1').sprite.x;
-            this.jugadorTexto.y = this.players.get('player1').sprite.y - this.players.get('player1').sprite.height/1.65;
+            this.jugadorTexto.y = this.players.get('player1').sprite.y - this.players.get('player1').sprite.height / 1.65;
 
             //INPUT
             const mapping = this.inputMappings.find(m => m.playerId === labubu.id);
@@ -943,40 +986,40 @@ export class GameScene extends Phaser.Scene {
             { direction: "left", turnMode: "reverse" },
             { direction: "right", turnMode: "normal" },
             { direction: "down", turnMode: "normal" }], 0));
-       
+
         //nodo central derecho
-        this.nodes.add(new RailNode(this, 288.5,268.5, [
+        this.nodes.add(new RailNode(this, 288.5, 268.5, [
             { direction: "up", turnMode: "reverse" },
             { direction: "right", turnMode: "normal" },
             { direction: "left", turnMode: "normal" }], 1));
-        
+
         //nodo central izquierdo
-        this.nodes.add(new RailNode(this,  416.5, 268.5, [
+        this.nodes.add(new RailNode(this, 416.5, 268.5, [
             { direction: "down", turnMode: "reverse" },
             { direction: "left", turnMode: "reverse" },
             { direction: "right", turnMode: "normal" },
-            ], 1));
+        ], 1));
         //nodo izquierdo
-         this.nodes.add(new RailNode(this,  608.5, 268.5, [
+        this.nodes.add(new RailNode(this, 608.5, 268.5, [
             { direction: "up", turnMode: "reverse" },
             { direction: "left", turnMode: "reverse" },
             { direction: "down", turnMode: "normal" },
-            ], 2));
+        ], 2));
         //nodo derecho
-         this.nodes.add(new RailNode(this,  98.5, 268.5, [
+        this.nodes.add(new RailNode(this, 98.5, 268.5, [
             { direction: "up", turnMode: "normal" },
             { direction: "right", turnMode: "normal" },
             { direction: "down", turnMode: "reverse" },
-            ], 2));
+        ], 2));
 
 
         //nodo abajo del todo
-         this.nodes.add(new RailNode(this,  416.5, 460.5, [
+        this.nodes.add(new RailNode(this, 416.5, 460.5, [
             { direction: "up", turnMode: "reverse" },
             { direction: "left", turnMode: "normal" },
             { direction: "right", turnMode: "reverse" },
-            ], 3));
-        
+        ], 3));
+
     }
     snapLabubuToNode(labubu, node) {
 
