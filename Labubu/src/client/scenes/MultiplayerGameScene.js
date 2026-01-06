@@ -605,29 +605,8 @@ export class MultiplayerGameScene extends Phaser.Scene {
             });
 
         } else if (powerup.poweruptype == 'Turn') {
-            switch (player.playerInstance.currentDirection) {
-                case 'down':
-                    player.playerInstance.currentDirection = 'up';
-                    player.playerInstance.turnCooldown = 50;
-                    player.playerInstance.alternateTurnmode();
-                    break;
-                case 'up':
-                    player.playerInstance.currentDirection = 'down';
-                    player.playerInstance.turnCooldown = 50;
-                    player.playerInstance.alternateTurnmode();
-                    break;
-                case 'left':
-                    player.playerInstance.currentDirection = 'right';
-                    player.playerInstance.turnCooldown = 50;
-                    player.playerInstance.alternateTurnmode();
-                    break;
-                case 'right':
-                    player.playerInstance.currentDirection = 'left';
-                    player.playerInstance.turnCooldown = 50;
-                    player.playerInstance.alternateTurnmode();
-                    break;
-            }
-
+            player.playerInstance.score--;
+            this.scoreUpdate();
         } else {
             player.playerInstance.score++;
             this.scoreUpdate();

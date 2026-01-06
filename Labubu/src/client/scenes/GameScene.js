@@ -47,7 +47,6 @@ export class GameScene extends Phaser.Scene {
         this.load.audio('choque', 'assets/audio/choque.mp3');
 
         //SPRITES LABUBUS
-
         //labubu
 
         this.load.spritesheet('labubu', 'assets/yellow/down.png', {
