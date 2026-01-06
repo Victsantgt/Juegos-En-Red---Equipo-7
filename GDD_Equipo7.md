@@ -151,9 +151,6 @@ La visión del juego se basa en una **cámara cenital**, ubicada directamente po
 
 El escenario de juego es un espacio delimitado por bordes diegéticos (muros). El área jugable se compone de un camino de raíles que conecta seis arbustos, permitiendo el movimiento dentro de estos límites. El jugador siempre tendrá una visión completa del espacio de juego.
 
--imagen escenario-
-Diseño del escenario
-
 <img width="742" height="624" alt="image" src="https://github.com/user-attachments/assets/333899b9-bf66-499a-b335-00641c94e695" />
 Escenario final
 
