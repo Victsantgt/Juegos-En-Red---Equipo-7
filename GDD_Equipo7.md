@@ -94,8 +94,10 @@ Cada jugador controla un vagón que avanza de forma automática por raíles en u
       * Disparar proyectiles en trayectoria recta hacia el vagón contrario.
       * Existe un tiempo de recarga automático entre disparos.
       * Si el jugador golpea a un oponente, el personaje celebra y no puede disparar durante un breve tiempo.
+  * **Parón en desvíos:**
+      * El jugador se queda parado en las intersecciones antes de cambiar la dirección.
   * **Giro en desvíos:**
-      * Decidir el momento exacto para cambiar de carril en los cruces de vías.
+      * El jugador debe de decidir a qué dirección cambiar lo suficientemente rápido para que no le pille el jugador contrincante.
       * Esta acción genera oportunidades de ataque o defensa.
   * **Protección de diana:**
       * Posicionar el vagón estratégicamente en el raíl para dificultar la línea de tiro del rival.
@@ -107,9 +109,9 @@ Habilidades especiales que se activarán automáticamente al recogerlas y darán
   * **Turbo:** Un pequeño acelerón.
   * **Curación:** Restaura una vida al jugador.
   * **Ítem Falso:** Un obstáculo que paraliza al enemigo temporalmente.
-  * **Cambio de sentido:** Invierte la trayectoria del jugador.
+  * **Chocolate malévolo** El jugador contrincante pierde una vida.
 
-La combinación de todas estas mecánicas fomenta la precisión, la anticipación de movimientos y la toma de decisiones rápidas.
+La combinación de todas estas mecánicas fomenta la precisión, la anticipación de movimientos y la toma de decisiones.
 
 -----
 
@@ -117,7 +119,7 @@ La combinación de todas estas mecánicas fomenta la precisión, la anticipació
 
 | Componente | Movimiento | Reglas de Velocidad |
 | :--- | :--- | :--- |
-| **Vagones (Jugadores)** | Avanzan de manera automática con velocidad constante, controlando solo los cambios de dirección en las intersecciones (salvo con power-ups). | Velocidad base es la más baja. |
+| **Vagones (Jugadores)** | Avanzan de manera automática con velocidad constante, controlando solo los cambios de dirección en las intersecciones | Velocidad base es la más baja. |
 | **Colisiones** | Si los vagones se chocan entre ellos, sus trayectorias se invierten. | N/A |
 | **Balas** | Se disparan en la misma dirección de avance del jugador. | Velocidad constante y **mayor** que la velocidad máxima de un jugador. |
 | **Power-up Turbo** | Aumenta la velocidad del vagón temporalmente. | Velocidad intermedia entre la base y las balas. |
@@ -152,6 +154,9 @@ El escenario de juego es un espacio delimitado por bordes diegéticos (muros). E
 -imagen escenario-
 Diseño del escenario
 
+<img width="742" height="624" alt="image" src="https://github.com/user-attachments/assets/333899b9-bf66-499a-b335-00641c94e695" />
+Escenario final
+
 -----
 
 ## 10\. Diagrama de Flujo
@@ -170,15 +175,11 @@ El juego utilizará un estilo visual de **Pixel Art Moderno**.
   * **Colores:** Sin limitación de colores a X bits.
   * **Inspiración:** Se tomaron como inspiración juegos como *Stardew Valley* o *Moonlighter*.
 
-### Assets Requeridos
+### Assets Finales
 
-Se deben crear varios sprites:
-
-  * Sprites para cada personaje (al menos uno por dirección).
-  * Animación de disparo y de celebración.
-  * Sprite para la bala/bola de cañón.
-  * Sprites para menús y elementos del escenario.
-
+Los assets han sido todos finalizados, con un total de cuatro diferentes labubus con animaciones en las cuatro direcciones. El jugador podrá elegir el labubu que más le guste para su elección en el online.
+<img width="680" height="220" alt="image" src="https://github.com/user-attachments/assets/a96ea6e5-8868-453e-8706-b4e9891ce2e9" />
+Labubus del juego
 -----
 
 ## 12\. Bocetos
@@ -214,6 +215,11 @@ Logotipo de la empresa “Todo al 7”
 <img width="891" height="633" alt="image" src="https://github.com/user-attachments/assets/a359ecaa-8739-4688-8c61-2cc086e0b46c" />
 
 Boceto del logo del juego
+
+Arte de menú final
+
+<img width="713" height="595" alt="image" src="https://github.com/user-attachments/assets/0fe95720-aa43-496f-8a3d-3ce07aeec64c" />
+
 
 -----
 
@@ -255,7 +261,19 @@ La estrategia principal se centrará en el uso de redes sociales:
 
 -----
 
-## 17\. Referencias
+## 17\. Implementación API REST
+
+*VILTOL
+
+-----
+
+## 18\. Implementación WebSockets
+
+*VILTOL
+
+-----
+
+## 19\. Referencias
 
   * **Wii Party | Wii | Juegos | Nintendo ES:** [https://www.nintendo.com/es-es/Juegos/Wii/Wii-Party-283938.html?srsltid=AfmBOooU\_-cgLeeGv4ogTXwVT9d2OxXn\_FeaTaGkl1MPt5KJbCa3poBD](https://www.nintendo.com/es-es/Juegos/Wii/Wii-Party-283938.html?srsltid=AfmBOooU_-cgLeeGv4ogTXwVT9d2OxXn_FeaTaGkl1MPt5KJbCa3poBD)
   * **Tema Principal de Wii Party:** [https://www.youtube.com/watch?v=fzepGtfHL9A\&list=RDfzepGtfHL9A\&start\_radio=1\&pp=ygUUd2lpIHBhcnR5IG1haW4gdGhlbWWgBwE%3D](https://www.youtube.com/watch?v=fzepGtfHL9A&list=RDfzepGtfHL9A&start_radio=1&pp=ygUUd2lpIHBhcnR5IG1haW4gdGhlbWWgBwE%3D)
