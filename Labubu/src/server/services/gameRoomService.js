@@ -128,6 +128,25 @@ export function createGameRoomService() {
     }
   }
 
+  function updateSkin(ws,skin){
+    
+    const roomId = ws.roomId;
+    if (!roomId) return;
+
+    const room = rooms.get(roomId);
+    if (!room || !room.active) return;
+
+    // Relay to the other player
+    const opponent = room.player1.ws === ws ? room.player2.ws : room.player1.ws;
+
+    if (opponent.readyState === 1) { // WebSocket.OPEN
+      opponent.send(JSON.stringify({
+        type: 'updateSkin',
+        skin
+      }));
+    }
+  }
+
   /**
    * Handle goal event from a player
    * @param {WebSocket} ws - Player's WebSocket
@@ -258,6 +277,7 @@ export function createGameRoomService() {
     shoot,
     handleGoal,
     handleDisconnect,
-    getActiveRoomCount
+    getActiveRoomCount,
+    updateSkin
   };
 }

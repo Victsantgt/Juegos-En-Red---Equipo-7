@@ -47,7 +47,8 @@ export class Labubu {
 
         this.currentDirection = 'down';     // dirección inicial
         this.turnMode = "normal";
-        
+
+        //this.sprite.play(this.animKey);
     }
 
     updateCenterCollider() {

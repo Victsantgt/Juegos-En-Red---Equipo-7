@@ -148,6 +148,10 @@ wss.on('connection', (ws) => {
           gameRoomService.handleGoal(ws, data.side);
           break;
 
+        case 'updateSkin':
+          gameRoomService.updateSkin(ws,data.skin);
+          break;
+
         default:
           console.log('Mensaje desconocido:', data.type);
       }

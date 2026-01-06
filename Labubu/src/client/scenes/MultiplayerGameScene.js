@@ -163,6 +163,12 @@ export class MultiplayerGameScene extends Phaser.Scene {
     }
 
     create() {
+
+        this.sendMessage({
+            type: 'updateSkin',
+            skin: parseInt(localStorage.getItem("skin"), 10)
+        });
+        
         // FADE IN
         this.cameras.main.fadeIn(1000, 255, 255, 255);
 
@@ -378,12 +384,11 @@ export class MultiplayerGameScene extends Phaser.Scene {
         //grupo para los powerups creados en spawnPowerup()
         this.powerups = this.physics.add.group();
         
-        this.setupWebSocketListeners();
+        
         this.cursors = this.input.keyboard.createCursorKeys();
 
         // BORRAR ESTO MÁS TARDE QUE ES PARA CERRAR EL SOCKET MANUALMENTE
         this.input.keyboard.on('keydown-K', () => {
-            console.log('victor no te mates todo irá bien');
             this.ws.close();
         });
 
@@ -474,6 +479,9 @@ export class MultiplayerGameScene extends Phaser.Scene {
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        this.setupWebSocketListeners();
+
 
         //////////////NUEVO///////////////////////////////////////////////////////////////////////
         this.connectionListener = (data) => {
@@ -778,6 +786,26 @@ export class MultiplayerGameScene extends Phaser.Scene {
                 this.handleDisconnection();
                 break;
 
+            case 'updateSkin':
+                switch(data.skin){
+                    case 0:
+                        this.remoteLabubu.sprite.play('labubu1-down');
+                        break;
+
+                    case 1:
+                        this.remoteLabubu.sprite.play('labubu2-down');
+                        break;
+                        
+                    case 2:
+                        this.remoteLabubu.sprite.play('labubu3-down');
+                        break;
+
+                    case 3:
+                        this.remoteLabubu.sprite.play('labubu4-down');
+                        break;
+                }
+                break;
+
             default:
                 console.log('Unknown message type:', data.type);
         }
@@ -888,11 +916,25 @@ export class MultiplayerGameScene extends Phaser.Scene {
             this.localLabubu.cooldown = 300;
         }
 
-        /*
+        
  
         //ANIMACIONES LABUBU LOCAL
-        let anim = this.localLabubu.sprite.anims.currentAnim?.key;
 
+        let newAnimL = this.localLabubu.animKey;
+        let newAnimR = this.remoteLabubu.animKey;
+        if (newAnimL && this.localLabubu.currentAnim !== newAnimL) {
+                this.localLabubu.sprite.play(newAnimL, true);
+                this.localLabubu.currentAnim = newAnimL;
+            }
+
+        if (newAnimR && this.remoteLabubu.currentAnim !== newAnimR) {
+                this.remoteLabubu.sprite.play(newAnimR, true);
+                this.remoteLabubu.currentAnim = newAnimR;
+            }
+
+        let anim = this.localLabubu.sprite.anims.currentAnim?.key;
+        if (!anim) return;
+        
         if (
             (anim.endsWith('down') && this.localLabubu.currentDirection !== 'down') ||
             (anim.endsWith('left') && this.localLabubu.currentDirection !== 'left') ||
@@ -921,7 +963,8 @@ export class MultiplayerGameScene extends Phaser.Scene {
         }
         //ANIMACIONES LABUBU REMOTO
         anim = this.remoteLabubu.sprite.anims.currentAnim?.key;
-
+        if (!anim) return;
+        
         if (
             (anim.endsWith('down') && this.remoteLabubu.currentDirection !== 'down') ||
             (anim.endsWith('left') && this.remoteLabubu.currentDirection !== 'left') ||
@@ -948,7 +991,7 @@ export class MultiplayerGameScene extends Phaser.Scene {
             if (this.remoteLabubu.currentDirection === 'down' && anim.startsWith('labubu4-')) this.remoteLabubu.sprite.play('labubu4-down');
             if (this.remoteLabubu.currentDirection === 'up' && anim.startsWith('labubu4-')) this.remoteLabubu.sprite.play('labubu4-up');
         }
-        */
+        
 
 
         // REDUCIR COOLDOWN
