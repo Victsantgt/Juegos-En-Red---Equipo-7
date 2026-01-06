@@ -7,8 +7,6 @@ import { connectionManager } from '../services/ConnectionManager';
  */
 export class ConnectionLostScene extends Phaser.Scene {
 
-    
-
     constructor() {
         super('ConnectionLostScene');
         this.reconnectCheckInterval = null;
@@ -20,37 +18,79 @@ export class ConnectionLostScene extends Phaser.Scene {
     }
 
     create() {
-        // Fondo semi-transparente
-        this.add.rectangle(400, 300, 800, 600, 0x000000, 0.8);
+        // --- ESTILOS Y MEDIDAS ---
+        const { width, height } = this.scale;
+        const centerX = width / 2;
+        const centerY = height / 2;
 
-        // Título
-        this.add.text(400, 200, 'CONEXIÓN PERDIDA', {
-            fontSize: '48px',
-            color: '#ff0000',
-            fontStyle: 'bold'
+        const colors = {
+            green: 0x5eb232,      
+            darkBrown: 0x553922,  
+            red: '#8a452e',       
+            yellow: '#e6dd38',    
+            white: '#ffffff',
+            shadow: 0x000000
+        };
+
+        // 1. FONDO 
+        this.add.rectangle(0, 0, width, height, colors.shadow, 0.7).setOrigin(0);
+
+        // 2. PANEL CENTRAL (Ventana de alerta)
+        const panelWidth = 600;
+        const panelHeight = 300;
+
+        // Sombra del panel
+        this.add.graphics()
+            .fillStyle(0x000000, 0.5)
+            .fillRoundedRect(centerX - panelWidth/2 + 10, centerY - panelHeight/2 + 10, panelWidth, panelHeight, 20);
+
+        // Fondo y Borde del panel
+        const panel = this.add.graphics();
+        panel.fillStyle(colors.darkBrown, 1); 
+        panel.fillRoundedRect(centerX - panelWidth/2, centerY - panelHeight/2, panelWidth, panelHeight, 20);
+        panel.lineStyle(4, colors.green, 1); 
+        panel.strokeRoundedRect(centerX - panelWidth/2, centerY - panelHeight/2, panelWidth, panelHeight, 20);
+
+        // 3. TEXTOS (Con estilo Lemon)
+
+        // Título: CONEXIÓN PERDIDA
+        this.add.text(centerX, centerY - 60, 'CONEXIÓN PERDIDA', {
+            fontFamily: 'Lemon',
+            fontSize: '42px',
+            color: colors.red,
+            stroke: '#ffffff',
+            strokeThickness: 3,
+            shadow: { offsetX: 2, offsetY: 2, color: '#000', blur: 0, stroke: true, fill: true }
         }).setOrigin(0.5);
 
-        // Mensaje
-        this.statusText = this.add.text(400, 300, 'Intentando reconectar...', {
-            fontSize: '24px',
-            color: '#ffff00'
+        // Mensaje de estado (Amarillo)
+        this.statusText = this.add.text(centerX, centerY + 20, 'Intentando reconectar...', {
+            fontFamily: 'Lemon',
+            fontSize: '20px',
+            color: colors.yellow
         }).setOrigin(0.5);
 
-        // Contador de intentos
+        // Contador de intentos (Blanco/Gris)
         this.attemptCount = 0;
-        this.attemptText = this.add.text(400, 350, 'Intentos: 0', {
-            fontSize: '18px',
-            color: '#ffffff'
+        this.attemptText = this.add.text(centerX, centerY + 70, 'Intentos: 0', {
+            fontFamily: 'Lemon',
+            fontSize: '16px',
+            color: '#aaaaaa'
         }).setOrigin(0.5);
+
+        // --- LÓGICA ---
 
         // Indicador parpadeante
         this.dotCount = 0;
         this.time.addEvent({
-            delay: 2000,
+            delay: 500, 
             callback: () => {
                 this.dotCount = (this.dotCount + 1) % 4;
                 const dots = '.'.repeat(this.dotCount);
-                this.statusText.setText(`Intentando reconectar${dots}`);
+                // Solo actualizamos si no hemos conectado aún
+                if (this.statusText.text.includes('Intentando')) {
+                     this.statusText.setText(`Intentando reconectar${dots}`);
+                }
             },
             loop: true
         });
@@ -78,7 +118,6 @@ export class ConnectionLostScene extends Phaser.Scene {
         await connectionManager.checkConnection();
     }
     
-
     onReconnected() {
         // Limpiar interval
         if (this.reconnectCheckInterval) {
@@ -88,9 +127,10 @@ export class ConnectionLostScene extends Phaser.Scene {
         // Remover listener
         connectionManager.removeListener(this.connectionListener);
 
-        // Mensaje de éxito
+        // Mensaje de éxito (Actualizamos al Verde del estilo)
         this.statusText.setText('¡Conexión restablecida!');
-        this.statusText.setColor('#00ff00');
+        this.statusText.setColor('#5eb232'); // Verde brillante
+        this.statusText.setStroke('#ffffff', 2); // Un pequeño borde para resaltar
 
         // Volver a la escena anterior
         this.time.delayedCall(1000, () => {

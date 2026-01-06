@@ -335,8 +335,11 @@ export class MultiplayerGameScene extends Phaser.Scene {
         });
 
         // Role indicator
-        const roleText = this.playerRole === 'player1' ? 'You are Player 1 (Left)' : 'You are Player 2 (Right)';
-        this.add.text(400, 20, roleText, {
+        const roleText = this.playerRole === 'player1' ? 'Eres el Jugador 1 (Izquierda)' : 'Eres el jugador 2 (Derecha)';
+
+        // Cambiamos 400 -> centerX
+        this.add.text(352, 20, roleText, {
+            fontFamily: 'Lemon',
             fontSize: '16px',
             color: '#ffff00'
         }).setOrigin(0.5);
@@ -770,8 +773,18 @@ export class MultiplayerGameScene extends Phaser.Scene {
         this.physics.pause();
 
         this.add.text(352, 288, '¡OPONENTE DESCONECTADO!', {
+            fontFamily: 'Lemon',
             fontSize: '32px',
-            color: '#ff0000'
+            color: '#ff0000',
+            // --- SOMBRA ---
+            shadow: {
+                offsetX: 3,       // Desplazamiento horizontal
+                offsetY: 3,       // Desplazamiento vertical
+                color: '#000000', // Color de la sombra (Negro)
+                blur: 0,          // Difuminado (0 es nítido, ideal para pixel art)
+                stroke: true,     // Si la sombra se aplica al borde
+                fill: true        // Si la sombra se aplica al relleno
+            }
         }).setOrigin(0.5);
     }
 
