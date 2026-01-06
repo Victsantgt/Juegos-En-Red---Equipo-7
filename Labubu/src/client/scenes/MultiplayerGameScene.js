@@ -571,6 +571,26 @@ export class MultiplayerGameScene extends Phaser.Scene {
             this.localLabubu.turnMode = "normal";
             this.remoteLabubu.turnMode = "reverse";
         }
+
+        switch (parseInt(localStorage.getItem("skin"), 10)) {
+            case 0:
+                this.localLabubu.animKey = 'labubu1-down';
+                break;
+
+            case 1:
+                this.localLabubu.animKey = 'labubu2-down';
+                break;
+
+            case 2:
+                this.localLabubu.animKey = 'labubu3-down';
+                break;
+
+            case 3:
+                this.localLabubu.animKey = 'labubu4-down';
+                break;
+        }
+
+
         this.localLabubu.score = 3;
         this.remoteLabubu.score = 3;
     }
