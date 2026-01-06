@@ -343,15 +343,15 @@ export class GameScene extends Phaser.Scene {
         //PAREDES DEL ESCENARIO. Todo esto se puede borrar cuando tengamos el escenario final, es solo para verlo visualmente
         this.walls = this.physics.add.staticGroup();
 
-        let wall1 = this.walls.create(192, 190, 'colliderCuadrado');
+        /*let wall1 = this.walls.create(192, 190, 'colliderCuadrado');
         wall1.body.setSize(128, 136);
         wall1.setVisible(true);
         wall1.refreshBody();
 
-        /*let wall2 = this.walls.create(512, 380, 'colliderCuadrado');
+        let wall2 = this.walls.create(512, 380, 'colliderCuadrado');
         wall2.body.setSize(128, 136);
         wall2.setVisible(true);
-        wall2.refreshBody();*/
+        wall2.refreshBody();
 
         let wall3 = this.walls.create(256, 380, 'colliderRectangulo');
         wall3.body.setSize(256, 136);
@@ -361,7 +361,7 @@ export class GameScene extends Phaser.Scene {
         let wall4 = this.walls.create(448, 188, 'colliderRectangulo');
         wall4.body.setSize(256, 136);
         wall4.setVisible(true);
-        wall4.refreshBody();
+        wall4.refreshBody();*/
 
         //grupo para los powerups creados en spawnPowerup()
         this.powerups = this.physics.add.group();
