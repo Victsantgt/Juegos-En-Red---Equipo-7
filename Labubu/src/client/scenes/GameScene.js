@@ -508,6 +508,7 @@ export class GameScene extends Phaser.Scene {
         let jugadorUno = new Labubu(this, 'player1', 96, 220, 'labubu1-down');
         let jugadorDos = new Labubu(this, 'player2', 608, 220, 'labubu2-down');
 
+
         this.jugadorTexto = this.add.text(jugadorUno.sprite.x, jugadorUno.sprite.y - jugadorUno.sprite.height / 1.65, ' ' + localStorage.getItem("username") + ' ', {
             fontSize: '14px',
             fontFamily: 'Lemon',
@@ -517,13 +518,13 @@ export class GameScene extends Phaser.Scene {
 
         switch (parseInt(localStorage.getItem("skin"), 10)) {
             case 0:
-                jugadorUno.animKey = 'labubu1-down';
-                jugadorDos.animKey = 'labubu2-down';
+                jugadorUno.animKey = 'labubu2-down';
+                jugadorDos.animKey = 'labubu1-down';
                 break;
 
             case 1:
-                jugadorUno.animKey = 'labubu2-down';
-                jugadorDos.animKey = 'labubu1-down';
+                jugadorUno.animKey = 'labubu1-down';
+                jugadorDos.animKey = 'labubu2-down';
                 break;
 
             case 2:
@@ -689,6 +690,7 @@ export class GameScene extends Phaser.Scene {
 
         // Lanzar la escena de Victoria ENCIMA de esta (Overlay)
         // Pasamos el ID del ganador
+        this.scene.stop('VictoryScene');
         this.scene.launch('VictoryScene', { winnerId: winnerId });
     }
 

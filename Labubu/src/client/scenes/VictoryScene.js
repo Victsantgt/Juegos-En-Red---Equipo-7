@@ -7,12 +7,50 @@ export class VictoryScene extends Phaser.Scene {
 
     init(data) {
         this.winnerId = data.winnerId;
+
+        this.winnerAsset = '';
+        this.loserAsset = '';
+        this.sadAsset = ''; 
+        this.happyAsset1 = '';
+        this.happyAsset2 = '';
+    
+        // Parsear el skin y poner un valor por defecto si falla (|| 0)
+        const skinID = parseInt(localStorage.getItem("skin"), 10) || 0;
+
+        switch(skinID){
+            case 0:
+                this.sadAsset = 'sadb';
+                this.happyAsset1 = 'happyY1'; // Ojo: Aquí pusiste happyY (Yellow) para skin 0? 
+                this.happyAsset2 = 'happyY2'; // Asegúrate que los colores coinciden con tu diseño
+            break;
+            case 1:
+                this.sadAsset = 'sady';
+                this.happyAsset1 = 'happyB1';
+                this.happyAsset2 = 'happyB2';
+            break;
+            
+            case 2:
+                this.sadAsset = 'sadp';
+                this.happyAsset1 = 'happyR1';
+                this.happyAsset2 = 'happyR2';
+            break;
+            
+            case 3:
+                this.sadAsset = 'sadr';
+                this.happyAsset1 = 'happyP1';
+                this.happyAsset2 = 'happyP2';
+            break;
+            
+            default: // Caso de seguridad extra
+                this.sadAsset = 'sadb';
+                this.happyAsset1 = 'happyY1';
+                this.happyAsset2 = 'happyY2';
+            break;
+        }
     }
 
     preload() {
         // Carga de imágenes
-
-
 
         this.load.image('j1Ganador', 'assets/pantallaVictoria/j1Ganador.png');
         this.load.image('j2Ganador', 'assets/pantallaVictoria/j2Ganador.png');
@@ -46,7 +84,7 @@ export class VictoryScene extends Phaser.Scene {
         // --- Fondo Oscuro ---
         this.add.rectangle(0, 0, 704, 576, 0x000000, 0.8).setOrigin(0, 0);
 
-        //MÚSICA
+        // --- MÚSICA ---
         this.sound.stopAll();
         this.sound.removeAll();
         this.musica = this.sound.add('musicaVictoria', {
@@ -55,60 +93,25 @@ export class VictoryScene extends Phaser.Scene {
         });
         this.musica.play();
         
-        // Variables para las claves de las imágenes
-        let winnerAsset = '';
-        let loserAsset = '';
-        let sadAsset = ''; 
-        let happyAsset1 = '';
-        let happyAsset2 = '';
 
+        // --- Determinar quién gana visualmente ---
         if (this.winnerId === 'player1') {
             // Gana J1
-            winnerAsset = 'j1Ganador';  // Imagen J1 Ganando
-            loserAsset = 'j2Perdedor';  // Imagen J2 Perdiendo
-            sadAsset = 'sadb';          // Imagen triste asociada a J2
-            happyAsset1 = 'happyY1';
-            happyAsset2 = 'happyY2';
+            this.winnerAsset = 'j1Ganador';  
+            this.loserAsset = 'j2Perdedor';  
         } else {
             // Gana J2            
-            winnerAsset = 'j2Ganador';  // Imagen J2 Ganando
-            loserAsset = 'j1Perdedor';  // Imagen J1 Perdiendo
-            sadAsset = 'sady';          // Imagen triste asociada a J1
-            happyAsset1 = 'happyB1';
-            happyAsset2 = 'happyB2';
+            this.winnerAsset = 'j2Ganador';  
+            this.loserAsset = 'j1Perdedor';  
         }
-        switch(parseInt(localStorage.getItem("skin"),10)){
-            case 0:
-                sadAsset = 'sady';
-                happyAsset1 = 'happyB1';
-                happyAsset2 = 'happyB2';
-            break;
-            
-            case 1:
-                sadAsset = 'sadb';
-                happyAsset1 = 'happyY1';
-                happyAsset2 = 'happyY2';
-            break;
-            
-            case 2:
-                sadAsset = 'sadr';
-                happyAsset1 = 'happyP1';
-                happyAsset2 = 'happyP2';
-            break;
-            
-            case 3:
-                sadAsset = 'sadp';
-                happyAsset1 = 'happyR1';
-                happyAsset2 = 'happyR2';
-            break;
-        }
+        
 
         // --- ANIMACIÓN ---
         // 352 píxels es el centro
 
-        // EL GANADOR
-        const winnerSprite = this.add.image(-300, 288, winnerAsset)
-            .setDepth(1); // Profundidad 1 (por encima del perdedor y la imagen triste)
+        // 1. EL GANADOR (Base)
+        const winnerSprite = this.add.image(-300, 288, this.winnerAsset)
+            .setDepth(1); // Profundidad 1
         winnerSprite.setScale(1);
 
         this.tweens.add({
@@ -120,20 +123,25 @@ export class VictoryScene extends Phaser.Scene {
             yoyo: false
         });
 
-        // HAPPY ANIMATION
-        // Creamos la animación específica para esta victoria
+        // 2. HAPPY ANIMATION (ARREGLO AQUÍ)
+        // Importante: Si la animación ya existe de una partida anterior, la borramos
+        // para que se pueda volver a crear con los assets del color correcto.
+        if (this.anims.exists('happyAnim')) {
+            this.anims.remove('happyAnim');
+        }
+
         this.anims.create({
             key: 'happyAnim',
             frames: [
-                { key: happyAsset1 },
-                { key: happyAsset2 }
+                { key: this.happyAsset1 },
+                { key: this.happyAsset2 }
             ],
             frameRate: 4,
             repeat: -1
         });
 
-        const happySprite = this.add.sprite(-300, 288, happyAsset1)
-            .setDepth(1.5) // Por encima del ganador base (1) pero debajo del texto (2)
+        let happySprite = this.add.sprite(-300, 288, this.happyAsset1)
+            .setDepth(1.5) // Por encima del ganador base
             .play('happyAnim');
         happySprite.setScale(1);
 
@@ -146,8 +154,8 @@ export class VictoryScene extends Phaser.Scene {
             yoyo: false
         });
 
-        // EL PERDEDOR
-        const loserSprite = this.add.image(1004, 288, loserAsset);
+        // 3. EL PERDEDOR
+        let loserSprite = this.add.image(1004, 288, this.loserAsset);
         loserSprite.setScale(1);
 
         this.tweens.add({
@@ -159,9 +167,9 @@ export class VictoryScene extends Phaser.Scene {
             yoyo: false
         });
 
-        // SAD
-        const sadSprite = this.add.image(1004, 288, sadAsset)
-            .setDepth(0.5); // Profundidad 0.5 (entre el perdedor y el ganador)
+        // 4. SAD (Triste)
+        let sadSprite = this.add.image(1004, 288, this.sadAsset)
+            .setDepth(0.5); // Profundidad 0.5
         sadSprite.setScale(1);
 
         this.tweens.add({
@@ -173,7 +181,7 @@ export class VictoryScene extends Phaser.Scene {
             yoyo: false
         });
 
-        // BOTONES
+        // 5. BOTONES DECORATIVOS (Fondo de botones)
         const botonesSprite = this.add.image(1004, 288, 'Botones');
         botonesSprite.setScale(1);
 
@@ -186,7 +194,9 @@ export class VictoryScene extends Phaser.Scene {
             yoyo: false
         });
 
-        // --- Botón del Menú ---
+        // --- INTERFAZ ---
+
+        // Botón del Menú
         const menuBtn = this.add.text(1133, 90, 'VOLVER AL MENÚ', { 
             fontFamily: 'Lemon',
             fontSize: '35px',
@@ -210,17 +220,17 @@ export class VictoryScene extends Phaser.Scene {
         menuBtn.on('pointerdown', () => {
             this.cameras.main.fadeOut(500, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-                this.scene.stop('GameScene');
+                this.scene.stop('GameScene'); // Aseguramos parar la escena de juego
                 this.scene.start('MenuScene');
             });
         });
 
-        // --- Botón de Revancha ---
+        // Botón de Revancha
         const resumeBtn = this.add.text(1130, 220, 'REVANCHA', {
             fontFamily: 'Lemon',
             fontSize: '40px',
             color: '#000000ff',
-        }).setOrigin(0.5) //0.5 para alinear centro con el botón de menú
+        }).setOrigin(0.5)
           .setInteractive({ useHandCursor: true })
           .setDepth(2);
 
