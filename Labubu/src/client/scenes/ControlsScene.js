@@ -17,7 +17,7 @@ export class ControlsScene extends Phaser.Scene {
         this.add.rectangle(0, 0, width, height, 0x000000, 0.6).setOrigin(0, 0);
 
         // --- TÍTULO PRINCIPAL ---
-        this.add.text(centerX, 60, 'CONTROLES', {
+        this.add.text(centerX, 60, 'CONTROLS', {
             fontFamily: 'Lemon',
             fontSize: '48px',
             color: '#5eb232', // Verde del juego
@@ -30,7 +30,7 @@ export class ControlsScene extends Phaser.Scene {
         const p1Y = 160;
 
         // Título J1 (Color amarillo del CSS: #e6dd38)
-        this.add.text(p1X, p1Y, 'JUGADOR 1', {
+        this.add.text(p1X, p1Y, 'PLAYER 1', {
             fontFamily: 'Lemon',
             fontSize: '28px',
             color: '#e6dd38'
@@ -44,11 +44,11 @@ export class ControlsScene extends Phaser.Scene {
         this.createKey(p1X, p1Y + 115, 'S');
         this.createKey(p1X + 50, p1Y + 115, 'D');
 
-        this.add.text(p1X, p1Y + 165, 'Moverse', { fontFamily: 'Lemon', fontSize: '14px', color: '#aaaaaa' }).setOrigin(0.5);
+        this.add.text(p1X, p1Y + 165, 'Move', { fontFamily: 'Lemon', fontSize: '14px', color: '#aaaaaa' }).setOrigin(0.5);
 
         // SHIFT (Tecla ancha)
         this.createKey(p1X, p1Y + 220, 'SHIFT', 120);
-        this.add.text(p1X, p1Y + 260, 'Disparar', { fontFamily: 'Lemon', fontSize: '14px', color: '#aaaaaa' }).setOrigin(0.5);
+        this.add.text(p1X, p1Y + 260, 'Shoot', { fontFamily: 'Lemon', fontSize: '14px', color: '#aaaaaa' }).setOrigin(0.5);
 
 
         // --- COLUMNA JUGADOR 2 (Derecha) ---
@@ -56,7 +56,7 @@ export class ControlsScene extends Phaser.Scene {
         const p2Y = 160;
 
         // Título J2 (Color rojizo del CSS: #8a452e)
-        this.add.text(p2X, p2Y, 'JUGADOR 2', {
+        this.add.text(p2X, p2Y, 'PLAYER 2', {
             fontFamily: 'Lemon',
             fontSize: '28px',
             color: '#8a452e'
@@ -70,15 +70,15 @@ export class ControlsScene extends Phaser.Scene {
         this.createKey(p2X, p2Y + 115, '↓');
         this.createKey(p2X + 50, p2Y + 115, '→');
 
-        this.add.text(p2X, p2Y + 165, 'Moverse', { fontFamily: 'Lemon', fontSize: '14px', color: '#aaaaaa' }).setOrigin(0.5);
+        this.add.text(p2X, p2Y + 165, 'Move', { fontFamily: 'Lemon', fontSize: '14px', color: '#aaaaaa' }).setOrigin(0.5);
 
         // ENTER (Tecla ancha)
         this.createKey(p2X, p2Y + 220, 'ENTER', 120);
-        this.add.text(p2X, p2Y + 260, 'Disparar', { fontFamily: 'Lemon', fontSize: '14px', color: '#aaaaaa' }).setOrigin(0.5);
+        this.add.text(p2X, p2Y + 260, 'Shoot', { fontFamily: 'Lemon', fontSize: '14px', color: '#aaaaaa' }).setOrigin(0.5);
 
 
         // --- SECCIÓN PAUSA (Abajo) ---
-        this.add.text(centerX, 450, 'ESC para Pausar', {
+        this.add.text(centerX, 450, 'ESC to Pause', {
             fontFamily: 'Lemon',
             fontSize: '24px',
             color: '#ffffff'
@@ -86,7 +86,7 @@ export class ControlsScene extends Phaser.Scene {
 
 
         // --- BOTÓN VOLVER ---
-        const backBtn = this.add.text(centerX, height - 60, 'Volver al Menú', {
+        const backBtn = this.add.text(centerX, height - 60, 'Go back to Menu', {
             fontFamily: 'Lemon',
             fontSize: '32px',
             color: '#5eb232',

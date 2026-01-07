@@ -25,7 +25,6 @@ export class MultiplayerGameScene extends Phaser.Scene {
     }
 
     init(data) {
-        
         this.remoteSkin = 0; // Valor por defecto skin
         this.ws = data.ws;
         this.playerRole = data.playerRole; // 'player1' | 'player2'
@@ -170,8 +169,6 @@ export class MultiplayerGameScene extends Phaser.Scene {
         this.cameras.main.fadeIn(1000, 255, 255, 255);
 
         let fondo = this.add.image(0, 0, 'fondo').setOrigin(0, 0);
-        
-        
 
         ////ANIMACIONES LABUBU 1////
 
@@ -560,12 +557,6 @@ export class MultiplayerGameScene extends Phaser.Scene {
     }
 
     setUpPlayers() {
-
-        this.sendMessage({
-            type: 'name',
-            name: localStorage.getItem("username")
-        });
-
         if (this.playerRole === 'player1') {
             this.localLabubu = new Labubu(this, 'player1', 96, 220, 'labubu3-down');
             this.remoteLabubu = new Labubu(this, 'player2', 608, 220, '');
@@ -577,21 +568,6 @@ export class MultiplayerGameScene extends Phaser.Scene {
             this.localLabubu.turnMode = "normal";
             this.remoteLabubu.turnMode = "reverse";
         }
-
-        this.localTexto = this.add.text(this.localLabubu.sprite.x, this.localLabubu.sprite.y - this.localLabubu.sprite.height / 1.65, ' ' + localStorage.getItem("username") + ' ', {
-            fontSize: '14px',
-            fontFamily: 'Lemon',
-            backgroundColor: '#2525257b',
-            color: '#ffffff'
-        }).setOrigin();
-
-        this.remoteTexto = this.add.text(this.remoteLabubu.sprite.x, this.remoteLabubu.sprite.y - this.remoteLabubu.sprite.height / 1.65, ' ' + this.remoteName + ' ', {
-            fontSize: '14px',
-            fontFamily: 'Lemon',
-            backgroundColor: '#2525257b',
-            color: '#ffffff'
-        }).setOrigin();
-
 
         switch (parseInt(localStorage.getItem("skin"), 10)) {
             case 1:
@@ -710,13 +686,9 @@ export class MultiplayerGameScene extends Phaser.Scene {
         let p1Skin, p2Skin;
 
         if (this.playerRole === 'player1') {
-            console.log(mySkin);
-            console.log(this.remoteSkin);
             p1Skin = mySkin;
             p2Skin = this.remoteSkin;
         } else {
-            console.log(mySkin);
-            console.log(this.remoteSkin);
             p1Skin = this.remoteSkin;
             p2Skin = mySkin;
         }
@@ -862,30 +834,21 @@ export class MultiplayerGameScene extends Phaser.Scene {
                 this.handleDisconnection();
                 break;
 
-            case 'name':
-                this.remoteName = data.name;
-                this.remoteTexto.setText(' ' + this.remoteName + ' ');
-                break;
-
             case 'updateSkin':
                 switch(data.skin){
                     case 1:
-                        this.remoteSkin = 1;
                         this.remoteLabubu.animKey = 'labubu1-down';
                         break;
 
                     case 0:
-                        this.remoteSkin = 0;
                         this.remoteLabubu.animKey = 'labubu2-down';
                         break;
                         
                     case 2:
-                        this.remoteSkin = 2;
                         this.remoteLabubu.animKey = 'labubu3-down';
                         break;
 
                     case 3:
-                        this.remoteSkin = 3;
                         this.remoteLabubu.animKey = 'labubu4-down';
                         break;
                 }
@@ -895,37 +858,6 @@ export class MultiplayerGameScene extends Phaser.Scene {
                 console.log('Unknown message type:', data.type);
         }
 
-    }
-
-    animRemoteLabubu(anim) {
-        if (!anim) return;
-        
-        if (
-            (anim.endsWith('down') && this.remoteLabubu.currentDirection !== 'down') ||
-            (anim.endsWith('left') && this.remoteLabubu.currentDirection !== 'left') ||
-            (anim.endsWith('right') && this.remoteLabubu.currentDirection !== 'right') ||
-            (anim.endsWith('up') && this.remoteLabubu.currentDirection !== 'up')) {
-
-            if (this.remoteLabubu.currentDirection === 'right' && anim.startsWith('labubu1-')) this.remoteLabubu.sprite.play('labubu1-right');
-            if (this.remoteLabubu.currentDirection === 'left' && anim.startsWith('labubu1-')) this.remoteLabubu.sprite.play('labubu1-left');
-            if (this.remoteLabubu.currentDirection === 'down' && anim.startsWith('labubu1-')) this.remoteLabubu.sprite.play('labubu1-down');
-            if (this.remoteLabubu.currentDirection === 'up' && anim.startsWith('labubu1-')) this.remoteLabubu.sprite.play('labubu1-up');
-
-            if (this.remoteLabubu.currentDirection === 'right' && anim.startsWith('labubu2-')) this.remoteLabubu.sprite.play('labubu2-right');
-            if (this.remoteLabubu.currentDirection === 'left' && anim.startsWith('labubu2-')) this.remoteLabubu.sprite.play('labubu2-left');
-            if (this.remoteLabubu.currentDirection === 'down' && anim.startsWith('labubu2-')) this.remoteLabubu.sprite.play('labubu2-down');
-            if (this.remoteLabubu.currentDirection === 'up' && anim.startsWith('labubu2-')) this.remoteLabubu.sprite.play('labubu2-up');
-
-            if (this.remoteLabubu.currentDirection === 'right' && anim.startsWith('labubu3-')) this.remoteLabubu.sprite.play('labubu3-right');
-            if (this.remoteLabubu.currentDirection === 'left' && anim.startsWith('labubu3-')) this.remoteLabubu.sprite.play('labubu3-left');
-            if (this.remoteLabubu.currentDirection === 'down' && anim.startsWith('labubu3-')) this.remoteLabubu.sprite.play('labubu3-down');
-            if (this.remoteLabubu.currentDirection === 'up' && anim.startsWith('labubu3-')) this.remoteLabubu.sprite.play('labubu3-up');
-
-            if (this.remoteLabubu.currentDirection === 'right' && anim.startsWith('labubu4-')) this.remoteLabubu.sprite.play('labubu4-right');
-            if (this.remoteLabubu.currentDirection === 'left' && anim.startsWith('labubu4-')) this.remoteLabubu.sprite.play('labubu4-left');
-            if (this.remoteLabubu.currentDirection === 'down' && anim.startsWith('labubu4-')) this.remoteLabubu.sprite.play('labubu4-down');
-            if (this.remoteLabubu.currentDirection === 'up' && anim.startsWith('labubu4-')) this.remoteLabubu.sprite.play('labubu4-up');
-        }
     }
 
     update() {
@@ -980,13 +912,6 @@ export class MultiplayerGameScene extends Phaser.Scene {
             this.localLabubu.sprite.setVelocity(0, 0);
             this.snapLabubuToNode(this.localLabubu, node);
         });
-
-        this.localTexto.x = this.localLabubu.sprite.x;
-        this.localTexto.y = this.localLabubu.sprite.y - this.localLabubu.sprite.height / 1.65;
-
-        this.remoteTexto.x = this.remoteLabubu.sprite.x;
-        this.remoteTexto.y = this.remoteLabubu.sprite.y - this.remoteLabubu.sprite.height / 1.65;
-
 
         //INPUT
         let inputDir = null;
@@ -1056,8 +981,8 @@ export class MultiplayerGameScene extends Phaser.Scene {
             }
 
         let anim = this.localLabubu.sprite.anims.currentAnim?.key;
-        //if (!anim) return;
-
+        if (!anim) return;
+        
         if (
             (anim.endsWith('down') && this.localLabubu.currentDirection !== 'down') ||
             (anim.endsWith('left') && this.localLabubu.currentDirection !== 'left') ||
@@ -1084,9 +1009,40 @@ export class MultiplayerGameScene extends Phaser.Scene {
             if (this.localLabubu.currentDirection === 'down' && anim.startsWith('labubu4-')) this.localLabubu.sprite.play('labubu4-down');
             if (this.localLabubu.currentDirection === 'up' && anim.startsWith('labubu4-')) this.localLabubu.sprite.play('labubu4-up');
         }
+
         //ANIMACIONES LABUBU REMOTO
+        /*
         anim = this.remoteLabubu.sprite.anims.currentAnim?.key;
-        this.animRemoteLabubu(anim);
+        if (!anim) return;
+        
+        if (
+            (anim.endsWith('down') && this.remoteLabubu.currentDirection !== 'down') ||
+            (anim.endsWith('left') && this.remoteLabubu.currentDirection !== 'left') ||
+            (anim.endsWith('right') && this.remoteLabubu.currentDirection !== 'right') ||
+            (anim.endsWith('up') && this.remoteLabubu.currentDirection !== 'up')) {
+
+            if (this.remoteLabubu.currentDirection === 'right' && anim.startsWith('labubu1-')) this.remoteLabubu.sprite.play('labubu1-right');
+            if (this.remoteLabubu.currentDirection === 'left' && anim.startsWith('labubu1-')) this.remoteLabubu.sprite.play('labubu1-left');
+            if (this.remoteLabubu.currentDirection === 'down' && anim.startsWith('labubu1-')) this.remoteLabubu.sprite.play('labubu1-down');
+            if (this.remoteLabubu.currentDirection === 'up' && anim.startsWith('labubu1-')) this.remoteLabubu.sprite.play('labubu1-up');
+
+            if (this.remoteLabubu.currentDirection === 'right' && anim.startsWith('labubu2-')) this.remoteLabubu.sprite.play('labubu2-right');
+            if (this.remoteLabubu.currentDirection === 'left' && anim.startsWith('labubu2-')) this.remoteLabubu.sprite.play('labubu2-left');
+            if (this.remoteLabubu.currentDirection === 'down' && anim.startsWith('labubu2-')) this.remoteLabubu.sprite.play('labubu2-down');
+            if (this.remoteLabubu.currentDirection === 'up' && anim.startsWith('labubu2-')) this.remoteLabubu.sprite.play('labubu2-up');
+
+            if (this.remoteLabubu.currentDirection === 'right' && anim.startsWith('labubu3-')) this.remoteLabubu.sprite.play('labubu3-right');
+            if (this.remoteLabubu.currentDirection === 'left' && anim.startsWith('labubu3-')) this.remoteLabubu.sprite.play('labubu3-left');
+            if (this.remoteLabubu.currentDirection === 'down' && anim.startsWith('labubu3-')) this.remoteLabubu.sprite.play('labubu3-down');
+            if (this.remoteLabubu.currentDirection === 'up' && anim.startsWith('labubu3-')) this.remoteLabubu.sprite.play('labubu3-up');
+
+            if (this.remoteLabubu.currentDirection === 'right' && anim.startsWith('labubu4-')) this.remoteLabubu.sprite.play('labubu4-right');
+            if (this.remoteLabubu.currentDirection === 'left' && anim.startsWith('labubu4-')) this.remoteLabubu.sprite.play('labubu4-left');
+            if (this.remoteLabubu.currentDirection === 'down' && anim.startsWith('labubu4-')) this.remoteLabubu.sprite.play('labubu4-down');
+            if (this.remoteLabubu.currentDirection === 'up' && anim.startsWith('labubu4-')) this.remoteLabubu.sprite.play('labubu4-up');
+        }
+        */
+
 
         // REDUCIR COOLDOWN
         if (this.localLabubu.cooldown > 0) {

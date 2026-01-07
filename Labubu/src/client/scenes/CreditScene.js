@@ -17,7 +17,7 @@ export class CreditScene extends Phaser.Scene {
         this.add.rectangle(0, 0, width, height, 0x000000, 0.6).setOrigin(0, 0);
 
         // --- TÍTULO ---
-        this.add.text(centerX, centerY - 180, 'CRÉDITOS', {
+        this.add.text(centerX, centerY - 180, 'CREDITS', {
             fontFamily: 'Lemon', 
             fontSize: '64px',
             color: '#8b4a00ff'
@@ -25,10 +25,10 @@ export class CreditScene extends Phaser.Scene {
 
         // --- LISTA DE CRÉDITOS ---
         const equipo = [
-            "Carla Calvache Amador\nProgramadora UIs, community manager",
-            "Daniel Redondo Pascual\nConcept art, ilustración 2D, programador",
-            "Tinka Armas Martí\nConcept art, ilustración 2D, programadora",
-            "Víctor Santiago Gil Torres\nCompositor, programador, guionista"
+            "Carla Calvache Amador\nUI Programming, Community Manager",
+            "Daniel Redondo Pascual\nConcept art, 2D Illustration, Programming",
+            "Tinka Armas Martí\nConcept art, 2D Illustration, Programming",
+            "Víctor Santiago Gil Torres\nMusic Composer, Programming, Guionist"
         ];
 
         // Ajustamos el espaciado para que quepa bien con letra más grande
@@ -50,7 +50,7 @@ export class CreditScene extends Phaser.Scene {
 
         // --- BOTÓN VOLVER ---
         // Estilo idéntico al botón 'Continuar' y 'Volver al Menú' de la Pausa
-        const menuBtn = this.add.text(centerX, centerY + 220, 'Volver al Menú', {
+        const menuBtn = this.add.text(centerX, centerY + 220, 'Go back to Menu', {
             fontFamily: 'Lemon',
             fontSize: '32px',
             color: '#5eb232', 

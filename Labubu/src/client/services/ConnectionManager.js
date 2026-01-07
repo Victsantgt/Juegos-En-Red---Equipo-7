@@ -7,7 +7,7 @@
 //PARA TRABAJAR MOVIMIENTO EN LOCAL
 //poner en false para que el texto de usuarios conectados furule 
 //const LOCAL_MODE = false;
-const LOCAL_MODE = false;
+const LOCAL_MODE = true;
 export class ConnectionManager {
   constructor() {
     this.connectedCount = 0;

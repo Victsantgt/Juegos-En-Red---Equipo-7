@@ -21,11 +21,11 @@ export class StartScene extends Phaser.Scene {
         this.cameras.main.setBackgroundColor('#ffffff');
         this.cameras.main.fadeIn(600, 255, 255, 255);
 
-        const text = this.add.text(420, 576/2, 'Haz click para empezar...', {
+        const text = this.add.text(704/2, 576/2, 'Click to start...', {
             fontFamily: 'Lemon',
             fontSize: '24px',
             color: '#000000ff',
-        }).setOrigin(0.7, 0.7);
+        }).setOrigin(0.5, 0.5);
 
         this.tweens.add({
             targets: text,

@@ -32,9 +32,9 @@ export class MenuScene extends Phaser.Scene {
             .setDepth(10);
 
         // --- BOTÓN LOCAL ---
-        const localBtn = this.add.text(610, 163, 'Modo Local', {
+        const localBtn = this.add.text(610, 163, 'PLAY GAME!', {
             fontFamily: 'Lemon',
-            fontSize: '24px',
+            fontSize: '30px',
             color: '#5eb232',
         }).setOrigin(0.7, 0.7)
             .setInteractive({ useHandCursor: true })
@@ -50,16 +50,25 @@ export class MenuScene extends Phaser.Scene {
 
 
         // --- BOTÓN ONLINE (ACTIVO) ---
-        const onlineBtn = this.add.text(600, 255, 'Modo Online', {
+        const controlsBtn = this.add.text(600, 255, 'Check Controls', {
             fontFamily: 'Lemon',
             fontSize: '24px',
             color: '#5eb232',
         }).setOrigin(0.6, 0.6)
             .setInteractive({ useHandCursor: true })
-            .on('pointerover', () => onlineBtn.setColor('#553922'))
-            .on('pointerout', () => onlineBtn.setColor('#5eb232'))
+            .on('pointerover', () => controlsBtn.setColor('#553922'))
+            .on('pointerout', () => controlsBtn.setColor('#5eb232'))
             .on('pointerdown', () => {
-                this.scene.start('LobbyScene');
+                controlsBtn.disableInteractive();
+                this.tweens.add({
+                    targets: overlay,
+                    alpha: 0.6,
+                    duration: 500,
+                    onComplete: () => {
+                        this.scene.pause();
+                        this.scene.launch('ControlsScene');
+                    }
+                });
             });
 
         /*
@@ -90,7 +99,7 @@ export class MenuScene extends Phaser.Scene {
         */
 
         // --- BOTÓN USUARIO ---
-        const userBtn = this.add.text(124, 487, 'Editar Usuario', {
+        const userBtn = this.add.text(124, 487, 'Edit Character', {
             fontFamily: 'Lemon',
             fontSize: '20px',
             color: '#5eb232',
@@ -112,9 +121,9 @@ export class MenuScene extends Phaser.Scene {
             });
 
         // --- BOTÓN CRÉDITOS ---
-        const creditBtn = this.add.text(110, 545, 'Créditos', {
+        const creditBtn = this.add.text(103, 545, 'Credits', {
             fontFamily: 'Lemon',
-            fontSize: '24px',
+            fontSize: '22px',
             color: '#5eb232',
         }).setOrigin(0.7, 0.7)
             .setInteractive({ useHandCursor: true })
@@ -146,14 +155,10 @@ export class MenuScene extends Phaser.Scene {
                     userBtn.setInteractive();
                     userBtn.setColor('#5eb232');
 
-                    // --- BOTÓN CONTROLES ---
-                    // Descomentar esto cuando se active el botón de controles
-                    /*
-                    if (controlsBtn) {
-                        controlsBtn.setInteractive();
-                        controlsBtn.setColor('#5eb232');
-                    }
-                    */
+                    
+                    controlsBtn.setInteractive();
+                    controlsBtn.setColor('#5eb232');
+                    
                 }
             });
         });
@@ -176,6 +181,7 @@ export class MenuScene extends Phaser.Scene {
         }
 
         // --- GESTIÓN DE CONEXIÓN ---
+        /*
         this.connectionText = this.add.text(127, 20, 'Comprobando servidor...', {
             fontSize: '14px',
             fontFamily: 'Lemon',
@@ -195,8 +201,9 @@ export class MenuScene extends Phaser.Scene {
         };
 
         this.updateConnectionDisplay(datosParaMostrar);
+        */
     }
-
+    /*
     updateConnectionDisplay(data) {
 
 
@@ -252,4 +259,5 @@ export class MenuScene extends Phaser.Scene {
             connectionManager.removeListener(this.connectionListener);
         }
     }
+    */
 }
