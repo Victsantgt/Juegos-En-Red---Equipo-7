@@ -258,13 +258,13 @@ La estrategia principal se centrará en el uso de redes sociales:
 
 ## 17\. API REST
 
-Se ha implementado un servidor backend utilizando **Node.js y Express** para gestionar la conexión y desconexión de los usuarios en la sala de espera. La arquitectura sigue el modelo **REST**, utilizando intercambio de mensajes en formato **JSON** y peticiones asíncronas desde el cliente (Fetch API).
+Se ha implementado un servidor utilizando **Node.js y Express** para gestionar la conexión y desconexión de los usuarios en la sala de espera. La arquitectura sigue el modelo **REST**, utilizando intercambio de mensajes en formato **JSON** y peticiones asíncronas desde el cliente (Fetch API).
 
 Las principales funcionalidades desarrolladas son:
 
 * **Control de Presencia:** El servidor mantiene una lista en memoria de los jugadores online.
 * **Gestión de Estados:** Uso de métodos HTTP (**POST** para registrarse, **GET** para listar jugadores y **DELETE** para salir).
-* **Detección de Caídas:** Implementación de un sistema de "heartbeat" donde el servidor elimina automáticamente a los jugadores que dejan de enviar señales de actividad, gestionando así las pérdidas de conexión inesperadas.
+* **Detección de Caídas:** Implementación de un sistema de "heartbeat" donde el servidor gestionando las pérdidas de conexión inesperadas.
 -----
 
 ## 18\. Referencias
