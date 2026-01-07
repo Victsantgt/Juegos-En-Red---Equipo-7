@@ -686,9 +686,13 @@ export class MultiplayerGameScene extends Phaser.Scene {
         let p1Skin, p2Skin;
 
         if (this.playerRole === 'player1') {
+            console.log(mySkin);
+            console.log(this.remoteSkin);
             p1Skin = mySkin;
             p2Skin = this.remoteSkin;
         } else {
+            console.log(mySkin);
+            console.log(this.remoteSkin);
             p1Skin = this.remoteSkin;
             p2Skin = mySkin;
         }
@@ -837,18 +841,22 @@ export class MultiplayerGameScene extends Phaser.Scene {
             case 'updateSkin':
                 switch(data.skin){
                     case 1:
+                        this.remoteSkin = 1;
                         this.remoteLabubu.animKey = 'labubu1-down';
                         break;
 
                     case 0:
+                        this.remoteSkin = 0;
                         this.remoteLabubu.animKey = 'labubu2-down';
                         break;
                         
                     case 2:
+                        this.remoteSkin = 2;
                         this.remoteLabubu.animKey = 'labubu3-down';
                         break;
 
                     case 3:
+                        this.remoteSkin = 3;
                         this.remoteLabubu.animKey = 'labubu4-down';
                         break;
                 }
@@ -981,8 +989,8 @@ export class MultiplayerGameScene extends Phaser.Scene {
             }
 
         let anim = this.localLabubu.sprite.anims.currentAnim?.key;
-        if (!anim) return;
-        
+        //if (!anim) return;
+
         if (
             (anim.endsWith('down') && this.localLabubu.currentDirection !== 'down') ||
             (anim.endsWith('left') && this.localLabubu.currentDirection !== 'left') ||
@@ -1011,7 +1019,21 @@ export class MultiplayerGameScene extends Phaser.Scene {
         }
         //ANIMACIONES LABUBU REMOTO
         anim = this.remoteLabubu.sprite.anims.currentAnim?.key;
-        if (!anim) return;
+        //if (!anim) return;
+        if(anim.startsWith('labubu3-')&&this.remoteSkin!=2){
+            switch(this.remoteSkin){
+                case 0:
+                    this.remoteLabubu.sprite.play('labubu2-down');
+                    break;
+                case 1:
+                    this.remoteLabubu.sprite.play('labubu2-down');
+                    break;
+                case 3:
+                    this.remoteLabubu.sprite.play('labubu2-down');
+                    break;    
+
+            }
+        }
         
         if (
             (anim.endsWith('down') && this.remoteLabubu.currentDirection !== 'down') ||

@@ -15,6 +15,8 @@ export class MultiplayerVictoryScene extends Phaser.Scene {
         let winnerSkinNum = 0;
         let loserSkinNum = 0;
 
+        console.log(p1Skin + ', ' + p2Skin);
+
         // Lógica: Asignar skin basada en quién ganó
         if (this.winnerId === 'player1') {
             winnerSkinNum = p1Skin;
