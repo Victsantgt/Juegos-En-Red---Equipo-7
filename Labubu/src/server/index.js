@@ -146,8 +146,8 @@ wss.on('connection', (ws) => {
           gameRoomService.spawnPowerup(ws);
           break;
 
-        case 'goal':
-          gameRoomService.handleGoal(ws, data.side);
+        case 'hit':
+          gameRoomService.handleHit(ws);
           break;
 
         case 'updateSkin':

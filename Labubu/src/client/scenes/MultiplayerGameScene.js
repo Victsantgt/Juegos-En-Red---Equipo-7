@@ -365,7 +365,7 @@ export class MultiplayerGameScene extends Phaser.Scene {
 
         let wall1 = this.walls.create(192, 190, 'colliderCuadrado');
         wall1.body.setSize(128, 136);
-        wall1.setVisible(true);
+        wall1.setVisible(false);
         wall1.refreshBody();
 
         /*let wall2 = this.walls.create(512, 380, 'colliderCuadrado');
@@ -375,12 +375,12 @@ export class MultiplayerGameScene extends Phaser.Scene {
 
         let wall3 = this.walls.create(256, 380, 'colliderRectangulo');
         wall3.body.setSize(256, 136);
-        wall3.setVisible(true);
+        wall3.setVisible(false);
         wall3.refreshBody();
 
         let wall4 = this.walls.create(448, 188, 'colliderRectangulo');
         wall4.body.setSize(256, 136);
-        wall4.setVisible(true);
+        wall4.setVisible(false);
         wall4.refreshBody();
 
         //grupo para los powerups creados en spawnPowerup()
@@ -858,6 +858,17 @@ export class MultiplayerGameScene extends Phaser.Scene {
                 this.sfxshot.play();
                 break;
 
+            case 'hit':
+                //ACIERTO
+                this.remoteLabubu.score--;
+                this.scoreUpdate();
+                this.sfxhit = this.sound.add('aciertoSonido', {
+                    loop: false,
+                    volume: 1
+                });
+                this.sfxhit.play();
+                break;
+
             case 'playerDisconnected':
                 this.handleDisconnection();
                 break;
@@ -1203,6 +1214,9 @@ export class MultiplayerGameScene extends Phaser.Scene {
                     volume: 1
                 });
                 this.sfxhit.play();
+                this.sendMessage({
+                    type: 'hit'
+                });
             }
             else {
                 //FALLO
@@ -1214,15 +1228,8 @@ export class MultiplayerGameScene extends Phaser.Scene {
         this.physics.add.overlap(bullet.sprite, this.remoteLabubu.sprite, () => {
             if (bullet.currentDirection === this.remoteLabubu.currentDirection) {
                 //ACIERTO
-                this.remoteLabubu.score--;
                 this.bullets = this.bullets.filter(b => b !== bullet);
                 bullet.sprite.destroy();
-                this.scoreUpdate();
-                this.sfxhit = this.sound.add('aciertoSonido', {
-                    loop: false,
-                    volume: 1
-                });
-                this.sfxhit.play();
             }
             else {
                 //FALLO
