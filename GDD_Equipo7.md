@@ -19,7 +19,8 @@
 - [14. Música y Efectos Sonoros](#14-música-y-efectos-sonoros)
 - [15. Historia y Desarrollo de Personajes](#15-historia-y-desarrollo-de-personajes)
 - [16. Estrategia de Marketing](#16-estrategia-de-marketing)
-- [17. Referencias](#17-referencias)
+- [17. API REST](#17-api-rest)
+- [18. Referencias](#18-referencias)
 
 </details>
 
@@ -48,9 +49,9 @@ Este género se centra en la comunicación social y la interacción de los jugad
 
 **Clasificación y Público Objetivo:**
 
-  * **PEGI 3:** Apto para todas las edades.
-  * **Público:** Familias y grupos de amigos que busquen pasar un rato divertido.
-  * **Plataforma:** Online, en el navegador de internet.
+  * **PEGI 3:** Apto para todas las edades.
+  * **Público:** Familias y grupos de amigos que busquen pasar un rato divertido.
+  * **Plataforma:** Online, en el navegador de internet.
 
 -----
 
@@ -58,8 +59,8 @@ Este género se centra en la comunicación social y la interacción de los jugad
 
 El juego toma referencias de títulos clave en el género:
 
-  * **Juegos de Fiesta Clásicos:** *Wii Party* (2010) y la saga *Mario Party*.
-  * **Juegos Modernos de Cooperación/Competición:** *Overcooked*.
+  * **Juegos de Fiesta Clásicos:** *Wii Party* (2010) y la saga *Mario Party*.
+  * **Juegos Modernos de Cooperación/Competición:** *Overcooked*.
 
 
 <img width="259" height="363" alt="image" src="https://github.com/user-attachments/assets/51897a4f-0fc3-4b46-af8c-e12ee3be87fe" />
@@ -90,24 +91,24 @@ Cada jugador controla un vagón que avanza de forma automática por raíles en u
 
 ### Acciones del Jugador
 
-  * **Disparo:**
-      * Disparar proyectiles en trayectoria recta hacia el vagón contrario.
-      * Existe un tiempo de recarga automático entre disparos.
-      * Si el jugador golpea a un oponente, el personaje celebra y no puede disparar durante un breve tiempo.
-  * **Giro en desvíos:**
-      * Decidir el momento exacto para cambiar de carril en los cruces de vías.
-      * Esta acción genera oportunidades de ataque o defensa.
-  * **Protección de diana:**
-      * Posicionar el vagón estratégicamente en el raíl para dificultar la línea de tiro del rival.
+  * **Disparo:**
+      * Disparar proyectiles en trayectoria recta hacia el vagón contrario.
+      * Existe un tiempo de recarga automático entre disparos.
+      * Si el jugador golpea a un oponente, el personaje celebra y no puede disparar durante un breve tiempo.
+  * **Giro en desvíos:**
+      * Decidir el momento exacto para cambiar de carril en los cruces de vías.
+      * Esta acción genera oportunidades de ataque o defensa.
+  * **Protección de diana:**
+      * Posicionar el vagón estratégicamente en el raíl para dificultar la línea de tiro del rival.
 
 ### Power-ups
 
 Habilidades especiales que se activarán automáticamente al recogerlas y darán una ventaja temporal:
 
-  * **Turbo:** Un pequeño acelerón.
-  * **Curación:** Restaura una vida al jugador.
-  * **Ítem Falso:** Un obstáculo que paraliza al enemigo temporalmente.
-  * **Cambio de sentido:** Invierte la trayectoria del jugador.
+  * **Turbo:** Un pequeño acelerón.
+  * **Curación:** Restaura una vida al jugador.
+  * **Ítem Falso:** Un obstáculo que paraliza al enemigo temporalmente.
+  * **Cambio de sentido:** Invierte la trayectoria del jugador.
 
 La combinación de todas estas mecánicas fomenta la precisión, la anticipación de movimientos y la toma de decisiones rápidas.
 
@@ -166,18 +167,18 @@ Diseño del escenario
 
 El juego utilizará un estilo visual de **Pixel Art Moderno**.
 
-  * **Restricción:** Se mantiene el tamaño limitado a sprites (8x8, 16x16, 32x32 o 64x64).
-  * **Colores:** Sin limitación de colores a X bits.
-  * **Inspiración:** Se tomaron como inspiración juegos como *Stardew Valley* o *Moonlighter*.
+  * **Restricción:** Se mantiene el tamaño limitado a sprites (8x8, 16x16, 32x32 o 64x64).
+  * **Colores:** Sin limitación de colores a X bits.
+  * **Inspiración:** Se tomaron como inspiración juegos como *Stardew Valley* o *Moonlighter*.
 
 ### Assets Requeridos
 
 Se deben crear varios sprites:
 
-  * Sprites para cada personaje (al menos uno por dirección).
-  * Animación de disparo y de celebración.
-  * Sprite para la bala/bola de cañón.
-  * Sprites para menús y elementos del escenario.
+  * Sprites para cada personaje (al menos uno por dirección).
+  * Animación de disparo y de celebración.
+  * Sprite para la bala/bola de cañón.
+  * Sprites para menús y elementos del escenario.
 
 -----
 
@@ -221,15 +222,15 @@ Boceto del logo del juego
 
 ### Música
 
-  * **Gameplay:** Música muy animada, que evoca temas de concursos de televisión o dibujos animados. El tema será simple y estará para acompañar el *gameplay*.
-  * **Menús:** Un tema más tranquilo y estilo *jazz* para contrastar y mantener una personalidad propia.
-  * **Inspiración:** *Wii Party*, *Mario Party* y *Mario Kart*.
+  * **Gameplay:** Música muy animada, que evoca temas de concursos de televisión o dibujos animados. El tema será simple y estará para acompañar el *gameplay*.
+  * **Menús:** Un tema más tranquilo y estilo *jazz* para contrastar y mantener una personalidad propia.
+  * **Inspiración:** *Wii Party*, *Mario Party* y *Mario Kart*.
 
 ### Efectos de Sonido
 
-  * **Estilo:** No realistas, sino divertidos y acorde a la estética *cartoon*.
-  * **Creación:** La mayoría se crearán con sintetizadores y *chiptune*, recordando a los efectos de sonido de dibujos animados.
-  * **Inspiración:** Estilo similar a los de *Stardew Valley*, *Celeste* o *Undertale*.
+  * **Estilo:** No realistas, sino divertidos y acorde a la estética *cartoon*.
+  * **Creación:** La mayoría se crearán con sintetizadores y *chiptune*, recordando a los efectos de sonido de dibujos animados.
+  * **Inspiración:** Estilo similar a los de *Stardew Valley*, *Celeste* o *Undertale*.
 
 -----
 
@@ -249,17 +250,23 @@ Solo el más intrépido, único e inigualable de entre todos los Labubu se alzar
 
 La estrategia principal se centrará en el uso de redes sociales:
 
-  * **Plataformas:** X, Instagram, Bluesky, TikTok y Gamejolt.
-  * **Pre-lanzamiento (Meses antes):** Publicación de *teasers*, *tráilers* y artes oficiales para establecer una base de fans estable.
-  * **Lanzamiento:** Envío de claves a *streamers* cuyo contenido se alinee con el género del juego para ampliar la visibilidad.
+  * **Plataformas:** X, Instagram, Bluesky, TikTok y Gamejolt.
+  * **Pre-lanzamiento (Meses antes):** Publicación de *teasers*, *tráilers* y artes oficiales para establecer una base de fans estable.
+  * **Lanzamiento:** Envío de claves a *streamers* cuyo contenido se alinee con el género del juego para ampliar la visibilidad.
 
 -----
 
-## 17\. Referencias
+## 17\. API REST
 
-  * **Wii Party | Wii | Juegos | Nintendo ES:** [https://www.nintendo.com/es-es/Juegos/Wii/Wii-Party-283938.html?srsltid=AfmBOooU\_-cgLeeGv4ogTXwVT9d2OxXn\_FeaTaGkl1MPt5KJbCa3poBD](https://www.nintendo.com/es-es/Juegos/Wii/Wii-Party-283938.html?srsltid=AfmBOooU_-cgLeeGv4ogTXwVT9d2OxXn_FeaTaGkl1MPt5KJbCa3poBD)
-  * **Tema Principal de Wii Party:** [https://www.youtube.com/watch?v=fzepGtfHL9A\&list=RDfzepGtfHL9A\&start\_radio=1\&pp=ygUUd2lpIHBhcnR5IG1haW4gdGhlbWWgBwE%3D](https://www.youtube.com/watch?v=fzepGtfHL9A&list=RDfzepGtfHL9A&start_radio=1&pp=ygUUd2lpIHBhcnR5IG1haW4gdGhlbWWgBwE%3D)
-  * **Estilo artístico de Stardew Valley:** [https://80.lv/articles/mastering-the-charm-of-low-poly-and-pixel-art-styles](https://80.lv/articles/mastering-the-charm-of-low-poly-and-pixel-art-styles)
-  * **Tema Menú Principal Mario Kart 8 Deluxe:** [https://www.youtube.com/watch?v=bCOuXEbBfS8\&list=PLTY-fHX-ZIGwdsXnDUPhGYLkhvH9TmtXD\&index=2](https://www.youtube.com/watch?v=bCOuXEbBfS8&list=PLTY-fHX-ZIGwdsXnDUPhGYLkhvH9TmtXD&index=2)
-  * **Efectos de sonido de Undertale:** [https://www.youtube.com/watch?v=dkk6t9iywKA\&pp=ygUXdW5kZXJ0YWxlIHNvdW5kIGVmZmVjdHM%3D](https://www.youtube.com/watch?v=dkk6t9iywKA&pp=ygUXdW5kZXJ0YWxlIHNvdW5kIGVmZmVjdHM%3D)
-  * **TikTok del Labubu de 24 quilates:** [https://www.tiktok.com/@lilzbullzmarbella2/video/7516255426451623190?lang=es](https://www.tiktok.com/@lilzbullzmarbella2/video/7516255426451623190?lang=es)
+*[Descripción de la API REST, endpoints, métodos y estructura de datos]*
+
+-----
+
+## 18\. Referencias
+
+  * **Wii Party | Wii | Juegos | Nintendo ES:** [https://www.nintendo.com/es-es/Juegos/Wii/Wii-Party-283938.html?srsltid=AfmBOooU\_-cgLeeGv4ogTXwVT9d2OxXn\_FeaTaGkl1MPt5KJbCa3poBD](https://www.nintendo.com/es-es/Juegos/Wii/Wii-Party-283938.html?srsltid=AfmBOooU_-cgLeeGv4ogTXwVT9d2OxXn_FeaTaGkl1MPt5KJbCa3poBD)
+  * **Tema Principal de Wii Party:** [https://www.youtube.com/watch?v=fzepGtfHL9A\&list=RDfzepGtfHL9A\&start\_radio=1\&pp=ygUUd2lpIHBhcnR5IG1haW4gdGhlbWWgBwE%3D](https://www.youtube.com/watch?v=fzepGtfHL9A&list=RDfzepGtfHL9A&start_radio=1&pp=ygUUd2lpIHBhcnR5IG1haW4gdGhlbWWgBwE%3D)
+  * **Estilo artístico de Stardew Valley:** [https://80.lv/articles/mastering-the-charm-of-low-poly-and-pixel-art-styles](https://80.lv/articles/mastering-the-charm-of-low-poly-and-pixel-art-styles)
+  * **Tema Menú Principal Mario Kart 8 Deluxe:** [https://www.youtube.com/watch?v=bCOuXEbBfS8\&list=PLTY-fHX-ZIGwdsXnDUPhGYLkhvH9TmtXD\&index=2](https://www.youtube.com/watch?v=bCOuXEbBfS8&list=PLTY-fHX-ZIGwdsXnDUPhGYLkhvH9TmtXD&index=2)
+  * **Efectos de sonido de Undertale:** [https://www.youtube.com/watch?v=dkk6t9iywKA\&pp=ygUXdW5kZXJ0YWxlIHNvdW5kIGVmZmVjdHM%3D](https://www.youtube.com/watch?v=dkk6t9iywKA&pp=ygUXdW5kZXJ0YWxlIHNvdW5kIGVmZmVjdHM%3D)
+  * **TikTok del Labubu de 24 quilates:** [https://www.tiktok.com/@lilzbullzmarbella2/video/7516255426451623190?lang=es](https://www.tiktok.com/@lilzbullzmarbella2/video/7516255426451623190?lang=es)
