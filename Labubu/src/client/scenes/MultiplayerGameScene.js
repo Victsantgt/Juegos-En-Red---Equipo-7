@@ -164,11 +164,6 @@ export class MultiplayerGameScene extends Phaser.Scene {
     }
 
     create() {
-
-        this.sendMessage({
-            type: 'updateSkin',
-            skin: parseInt(localStorage.getItem("skin"), 10)
-        });
         
         // FADE IN
         this.cameras.main.fadeIn(1000, 255, 255, 255);
@@ -591,6 +586,11 @@ export class MultiplayerGameScene extends Phaser.Scene {
                 this.localLabubu.animKey = 'labubu4-down';
                 break;
         }
+
+        this.sendMessage({
+            type: 'updateSkin',
+            skin: parseInt(localStorage.getItem("skin"), 10)
+        });
 
 
         this.localLabubu.score = 3;
