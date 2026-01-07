@@ -282,6 +282,7 @@ Se han implementado las siguientes  aplicaciones:
 * **El movimiento del labubu en remoto:** Para ello se envía en todo momento la posición del labubu y su dirección actual, y dentro de la sala del juego se envía al otro jugador la posición para reflejarla en ambas pantallas.
 * **El disparo:** Al pulsar SPACE, se manda un mensaje al servidor de que se ha disparado, junto a la posición de la bala y su dirección. Dentro del servidor se manda a ambos jugadores el mensaje con los datos de la bala, para que se cree en ambas pantallas al mismo tiempo. En local sí se maneja su movimiento y su colisión.
 * **La aparición de powerups:** Debido a que en local no se garantiza que se genere el mismo tipo de powerups y en la misma posición, se opta por craerlos en el servidor. Dentro de la gameRoom, durante un intervalo de tiempo se envía un mensaje a ambos jugadores con los datos del powerup que se debería crear. Toda la lógica de crear el powerup se gestiona en el servidor, y en local solo se procesan los datos.
+* **Los golpes con balas**  Cuando un labubu colisiona con una bala, se notifica al servidor para asegurar que ambos jugadores están bien sincronizados.
 * **Los aspectos y nombres de los labubus:**  En el create, se manda la información del jugador que tenía guardada en localStorage, y el servidor se la manda al otro jugador para que así se vea reflejada en su juego también.
 
 -----
