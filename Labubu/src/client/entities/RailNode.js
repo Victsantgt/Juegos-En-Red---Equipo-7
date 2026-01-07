@@ -16,7 +16,7 @@ export class RailNode extends Phaser.Physics.Arcade.Sprite {
         // Ajustar tamaño 64x64
         this.setDisplaySize(40, 40);
         this.body.setSize(40, 40);
-        this.setVisible(true);
+        this.setVisible(false);
 
     }
 
