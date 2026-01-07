@@ -110,6 +110,17 @@ body {
     animation: blink 3s infinite;
 }
 
+.exp-message {
+    font-family: 'Lemon', cursive;
+    color: #5eb232; /* Amarillo a juego con el tema */
+    font-size: 1.0rem;
+    margin: 0;
+    text-shadow: 0px 0px 10px #ffffff; /* Borde negro para que resalte */
+    
+    /* Animación opcional: un parpadeo suave para que llame la atención */
+    animation: blink 3s infinite;
+}
+
 /* En pantallas medianas, reducimos un poco el zoom automáticamente */
 @media (max-width: 1300px) {
     .main-layout {

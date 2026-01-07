@@ -98,7 +98,6 @@ export class VictoryScene extends Phaser.Scene {
         }
 
 
-
         } else {
             // Gana J2            
             this.winnerAsset = 'j2Ganador';  

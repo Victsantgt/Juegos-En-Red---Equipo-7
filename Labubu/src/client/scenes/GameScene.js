@@ -477,7 +477,6 @@ export class GameScene extends Phaser.Scene {
 
         this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
-        //////////////NUEVO///////////////////////////////////////////////////////////////////////
         this.connectionListener = (data) => {
             if (!data.connected && this.scene.isActive()) {
                 this.onConnectionLost();
@@ -497,7 +496,6 @@ export class GameScene extends Phaser.Scene {
             connectionManager.removeListener(this.connectionListener);
         }
     }
-    ///////////////////////////////////////////////////////////////////
 
     setUpPlayers() {
 
@@ -690,7 +688,6 @@ export class GameScene extends Phaser.Scene {
 
         // Lanzar la escena de Victoria ENCIMA de esta (Overlay)
         // Pasamos el ID del ganador
-        this.scene.stop('VictoryScene');
         this.scene.launch('VictoryScene', { winnerId: winnerId });
     }
 

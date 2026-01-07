@@ -25,6 +25,7 @@ export class MultiplayerGameScene extends Phaser.Scene {
     }
 
     init(data) {
+        this.remoteSkin = 0; // Valor por defecto skin
         this.ws = data.ws;
         this.playerRole = data.playerRole; // 'player1' | 'player2'
         this.roomId = data.roomId;
@@ -485,8 +486,6 @@ export class MultiplayerGameScene extends Phaser.Scene {
 
         this.setupWebSocketListeners();
 
-
-        //////////////NUEVO///////////////////////////////////////////////////////////////////////
         this.connectionListener = (data) => {
             if (!data.connected && this.scene.isActive()) {
                 this.onConnectionLost();
@@ -677,15 +676,30 @@ export class MultiplayerGameScene extends Phaser.Scene {
         if (this.gameEnded) return;
         this.gameEnded = true;
 
-        // Congelar físicas (balas y jugadores quietos)
         this.physics.pause();
-
-        // Pausar la escena actual por completo (para que deje de procesar inputs o update)
         this.scene.pause();
 
-        // Lanzar la escena de Victoria ENCIMA de esta (Overlay)
-        // Pasamos el ID del ganador
-        this.scene.launch('VictoryScene', { winnerId: winnerId });
+        // 1. Obtener skin local
+        const mySkin = parseInt(localStorage.getItem("skin"), 10) || 0;
+
+        // 2. Asignar skins a Player 1 y Player 2
+        let p1Skin, p2Skin;
+
+        if (this.playerRole === 'player1') {
+            p1Skin = mySkin;
+            p2Skin = this.remoteSkin;
+        } else {
+            p1Skin = this.remoteSkin;
+            p2Skin = mySkin;
+        }
+
+        // 3. Lanzar victoria pasando todos los datos
+        this.scene.launch('MultiplayerVictoryScene', { 
+            winnerId: winnerId,
+            p1Skin: p1Skin, // Skin del J1
+            p2Skin: p2Skin, // Skin del J2
+            isMultiplayer: true // Aviso de que es online
+        });
     }
 
     getTurnDirectionNormal(dir) {
@@ -796,6 +810,9 @@ export class MultiplayerGameScene extends Phaser.Scene {
  
     handleServerMessage(data) {
         switch (data.type) {
+            case 'updateSkin':
+            this.remoteSkin = data.skin; // para las skins
+            break;
             case 'labubuUpdate':
                 this.remoteLabubu.sprite.x = data.x;
                 this.remoteLabubu.sprite.y = data.y;
