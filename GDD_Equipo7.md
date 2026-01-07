@@ -96,7 +96,7 @@ Cada jugador controla un vagón que avanza de forma automática por raíles en u
       * Existe un tiempo de recarga automático entre disparos.
       * Si el jugador golpea a un oponente, el personaje celebra y no puede disparar durante un breve tiempo.
   * **Giro en desvíos:**
-      * Decidir el momento exacto para cambiar de carril en los cruces de vías.
+      * El jugador debe de decidir a qué dirección cambiar lo suficientemente rápido para que no le pille el jugador contrincante.
       * Esta acción genera oportunidades de ataque o defensa.
   * **Protección de diana:**
       * Posicionar el vagón estratégicamente en el raíl para dificultar la línea de tiro del rival.
@@ -107,10 +107,9 @@ Habilidades especiales que se activarán automáticamente al recogerlas y darán
 
   * **Turbo:** Un pequeño acelerón.
   * **Curación:** Restaura una vida al jugador.
-  * **Ítem Falso:** Un obstáculo que paraliza al enemigo temporalmente.
-  * **Cambio de sentido:** Invierte la trayectoria del jugador.
+  * **Chocolate malévolo** El jugador contrincante pierde una vida.
 
-La combinación de todas estas mecánicas fomenta la precisión, la anticipación de movimientos y la toma de decisiones rápidas.
+La combinación de todas estas mecánicas fomenta la precisión, la anticipación de movimientos y la toma de decisiones.
 
 -----
 
@@ -118,7 +117,7 @@ La combinación de todas estas mecánicas fomenta la precisión, la anticipació
 
 | Componente | Movimiento | Reglas de Velocidad |
 | :--- | :--- | :--- |
-| **Vagones (Jugadores)** | Avanzan de manera automática con velocidad constante, controlando solo los cambios de dirección en las intersecciones (salvo con power-ups). | Velocidad base es la más baja. |
+| **Vagones (Jugadores)** | Avanzan de manera automática con velocidad constante, controlando solo los cambios de dirección en las intersecciones | Velocidad base es la más baja. |
 | **Colisiones** | Si los vagones se chocan entre ellos, sus trayectorias se invierten. | N/A |
 | **Balas** | Se disparan en la misma dirección de avance del jugador. | Velocidad constante y **mayor** que la velocidad máxima de un jugador. |
 | **Power-up Turbo** | Aumenta la velocidad del vagón temporalmente. | Velocidad intermedia entre la base y las balas. |
@@ -150,14 +149,17 @@ La visión del juego se basa en una **cámara cenital**, ubicada directamente po
 
 El escenario de juego es un espacio delimitado por bordes diegéticos (muros). El área jugable se compone de un camino de raíles que conecta seis arbustos, permitiendo el movimiento dentro de estos límites. El jugador siempre tendrá una visión completa del espacio de juego.
 
--imagen escenario-
-Diseño del escenario
+<img width="742" height="624" alt="image" src="https://github.com/user-attachments/assets/333899b9-bf66-499a-b335-00641c94e695" />
+Escenario final
 
 -----
 
 ## 10\. Diagrama de Flujo
 
 <img width="1054" height="619" alt="image" src="https://github.com/user-attachments/assets/1c710e3b-2c6c-42e4-8185-3f3a5c1e945b" />
+
+<img width="742" height="624" alt="image" src="https://github.com/user-attachments/assets/333899b9-bf66-499a-b335-00641c94e695" />
+Escenario final
 
 -----
 
@@ -171,14 +173,14 @@ El juego utilizará un estilo visual de **Pixel Art Moderno**.
   * **Colores:** Sin limitación de colores a X bits.
   * **Inspiración:** Se tomaron como inspiración juegos como *Stardew Valley* o *Moonlighter*.
 
-### Assets Requeridos
+### Assets Finales
 
-Se deben crear varios sprites:
+Los assets han sido todos finalizados, con un total de cuatro diferentes labubus con animaciones en las cuatro direcciones. El jugador podrá elegir el labubu que más le guste en el online.
 
-  * Sprites para cada personaje (al menos uno por dirección).
-  * Animación de disparo y de celebración.
-  * Sprite para la bala/bola de cañón.
-  * Sprites para menús y elementos del escenario.
+
+<img width="680" height="220" alt="image" src="https://github.com/user-attachments/assets/a96ea6e5-8868-453e-8706-b4e9891ce2e9" />
+
+Labubus del juego
 
 -----
 
@@ -215,6 +217,10 @@ Logotipo de la empresa “Todo al 7”
 <img width="891" height="633" alt="image" src="https://github.com/user-attachments/assets/a359ecaa-8739-4688-8c61-2cc086e0b46c" />
 
 Boceto del logo del juego
+
+Arte de menú final
+
+<img width="713" height="595" alt="image" src="https://github.com/user-attachments/assets/0fe95720-aa43-496f-8a3d-3ce07aeec64c" />
 
 -----
 
@@ -267,7 +273,20 @@ Las principales funcionalidades desarrolladas son:
 * **Detección de Caídas:** Implementación de un sistema de "heartbeat" donde el servidor gestionando las pérdidas de conexión inesperadas.
 -----
 
-## 18\. Referencias
+## 18\. Implementación WebSockets
+
+Se han implementado las siguientes  aplicaciones:
+
+* **Unirse y abandonar la cola:** En LobbyScene al conectarse al servidor de Websockets, el jugador se une automáticamente a la cola, la cual puede abandonar en cualquier momento pulsando el botón de esa misma escena, desconectándolo así del servidor de websockets.
+* Cuando al menos dos jugadores están en la cola, se crea una sala, y se inicia la escena de MultiplayerGameScene. Dentro de esta escena se gestiona en local el movimiento del labubu en local, las colisiones, y la puntuación. En servidor se gestiona:
+* **El movimiento del labubu en remoto:** Para ello se envía en todo momento la posición del labubu y su dirección actual, y dentro de la sala del juego se envía al otro jugador la posición para reflejarla en ambas pantallas.
+* **El disparo:** Al pulsar SPACE, se manda un mensaje al servidor de que se ha disparado, junto a la posición de la bala y su dirección. Dentro del servidor se manda a ambos jugadores el mensaje con los datos de la bala, para que se cree en ambas pantallas al mismo tiempo. En local sí se maneja su movimiento y su colisión.
+* **La aparición de powerups:** Debido a que en local no se garantiza que se genere el mismo tipo de powerups y en la misma posición, se opta por craerlos en el servidor. Dentro de la gameRoom, durante un intervalo de tiempo se envía un mensaje a ambos jugadores con los datos del powerup que se debería crear. Toda la lógica de crear el powerup se gestiona en el servidor, y en local solo se procesan los datos.
+* **Los aspectos y nombres de los labubus:**  En el create, se manda la información del jugador que tenía guardada en localStorage, y el servidor se la manda al otro jugador para que así se vea reflejada en su juego también.
+
+-----
+
+## 19\. Referencias
 
   * **Wii Party | Wii | Juegos | Nintendo ES:** [https://www.nintendo.com/es-es/Juegos/Wii/Wii-Party-283938.html?srsltid=AfmBOooU\_-cgLeeGv4ogTXwVT9d2OxXn\_FeaTaGkl1MPt5KJbCa3poBD](https://www.nintendo.com/es-es/Juegos/Wii/Wii-Party-283938.html?srsltid=AfmBOooU_-cgLeeGv4ogTXwVT9d2OxXn_FeaTaGkl1MPt5KJbCa3poBD)
   * **Tema Principal de Wii Party:** [https://www.youtube.com/watch?v=fzepGtfHL9A\&list=RDfzepGtfHL9A\&start\_radio=1\&pp=ygUUd2lpIHBhcnR5IG1haW4gdGhlbWWgBwE%3D](https://www.youtube.com/watch?v=fzepGtfHL9A&list=RDfzepGtfHL9A&start_radio=1&pp=ygUUd2lpIHBhcnR5IG1haW4gdGhlbWWgBwE%3D)
