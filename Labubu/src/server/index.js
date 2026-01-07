@@ -137,6 +137,8 @@ wss.on('connection', (ws) => {
           break;
 
         case 'shoot':
+          console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
           gameRoomService.shoot(ws, data.x, data.y, data.dir);
           break;
 
@@ -150,6 +152,11 @@ wss.on('connection', (ws) => {
 
         case 'updateSkin':
           gameRoomService.updateSkin(ws,data.skin);
+          break;
+
+        case 'name':
+          console.log(data.name);
+          gameRoomService.name(ws,data.name);
           break;
 
         default:

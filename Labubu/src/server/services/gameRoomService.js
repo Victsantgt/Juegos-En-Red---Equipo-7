@@ -231,6 +231,25 @@ export function createGameRoomService() {
     }
   }
 
+  function name(ws,name){
+    const roomId = ws.roomId;
+    if (!roomId) return;
+
+    console.log(name);
+    const room = rooms.get(roomId);
+    if (!room || !room.active) return;
+
+    // Relay to the other player
+    const opponent = room.player1.ws === ws ? room.player2.ws : room.player1.ws;
+
+    if (opponent.readyState === 1) { // WebSocket.OPEN
+      opponent.send(JSON.stringify({
+        type: 'name',
+        name
+      }));
+    }
+  }
+
   /**
    * Handle player disconnection
    * @param {WebSocket} ws - Disconnected player's WebSocket
@@ -278,6 +297,7 @@ export function createGameRoomService() {
     handleGoal,
     handleDisconnect,
     getActiveRoomCount,
-    updateSkin
+    updateSkin,
+    name
   };
 }
