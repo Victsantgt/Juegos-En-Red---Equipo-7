@@ -15,38 +15,9 @@ export class VictoryScene extends Phaser.Scene {
         this.happyAsset2 = '';
     
         // Parsear el skin y poner un valor por defecto si falla (|| 0)
-        const skinID = parseInt(localStorage.getItem("skin"), 10) || 0;
+        this.skinID = parseInt(localStorage.getItem("skin"), 10) || 0;
 
-        switch(skinID){
-            case 0:
-                this.sadAsset = 'sadb';
-                this.happyAsset1 = 'happyY1'; // Ojo: Aquí pusiste happyY (Yellow) para skin 0? 
-                this.happyAsset2 = 'happyY2'; // Asegúrate que los colores coinciden con tu diseño
-            break;
-            case 1:
-                this.sadAsset = 'sady';
-                this.happyAsset1 = 'happyB1';
-                this.happyAsset2 = 'happyB2';
-            break;
-            
-            case 2:
-                this.sadAsset = 'sadp';
-                this.happyAsset1 = 'happyR1';
-                this.happyAsset2 = 'happyR2';
-            break;
-            
-            case 3:
-                this.sadAsset = 'sadr';
-                this.happyAsset1 = 'happyP1';
-                this.happyAsset2 = 'happyP2';
-            break;
-            
-            default: // Caso de seguridad extra
-                this.sadAsset = 'sadb';
-                this.happyAsset1 = 'happyY1';
-                this.happyAsset2 = 'happyY2';
-            break;
-        }
+        
     }
 
     preload() {
@@ -99,10 +70,65 @@ export class VictoryScene extends Phaser.Scene {
             // Gana J1
             this.winnerAsset = 'j1Ganador';  
             this.loserAsset = 'j2Perdedor';  
+
+            
+            
+            switch(this.skinID){
+            case 0:
+                this.sadAsset = 'sady';
+                this.happyAsset1 = 'happyB1'; 
+                this.happyAsset2 = 'happyB2'; 
+            break;
+            case 1:
+                this.sadAsset = 'sadb';
+                this.happyAsset1 = 'happyY1';
+                this.happyAsset2 = 'happyY2';
+            break;
+            
+            case 2:
+                this.sadAsset = 'sadr';
+                this.happyAsset1 = 'happyP1';
+                this.happyAsset2 = 'happyP2';
+            break;
+            case 3:
+                this.sadAsset = 'sadp';
+                this.happyAsset1 = 'happyR1';
+                this.happyAsset2 = 'happyR2';
+            break;
+        }
+
+
+
         } else {
             // Gana J2            
             this.winnerAsset = 'j2Ganador';  
             this.loserAsset = 'j1Perdedor';  
+
+        switch(this.skinID){
+            case 0:
+                this.sadAsset = 'sadb';
+                this.happyAsset1 = 'happyY1'; 
+                this.happyAsset2 = 'happyY2'; 
+            break;
+            case 1:
+                this.sadAsset = 'sady';
+                this.happyAsset1 = 'happyB1';
+                this.happyAsset2 = 'happyB2';
+            break;
+            
+            case 2:
+                this.sadAsset = 'sadp';
+                this.happyAsset1 = 'happyR1';
+                this.happyAsset2 = 'happyR2';
+            break;
+            
+            case 3:
+                this.sadAsset = 'sadr';
+                this.happyAsset1 = 'happyP1';
+                this.happyAsset2 = 'happyP2';
+            break;
+            
+        }
         }
         
 
