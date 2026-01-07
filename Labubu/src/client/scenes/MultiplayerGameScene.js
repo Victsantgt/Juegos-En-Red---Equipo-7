@@ -563,23 +563,23 @@ export class MultiplayerGameScene extends Phaser.Scene {
 
     setUpPlayers() {
         if (this.playerRole === 'player1') {
-            this.localLabubu = new Labubu(this, 'player1', 96, 220, 'labubu1-down');
-            this.remoteLabubu = new Labubu(this, 'player2', 608, 220, 'labubu2-down');
+            this.localLabubu = new Labubu(this, 'player1', 96, 220, 'labubu3-down');
+            this.remoteLabubu = new Labubu(this, 'player2', 608, 220, 'labubu3-down');
             this.localLabubu.turnMode = "reverse";
             this.remoteLabubu.turnMode = "normal";
         } else {
-            this.localLabubu = new Labubu(this, 'player2', 608, 220, 'labubu2-down');
-            this.remoteLabubu = new Labubu(this, 'player1', 96, 220, 'labubu1-down');
+            this.localLabubu = new Labubu(this, 'player2', 608, 220, 'labubu3-down');
+            this.remoteLabubu = new Labubu(this, 'player1', 96, 220, 'labubu3-down');
             this.localLabubu.turnMode = "normal";
             this.remoteLabubu.turnMode = "reverse";
         }
 
         switch (parseInt(localStorage.getItem("skin"), 10)) {
-            case 0:
+            case 1:
                 this.localLabubu.animKey = 'labubu1-down';
                 break;
 
-            case 1:
+            case 0:
                 this.localLabubu.animKey = 'labubu2-down';
                 break;
 
@@ -810,9 +810,7 @@ export class MultiplayerGameScene extends Phaser.Scene {
  
     handleServerMessage(data) {
         switch (data.type) {
-            case 'updateSkin':
-            this.remoteSkin = data.skin; // para las skins
-            break;
+
             case 'labubuUpdate':
                 this.remoteLabubu.sprite.x = data.x;
                 this.remoteLabubu.sprite.y = data.y;
@@ -838,20 +836,20 @@ export class MultiplayerGameScene extends Phaser.Scene {
 
             case 'updateSkin':
                 switch(data.skin){
-                    case 0:
-                        this.remoteLabubu.sprite.play('labubu1-down');
+                    case 1:
+                        this.remoteLabubu.animKey = 'labubu1-down';
                         break;
 
-                    case 1:
-                        this.remoteLabubu.sprite.play('labubu2-down');
+                    case 0:
+                        this.remoteLabubu.animKey = 'labubu2-down';
                         break;
                         
                     case 2:
-                        this.remoteLabubu.sprite.play('labubu3-down');
+                        this.remoteLabubu.animKey = 'labubu3-down';
                         break;
 
                     case 3:
-                        this.remoteLabubu.sprite.play('labubu4-down');
+                        this.remoteLabubu.animKey = 'labubu4-down';
                         break;
                 }
                 break;

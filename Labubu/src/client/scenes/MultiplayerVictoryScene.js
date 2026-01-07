@@ -40,8 +40,8 @@ export class MultiplayerVictoryScene extends Phaser.Scene {
     // Función auxiliar para traducir ID de skin a nombre de archivo
     getSkinConfig(skinId) {
         switch(skinId) {
-            case 0: return { sad: 'sady', happy1: 'happyY1', happy2: 'happyY2' }; // Skin 0
-            case 1: return { sad: 'sadb', happy1: 'happyB1', happy2: 'happyB2' }; // Skin 1
+            case 1: return { sad: 'sady', happy1: 'happyY1', happy2: 'happyY2' }; // Skin 1
+            case 0: return { sad: 'sadb', happy1: 'happyB1', happy2: 'happyB2' }; // Skin 0
             case 2: return { sad: 'sadp', happy1: 'happyP1', happy2: 'happyP2' }; // Skin 2
             case 3: return { sad: 'sadr', happy1: 'happyR1', happy2: 'happyR2' }; // Skin 3
             default: return { sad: 'sadb', happy1: 'happyY1', happy2: 'happyY2' }; // Fallback
