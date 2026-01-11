@@ -16,6 +16,10 @@ export class StartScene extends Phaser.Scene {
             volume: 0.5
         });
         this.sound.volume = parseFloat(localStorage.getItem("volume")) || 1;    //Cargar el volumen de partidas anteriores
+        this.skinTemp = parseFloat(localStorage.getItem("skin1")) || 0;
+        if(this.skinTemp === 0) localStorage.setItem("skin1", '0');
+        this.skinTemp = parseFloat(localStorage.getItem("skin2")) || 1;
+        if(this.skinTemp === 1) localStorage.setItem("skin2", '1');
 
         // FADE IN
         this.cameras.main.setBackgroundColor('#ffffff');
