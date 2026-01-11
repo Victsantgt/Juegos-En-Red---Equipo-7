@@ -15,7 +15,8 @@ export class VictoryScene extends Phaser.Scene {
         this.happyAsset2 = '';
     
         // Parsear el skin y poner un valor por defecto si falla (|| 0)
-        this.skinID = parseInt(localStorage.getItem("skin"), 10) || 0;
+        this.skinID1 = parseInt(localStorage.getItem("skin1"), 10) || 0;
+        this.skinID2 = parseInt(localStorage.getItem("skin2"), 10) || 0;
 
         
     }
@@ -73,61 +74,85 @@ export class VictoryScene extends Phaser.Scene {
 
             
             
-            switch(this.skinID){
+            switch(this.skinID1){
             case 0:
-                this.sadAsset = 'sady';
                 this.happyAsset1 = 'happyB1'; 
                 this.happyAsset2 = 'happyB2'; 
             break;
             case 1:
-                this.sadAsset = 'sadb';
                 this.happyAsset1 = 'happyY1';
                 this.happyAsset2 = 'happyY2';
             break;
             
             case 2:
-                this.sadAsset = 'sadr';
                 this.happyAsset1 = 'happyP1';
                 this.happyAsset2 = 'happyP2';
             break;
             case 3:
-                this.sadAsset = 'sadp';
                 this.happyAsset1 = 'happyR1';
                 this.happyAsset2 = 'happyR2';
             break;
-        }
-
-
-        } else {
-            // Gana J2            
-            this.winnerAsset = 'j2Ganador';  
-            this.loserAsset = 'j1Perdedor';  
-
-        switch(this.skinID){
+            
+            }
+            switch(this.skinID2){
             case 0:
                 this.sadAsset = 'sadb';
-                this.happyAsset1 = 'happyY1'; 
-                this.happyAsset2 = 'happyY2'; 
             break;
             case 1:
                 this.sadAsset = 'sady';
-                this.happyAsset1 = 'happyB1';
-                this.happyAsset2 = 'happyB2';
             break;
             
             case 2:
                 this.sadAsset = 'sadp';
-                this.happyAsset1 = 'happyR1';
-                this.happyAsset2 = 'happyR2';
+            break;
+            case 3:
+                this.sadAsset = 'sadr';
+            break;
+            }
+        } 
+        else {
+            // Gana J2            
+            this.winnerAsset = 'j2Ganador';  
+            this.loserAsset = 'j1Perdedor';  
+
+        switch(this.skinID1){
+            case 0:
+                this.sadAsset = 'sadb';
+            break;
+            case 1:
+                this.sadAsset = 'sady';
+            break;
+            
+            case 2:
+                this.sadAsset = 'sadp';
             break;
             
             case 3:
                 this.sadAsset = 'sadr';
+            break;
+            
+            }
+            switch(this.skinID2){
+            case 0:
+                this.happyAsset1 = 'happyB1'; 
+                this.happyAsset2 = 'happyB2'; 
+            break;
+            case 1:
+                this.happyAsset1 = 'happyY1';
+                this.happyAsset2 = 'happyY2';
+            break;
+            
+            case 2:
                 this.happyAsset1 = 'happyP1';
                 this.happyAsset2 = 'happyP2';
             break;
             
-        }
+            case 3:
+                this.happyAsset1 = 'happyR1';
+                this.happyAsset2 = 'happyR2';
+            break;
+            
+            }
         }
         
 
@@ -222,7 +247,7 @@ export class VictoryScene extends Phaser.Scene {
         // --- INTERFAZ ---
 
         // Botón del Menú
-        const menuBtn = this.add.text(1133, 90, 'VOLVER AL MENÚ', { 
+        const menuBtn = this.add.text(1133, 90, 'RETURN TO MENU', { 
             fontFamily: 'Lemon',
             fontSize: '35px',
             color: '#000000ff',
@@ -251,7 +276,7 @@ export class VictoryScene extends Phaser.Scene {
         });
 
         // Botón de Revancha
-        const resumeBtn = this.add.text(1130, 220, 'REVANCHA', {
+        const resumeBtn = this.add.text(1130, 220, 'REMATCH!', {
             fontFamily: 'Lemon',
             fontSize: '40px',
             color: '#000000ff',

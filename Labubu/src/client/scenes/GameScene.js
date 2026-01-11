@@ -499,40 +499,57 @@ export class GameScene extends Phaser.Scene {
 
     setUpPlayers() {
 
-        console.log(parseInt(localStorage.getItem("skin"), 10));
-
-
-
         let jugadorUno = new Labubu(this, 'player1', 96, 220, 'labubu1-down');
         let jugadorDos = new Labubu(this, 'player2', 608, 220, 'labubu2-down');
 
 
-        this.jugadorTexto = this.add.text(jugadorUno.sprite.x, jugadorUno.sprite.y - jugadorUno.sprite.height / 1.65, ' ' + localStorage.getItem("username") + ' ', {
+        this.jugador1Texto = this.add.text(jugadorUno.sprite.x, jugadorUno.sprite.y - jugadorUno.sprite.height / 1.65, ' Player 1 ', {
             fontSize: '14px',
             fontFamily: 'Lemon',
             backgroundColor: '#2525257b',
             color: '#ffffff'
         }).setOrigin();
 
-        switch (parseInt(localStorage.getItem("skin"), 10)) {
+        this.jugador2Texto = this.add.text(jugadorDos.sprite.x, jugadorDos.sprite.y - jugadorDos.sprite.height / 1.65, ' Player 2 ', {
+            fontSize: '14px',
+            fontFamily: 'Lemon',
+            backgroundColor: '#2525257b',
+            color: '#ffffff'
+        }).setOrigin();
+
+        switch (parseInt(localStorage.getItem("skin1"), 10)) {
             case 0:
                 jugadorUno.animKey = 'labubu2-down';
-                jugadorDos.animKey = 'labubu1-down';
                 break;
 
             case 1:
                 jugadorUno.animKey = 'labubu1-down';
-                jugadorDos.animKey = 'labubu2-down';
                 break;
 
             case 2:
                 jugadorUno.animKey = 'labubu3-down';
-                jugadorDos.animKey = 'labubu4-down';
                 break;
 
             case 3:
                 jugadorUno.animKey = 'labubu4-down';
+                break;
+        }
+
+        switch (parseInt(localStorage.getItem("skin2"), 10)) {
+            case 0:
+                jugadorDos.animKey = 'labubu2-down';
+                break;
+
+            case 1:
+                jugadorDos.animKey = 'labubu1-down';
+                break;
+
+            case 2:
                 jugadorDos.animKey = 'labubu3-down';
+                break;
+
+            case 3:
+                jugadorDos.animKey = 'labubu4-down';
                 break;
         }
 
@@ -826,8 +843,11 @@ export class GameScene extends Phaser.Scene {
 
             // USERNAME
 
-            this.jugadorTexto.x = this.players.get('player1').sprite.x;
-            this.jugadorTexto.y = this.players.get('player1').sprite.y - this.players.get('player1').sprite.height / 1.65;
+            this.jugador1Texto.x = this.players.get('player1').sprite.x;
+            this.jugador1Texto.y = this.players.get('player1').sprite.y - this.players.get('player1').sprite.height / 1.65;
+
+            this.jugador2Texto.x = this.players.get('player2').sprite.x;
+            this.jugador2Texto.y = this.players.get('player2').sprite.y - this.players.get('player2').sprite.height / 1.65;
 
             //INPUT
             const mapping = this.inputMappings.find(m => m.playerId === labubu.id);
